@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Interfaces\UserInterface;
+use App\Models\Role;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserService
 {
@@ -88,5 +90,59 @@ class UserService
     public function forceDeleteUser(int $id): void
     {
         $this->userRepository->forceDelete($id);
+    }
+
+    public function assignRoleToUser(int|string $userId, string $roleCode): User
+    {
+        $user = $this->userRepository->getById($userId, ['*'], ['roles']);
+
+        $role = Role::query()
+            ->where('code', $roleCode)
+            ->first();
+
+        if ($role === null) {
+            throw (new ModelNotFoundException())->setModel(Role::class, [$roleCode]);
+        }
+
+        $user->roles()->syncWithoutDetaching([$role->id]);
+
+        return $user->fresh(['roles']);
+    }
+
+    public function removeRoleFromUser(int|string $userId, string $roleCode): User
+    {
+        $user = $this->userRepository->getById($userId, ['*'], ['roles']);
+
+        $role = Role::query()
+            ->where('code', $roleCode)
+            ->first();
+
+        if ($role === null) {
+            throw (new ModelNotFoundException())->setModel(Role::class, [$roleCode]);
+        }
+
+        $user->roles()->detach($role->id);
+
+        return $user->fresh(['roles']);
+    }
+
+    public function syncRolesToUser(int|string $userId, array $roleCodes): User
+    {
+        $user = $this->userRepository->getById($userId, ['*'], ['roles']);
+
+        $roles = Role::query()
+            ->whereIn('code', $roleCodes)
+            ->get(['id', 'code']);
+
+        $foundCodes = $roles->pluck('code')->all();
+        $missingCodes = array_values(array_diff($roleCodes, $foundCodes));
+
+        if ($missingCodes !== []) {
+            throw (new ModelNotFoundException())->setModel(Role::class, $missingCodes);
+        }
+
+        $user->roles()->sync($roles->pluck('id')->all());
+
+        return $user->fresh(['roles']);
     }
 }
