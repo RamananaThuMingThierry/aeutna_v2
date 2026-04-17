@@ -12,17 +12,17 @@ class ActivityLogService
 {
     public function __construct(private ActivityLogInterface $activityLogRepository) {}
 
-    public function getAllActivityLogs(string|array $keys, mixed $values, array $fields = ['*'], array $relations = [], ?int $paginate = null, array $orderBy = ['id' => 'desc'])
+    public function getAllActivityLogs(string|array|null $keys, mixed $values, array $fields = ['*'], array $relations = [], ?int $paginate = null, array $orderBy = ['id' => 'desc'])
     {
         return $this->activityLogRepository->getAll($keys, $values, $fields, $relations, $paginate, $orderBy);
     }
 
-    public function getByIdActivityLog(int|string $id, array $fields = ['*'], array $relations = [])
+    public function getByIdActivityLog(int|string|null $id, array $fields = ['*'], array $relations = [])
     {
         return $this->activityLogRepository->getById($id, $fields, $relations);
     }
 
-    public function getByKeysActivityLog(string|array $keys, mixed $values, array $fields = ['*'], array $relations = [])
+    public function getByKeysActivityLog(string|array|null $keys, mixed $values, array $fields = ['*'], array $relations = [])
     {
         return $this->activityLogRepository->getByKeys($keys, $values, $fields, $relations);
     }

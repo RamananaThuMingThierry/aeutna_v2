@@ -2,7 +2,9 @@ import React from "react";
 import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 
 import AdminLayout from "../layouts/AdminLayout";
+import AxesPage from "../pages/admin/AxesPage";
 import RootLayout from "../layouts/RootLayout";
+import ActivityLogPage from "../pages/admin/ActivityLogPage";
 import DashboardPage from "../pages/admin/DashboardPage";
 import UsersPage from "../pages/admin/UsersPage";
 import ProfilePage from "../pages/account/ProfilePage";
@@ -165,6 +167,10 @@ export const router = createBrowserRouter([
             element: <DashboardPage />,
           },
           {
+            path: "axes",
+            element: <AxesPage />,
+          },
+          {
             path: "categories",
             element: (
               <PlaceholderPage
@@ -255,12 +261,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "activity-logs",
-            element: (
-              <PlaceholderPage
-                title="Activity logs"
-                description="Journal d'activite en attente d'implementation."
-              />
-            ),
+            element: <ActivityLogPage />,
           },
         ],
       },

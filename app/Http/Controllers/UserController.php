@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\SyncUserRolesRequest;
-use App\Http\Requests\UpdateUserRequest;
-use App\Http\Requests\UserRoleRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Users\StoreUserRequest;
+use App\Http\Requests\Users\SyncUserRolesRequest;
+use App\Http\Requests\Users\UpdateUserRequest;
+use App\Http\Requests\Users\UserRoleRequest;
 use App\Models\User;
 use App\Services\ActivityLogService;
 use App\Services\UserService;

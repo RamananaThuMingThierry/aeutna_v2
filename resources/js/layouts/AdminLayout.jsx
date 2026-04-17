@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 
 const menuItems = [
   { to: "/admin/dashboard", label: "Dashboard", icon: "bi-grid-1x2-fill" },
+  { to: "/admin/axes", label: "Axes", icon: "bi-diagram-3-fill" },
   { to: "/admin/users", label: "Utilisateurs", icon: "bi-people-fill" },
   { to: "/admin/categories", label: "Categories", icon: "bi-tags-fill" },
   { to: "/admin/testimonials", label: "Temoignages", icon: "bi-chat-square-quote-fill" },
@@ -69,6 +70,7 @@ function SidebarContent({ currentUser, currentRoles, onLogout }) {
 export default function AdminLayout() {
   const navigate = useNavigate();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
 
   const currentUser = useMemo(() => {
     try {
@@ -92,6 +94,14 @@ export default function AdminLayout() {
     localStorage.removeItem("user");
     localStorage.removeItem("roles");
     navigate("/login", { replace: true });
+  }
+
+  function openLogoutModal() {
+    setLogoutModalOpen(true);
+  }
+
+  function closeLogoutModal() {
+    setLogoutModalOpen(false);
   }
 
   return (
@@ -131,7 +141,7 @@ export default function AdminLayout() {
           <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" />
         </div>
         <div className="offcanvas-body p-0">
-          <SidebarContent currentUser={currentUser} currentRoles={currentRoles} onLogout={handleLogout} />
+          <SidebarContent currentUser={currentUser} currentRoles={currentRoles} onLogout={openLogoutModal} />
         </div>
       </div>
 
@@ -141,7 +151,7 @@ export default function AdminLayout() {
               sidebarCollapsed ? "is-collapsed" : ""
             }`}
           >
-            <SidebarContent currentUser={currentUser} currentRoles={currentRoles} onLogout={handleLogout} />
+            <SidebarContent currentUser={currentUser} currentRoles={currentRoles} onLogout={openLogoutModal} />
           </aside>
 
           <div className={`admin-content ${sidebarCollapsed ? "is-expanded" : ""}`}>
@@ -161,7 +171,7 @@ export default function AdminLayout() {
 
                 <div className="d-flex align-items-center gap-3 ms-lg-auto">
 
-                  <div className="text-end d-none d-sm-block">
+                  <div className="text-end d-none d-md-inline">
                     <div className="fw-semibold small">{currentUser?.name || "Utilisateur"}</div>
                     <div className="text-secondary small">{currentUser?.email || ""}</div>
                   </div>
@@ -183,6 +193,43 @@ export default function AdminLayout() {
             </main>
           </div>
       </div>
+
+      {logoutModalOpen ? (
+        <>
+          <div className="modal fade show" style={{ display: "block" }} role="dialog" aria-modal="true">
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content border-0 shadow">
+                <div className="modal-header">
+                  <h5 className="modal-title">Confirmation</h5>
+                  <button type="button" className="btn-close" onClick={closeLogoutModal} />
+                </div>
+
+                <div className="modal-body">
+                  <p className="mb-0">Voulez-vous vraiment vous deconnecter de l&apos;espace admin ?</p>
+                </div>
+
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-outline-secondary" onClick={closeLogoutModal}>
+                    Annuler
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-dark"
+                    onClick={() => {
+                      closeLogoutModal();
+                      handleLogout();
+                    }}
+                  >
+                    Se deconnecter
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="modal-backdrop fade show" onClick={closeLogoutModal} />
+        </>
+      ) : null}
     </div>
   );
 }

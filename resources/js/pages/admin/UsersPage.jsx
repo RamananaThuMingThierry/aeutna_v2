@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import DataTable from "datatables.net-bs5";
-import { Modal } from "bootstrap";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import $ from "jquery";
+import "datatables.net";
+import "datatables.net-bs5";
 
 import { usersApi } from "../../api/user";
+import { useI18n } from "../../hooks/website/I18nContext";
 
 const AVAILABLE_ROLES = ["super_admin", "admin", "bureau", "member"];
 
@@ -29,9 +31,7 @@ function formatRoles(roles) {
 }
 
 function resolveAvatarUrl(avatar) {
-  if (!avatar) {
-    return "";
-  }
+  if (!avatar) return "";
 
   if (avatar.startsWith("http://") || avatar.startsWith("https://") || avatar.startsWith("blob:")) {
     return avatar;
@@ -47,250 +47,151 @@ function resolveAvatarUrl(avatar) {
 }
 
 export default function UsersPage() {
-  const currentUser = (() => {
+  const { lang, t } = useI18n();
+  const DT_LANG_URL = useMemo(() => `/lang/datatables/${lang}.json`, [lang]);
+
+  const currentUser = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem("user") || "null");
     } catch {
       return null;
     }
-  })();
+  }, []);
 
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [selectedRoles, setSelectedRoles] = useState([]);
-  const [viewLoading, setViewLoading] = useState(false);
+  const [items, setItems] = useState([]);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState({ open: false, type: "success", message: "" });
+
+  const [showOpen, setShowOpen] = useState(false);
+  const [showing, setShowing] = useState(null);
+  const [showLoading, setShowLoading] = useState(false);
+
+  const [editOpen, setEditOpen] = useState(false);
+  const [editing, setEditing] = useState(null);
+  const [selectedRoles, setSelectedRoles] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [globalError, setGlobalError] = useState("");
+
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   const tableRef = useRef(null);
-  const dataTableRef = useRef(null);
-  const viewModalRef = useRef(null);
-  const editModalRef = useRef(null);
-  const deleteModalRef = useRef(null);
-  const viewModalInstance = useRef(null);
-  const editModalInstance = useRef(null);
-  const deleteModalInstance = useRef(null);
+  const dtRef = useRef(null);
+  const itemsRef = useRef(items);
+  const toastTimeoutRef = useRef(null);
 
   useEffect(() => {
-    viewModalInstance.current = new Modal(viewModalRef.current);
-    editModalInstance.current = new Modal(editModalRef.current);
-    deleteModalInstance.current = new Modal(deleteModalRef.current);
+    itemsRef.current = items;
+  }, [items]);
 
+  useEffect(() => {
     return () => {
-      viewModalInstance.current?.dispose();
-      editModalInstance.current?.dispose();
-      deleteModalInstance.current?.dispose();
+      if (toastTimeoutRef.current) {
+        window.clearTimeout(toastTimeoutRef.current);
+      }
     };
   }, []);
 
-  useEffect(() => {
-    void loadUsers();
-  }, []);
+  function showToast(type, message) {
+    setToast({ open: true, type, message });
 
-  useEffect(() => {
-    if (loading || !tableRef.current) {
-      return;
+    if (toastTimeoutRef.current) {
+      window.clearTimeout(toastTimeoutRef.current);
     }
 
-    dataTableRef.current?.destroy();
-    dataTableRef.current = new DataTable(tableRef.current, {
-      pageLength: 10,
-      lengthMenu: [10, 25, 50, 100],
-      order: [[0, "asc"]],
-      columnDefs: [
-        { targets: [5], orderable: false, searchable: false },
-      ],
-      language: {
-        search: "Rechercher :",
-        lengthMenu: "Afficher _MENU_ lignes",
-        info: "Affichage de _START_ a _END_ sur _TOTAL_ utilisateurs",
-        infoEmpty: "Aucun utilisateur a afficher",
-        zeroRecords: "Aucun utilisateur correspondant",
-        emptyTable: "Aucun utilisateur trouve",
-        paginate: {
-          first: "<<",
-          last: ">>",
-          next: ">",
-          previous: "<",
-        },
-      },
-    });
-
-    return () => {
-      dataTableRef.current?.destroy();
-      dataTableRef.current = null;
-    };
-  }, [users, loading]);
-
-  useEffect(() => {
-    if (!tableRef.current) {
-      return;
-    }
-
-    function handleUserAction(action, user) {
-      if (action === "show") {
-        openViewModal(user);
-        return;
-      }
-
-      if (action === "edit") {
-        openEditModal(user);
-        return;
-      }
-
-      if (action === "delete") {
-        if (String(currentUser?.encrypted_id || currentUser?.id) === String(user.encrypted_id || user.id)) {
-          setError("Vous ne pouvez pas vous supprimer vous-meme.");
-          return;
-        }
-
-        openDeleteModal(user);
-      }
-    }
-
-    function handleTableClick(event) {
-      const actionButton = event.target.closest("[data-user-action]");
-
-      if (!actionButton) {
-        return;
-      }
-
-      const action = actionButton.getAttribute("data-user-action");
-      const userIndex = Number(actionButton.getAttribute("data-user-index"));
-      const user = Number.isInteger(userIndex) ? users[userIndex] : null;
-
-      if (!user) {
-        return;
-      }
-
-      handleUserAction(action, user);
-    }
-
-    const tableElement = tableRef.current;
-    const clickScope = tableElement.closest(".dt-container") || tableElement.parentElement || tableElement;
-
-    clickScope.addEventListener("click", handleTableClick, true);
-
-    return () => {
-      clickScope.removeEventListener("click", handleTableClick, true);
-    };
-  }, [users, currentUser]);
-
-  function handleActionClickCapture(event) {
-    const actionButton = event.target.closest("[data-user-action]");
-
-    if (!actionButton) {
-      return;
-    }
-
-    const action = actionButton.getAttribute("data-user-action");
-    const userIndex = Number(actionButton.getAttribute("data-user-index"));
-    const user = Number.isInteger(userIndex) ? users[userIndex] : null;
-
-    if (!user) {
-      return;
-    }
-
-    if (action === "show") {
-      openViewModal(user);
-      return;
-    }
-
-    if (action === "edit") {
-      openEditModal(user);
-      return;
-    }
-
-    if (action === "delete") {
-      if (String(currentUser?.encrypted_id || currentUser?.id) === String(user.encrypted_id || user.id)) {
-        setError("Vous ne pouvez pas vous supprimer vous-meme.");
-        return;
-      }
-
-      openDeleteModal(user);
-    }
+    toastTimeoutRef.current = window.setTimeout(() => {
+      setToast((current) => ({ ...current, open: false }));
+    }, 3500);
   }
 
-  async function loadUsers() {
-    setLoading(true);
-    setError("");
+  const getRowId = (row) => row?.encrypted_id ?? row?.id;
+  const isCurrentUserRow = (row) => String(currentUser?.id || "") === String(row?.id || "__no_id__");
+
+  async function load({ mode = "refresh" } = {}) {
+    if (mode === "initial") {
+      setInitialLoading(true);
+    } else {
+      setRefreshing(true);
+    }
 
     try {
-      const data = await usersApi.list();
-      setUsers(normalizeCollection(data));
-    } catch (err) {
-      setError(err?.response?.data?.message || "Impossible de charger les utilisateurs.");
+      const list = await usersApi.list();
+      setItems(normalizeCollection(list));
+    } catch (error) {
+      const message =
+        error?.response?.data?.message ||
+        t("users.toast.loadFailed", "Impossible de charger les utilisateurs.");
+
+      if (mode === "initial") {
+        setGlobalError(message);
+      } else {
+        showToast("danger", message);
+      }
     } finally {
-      setLoading(false);
+      if (mode === "initial") {
+        setInitialLoading(false);
+      }
+
+      setRefreshing(false);
     }
   }
 
-  function openViewModal(user) {
-    setError("");
-    setSelectedUser(user);
-    setViewLoading(true);
-    viewModalInstance.current?.show();
+  useEffect(() => {
+    void load({ mode: "initial" });
+  }, []);
 
-    void (async () => {
-      try {
-        const data = await usersApi.show(user.encrypted_id);
-        setSelectedUser(data?.user || user);
-      } catch (err) {
-        setError(err?.response?.data?.message || "Impossible de charger cet utilisateur.");
-      } finally {
-        setViewLoading(false);
-      }
-    })();
-  }
-
-  function openEditModal(user) {
-    setSuccess("");
-    setError("");
-    setSelectedUser(user);
+  function openEdit(user) {
+    setEditing(user);
     setSelectedRoles(formatRoles(user.roles));
-    editModalInstance.current?.show();
+    setErrors({});
+    setGlobalError("");
+    setEditOpen(true);
   }
 
-  function openDeleteModal(user) {
-    setSuccess("");
-    setError("");
-    setSelectedUser(user);
-    deleteModalInstance.current?.show();
+  function closeEdit() {
+    if (saving) return;
+    setEditOpen(false);
+    setEditing(null);
   }
 
-  function updateUserInState(nextUser) {
-    setUsers((current) =>
-      current.map((user) =>
-        (user.encrypted_id || user.id) === (nextUser.encrypted_id || nextUser.id) ? nextUser : user
-      )
-    );
-  }
-
-  async function handleUpdateSubmit(event) {
-    event.preventDefault();
-    if (!selectedUser?.encrypted_id) {
+  function onDeleteAsk(user) {
+    if (isCurrentUserRow(user)) {
+      showToast("danger", t("users.toast.selfDelete", "Vous ne pouvez pas vous supprimer vous-meme."));
       return;
     }
 
-    setSaving(true);
-    setError("");
+    setDeleteTarget(user);
+    setDeleteOpen(true);
+  }
+
+  function closeDeleteModal() {
+    if (deleting) return;
+    setDeleteOpen(false);
+    setDeleteTarget(null);
+  }
+
+  async function openShow(user) {
+    setShowLoading(true);
+    setShowing(user);
+    setShowOpen(true);
 
     try {
-      const result = await usersApi.syncRoles(selectedUser.encrypted_id, selectedRoles);
-      const nextUser = result.data;
-
-      updateUserInState(nextUser);
-      setSelectedUser(nextUser);
-      setSuccess(result.message || "Roles synchronises avec succes.");
-      editModalInstance.current?.hide();
-    } catch (err) {
-      setError(err?.response?.data?.message || "Impossible de mettre a jour les roles.");
+      const data = await usersApi.show(getRowId(user));
+      setShowing(data?.user || user);
+    } catch {
+      setShowing(user);
     } finally {
-      setSaving(false);
+      setShowLoading(false);
     }
+  }
+
+  function closeShow() {
+    setShowOpen(false);
+    setShowing(null);
+    setShowLoading(false);
   }
 
   function toggleRole(roleCode) {
@@ -299,289 +200,418 @@ export default function UsersPage() {
     );
   }
 
-  async function handleDeleteConfirm() {
-    if (!selectedUser?.encrypted_id) {
-      return;
+  useEffect(() => {
+    if (initialLoading) return;
+    if (!tableRef.current) return;
+
+    const $table = $(tableRef.current);
+
+    if (dtRef.current) {
+      try {
+        $table.off("click", ".js-show");
+        $table.off("click", ".js-edit");
+        $table.off("click", ".js-del");
+      } catch {}
+
+      dtRef.current.destroy(true);
+      dtRef.current = null;
+      $table.find("tbody").empty();
     }
 
-    setDeleting(true);
-    setError("");
+    dtRef.current = $table.DataTable({
+      data: [],
+      pageLength: 10,
+      lengthMenu: [10, 15, 25, 50, 100],
+      ordering: true,
+      searching: true,
+      responsive: true,
+      language: { url: DT_LANG_URL },
+      columns: [
+        {
+          data: "avatar",
+          orderable: false,
+          searchable: false,
+          width: 80,
+          render: (value, type, row) => {
+            const src = resolveAvatarUrl(value);
+            const initial = String(row?.name || "?").slice(0, 1).toUpperCase();
+
+            if (!src) {
+              return `
+                <div class="rounded-circle bg-dark text-white d-inline-flex align-items-center justify-content-center fw-semibold"
+                  style="width:40px;height:40px;">
+                  ${initial}
+                </div>
+              `;
+            }
+
+            return `
+              <img src="${src}" alt="avatar"
+                class="rounded-circle object-fit-cover border"
+                style="width:40px;height:40px;" />
+            `;
+          },
+        },
+        { data: "name", defaultContent: "" },
+        { data: "email", defaultContent: "" },
+        { data: "phone", defaultContent: "-" },
+        {
+          data: "roles",
+          defaultContent: "",
+          render: (value) => {
+            const roles = formatRoles(value);
+
+            if (roles.length === 0) {
+              return `<span class="text-muted small">${t("users.table.noRoles", "Aucun role")}</span>`;
+            }
+
+            return roles
+              .map(
+                (role) =>
+                  `<span class="badge text-bg-light border text-dark text-uppercase me-1 mb-1">${role}</span>`
+              )
+              .join("");
+          },
+        },
+        {
+          data: "is_active",
+          width: 120,
+          render: (value) =>
+            value
+              ? `<span class="badge text-bg-success">${t("users.table.active", "Actif")}</span>`
+              : `<span class="badge text-bg-secondary">${t("users.table.inactive", "Inactif")}</span>`,
+        },
+        {
+          data: null,
+          orderable: false,
+          searchable: false,
+          className: "text-end",
+          width: 180,
+          render: (data, type, row) => {
+            const id = getRowId(row);
+            const isCurrentUser = isCurrentUserRow(row);
+
+            return `
+              <button class="btn btn-sm btn-outline-primary me-2 js-show" data-id="${id}">
+                <i class="bi bi-eye"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-dark me-2 js-edit" data-id="${id}">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+              ${
+                isCurrentUser
+                  ? ""
+                  : `<button class="btn btn-sm btn-outline-danger js-del" data-id="${id}">
+                      <i class="bi bi-trash3"></i>
+                    </button>`
+              }
+            `;
+          },
+        },
+      ],
+    });
+
+    $table.on("click", ".js-show", (event) => {
+      const id = $(event.currentTarget).data("id");
+      const user = itemsRef.current.find((item) => String(getRowId(item)) === String(id));
+      if (user) void openShow(user);
+    });
+
+    $table.on("click", ".js-edit", (event) => {
+      const id = $(event.currentTarget).data("id");
+      const user = itemsRef.current.find((item) => String(getRowId(item)) === String(id));
+      if (user) openEdit(user);
+    });
+
+    $table.on("click", ".js-del", (event) => {
+      const id = $(event.currentTarget).data("id");
+      const user = itemsRef.current.find((item) => String(getRowId(item)) === String(id));
+      if (user) onDeleteAsk(user);
+    });
+
+    return () => {
+      try {
+        $table.off("click", ".js-show");
+        $table.off("click", ".js-edit");
+        $table.off("click", ".js-del");
+      } catch {}
+
+      dtRef.current?.destroy();
+      dtRef.current = null;
+    };
+  }, [initialLoading, DT_LANG_URL, t, currentUser]);
+
+  useEffect(() => {
+    if (!dtRef.current) return;
+
+    const dt = dtRef.current;
+    const page = dt.page();
+    const search = dt.search();
+    const order = dt.order();
+
+    dt.clear();
+    dt.rows.add(items);
+    dt.draw(false);
+    dt.order(order).draw(false);
+    dt.search(search).draw(false);
+    dt.page(page).draw(false);
+  }, [items]);
+
+  async function onSubmit(event) {
+    event.preventDefault();
+    setErrors({});
+    setGlobalError("");
+
+    if (!editing) return;
+
+    setSaving(true);
 
     try {
-      const result = await usersApi.remove(selectedUser.encrypted_id);
-      setUsers((current) =>
-        current.filter((user) => (user.encrypted_id || user.id) !== selectedUser.encrypted_id)
-      );
-      setSuccess(result.message || "Utilisateur supprime avec succes.");
-      deleteModalInstance.current?.hide();
-      setSelectedUser(null);
-    } catch (err) {
-      setError(err?.response?.data?.message || "Impossible de supprimer l'utilisateur.");
+      await usersApi.syncRoles(getRowId(editing), selectedRoles);
+      await load({ mode: "refresh" });
+      setEditOpen(false);
+      setEditing(null);
+      showToast("success", t("users.toast.updated", "Roles synchronises avec succes."));
+    } catch (error) {
+      const data = error?.response?.data;
+
+      if (data?.errors) {
+        setErrors(data.errors);
+      } else {
+        setGlobalError(data?.message || t("users.toast.saveFailed", "Impossible de mettre a jour les roles."));
+      }
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function confirmDelete() {
+    if (!deleteTarget || deleting) return;
+
+    setDeleting(true);
+
+    try {
+      await usersApi.remove(getRowId(deleteTarget));
+      await load({ mode: "refresh" });
+      setDeleteOpen(false);
+      setDeleteTarget(null);
+      showToast("success", t("users.toast.deleted", "Utilisateur supprime avec succes."));
+    } catch (error) {
+      const message =
+        error?.response?.data?.message || t("users.toast.deleteFailed", "Impossible de supprimer l'utilisateur.");
+      showToast("danger", message);
     } finally {
       setDeleting(false);
     }
   }
 
   return (
-    <div>
-      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div className="container-fluid">
+      <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 mb-3">
         <div>
-          <h3 className="h4 mb-1">Utilisateurs</h3>
-          <p className="text-secondary mb-0">
-            Gestion des comptes avec consultation, gestion des roles et suppression.
-          </p>
+          <h4 className="mb-1">{t("users.title", "Utilisateurs")}</h4>
+          <div className="text-muted small">
+            {t("users.subtitle", "Gestion des comptes avec consultation, roles et suppression")}
+          </div>
         </div>
 
-        <button type="button" className="btn btn-dark" onClick={() => void loadUsers()}>
-          <i className="bi bi-arrow-clockwise me-2" />
-          Rafraichir
-        </button>
+        <div className="d-flex gap-2">
+          <button
+            className="btn btn-outline-secondary"
+            onClick={() => void load({ mode: "refresh" })}
+            disabled={initialLoading || refreshing}
+          >
+            {initialLoading || refreshing ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2" />
+                {t("users.refreshing", "Rafraichissement...")}
+              </>
+            ) : (
+              <>
+                <i className="bi bi-arrow-clockwise me-2" />
+                {t("users.refresh", "Rafraichir")}
+              </>
+            )}
+          </button>
+        </div>
       </div>
-
-      {success ? (
-        <div className="alert alert-success" role="alert">
-          {success}
-        </div>
-      ) : null}
-
-      {error ? (
-        <div className="alert alert-danger" role="alert">
-          {error}
-        </div>
-      ) : null}
 
       <div className="card border-0 shadow-sm">
         <div className="card-body">
+          {initialLoading ? (
+            <div className="d-flex align-items-center gap-2 text-muted mb-3">
+              <div className="spinner-border spinner-border-sm" />
+              {t("users.loading", "Chargement...")}
+            </div>
+          ) : null}
+
+          {globalError ? <div className="alert alert-danger py-2">{globalError}</div> : null}
+
           <div className="table-responsive">
-            <table
-              ref={tableRef}
-              className="table table-hover align-middle mb-0"
-              onClickCapture={handleActionClickCapture}
-            >
-              <thead className="table-light">
-                <tr>
-                  <th>Nom</th>
-                  <th>Email</th>
-                  <th>Telephone</th>
-                  <th>Roles</th>
-                  <th>Statut</th>
-                  <th className="text-end">Actions</th>
+            <table ref={tableRef} className="table align-middle mb-0">
+              <thead>
+                <tr className="text-muted small">
+                  <th style={{ width: 80 }}>{t("users.table.avatar", "Avatar")}</th>
+                  <th>{t("users.table.name", "Nom")}</th>
+                  <th>{t("users.table.email", "Email")}</th>
+                  <th>{t("users.table.phone", "Telephone")}</th>
+                  <th>{t("users.table.roles", "Roles")}</th>
+                  <th style={{ width: 120 }}>{t("users.table.status", "Statut")}</th>
+                  <th style={{ width: 180 }} className="text-end">
+                    {t("users.table.actions", "Actions")}
+                  </th>
                 </tr>
               </thead>
-              <tbody>
-                {loading ? (
-                  <tr>
-                    <td colSpan="6" className="text-center py-5 text-secondary">
-                      Chargement des utilisateurs...
-                    </td>
-                  </tr>
-                ) : users.length === 0 ? (
-                  <tr>
-                    <td colSpan="6" className="text-center py-5 text-secondary">
-                      Aucun utilisateur trouve.
-                    </td>
-                  </tr>
-                ) : (
-                  users.map((user, index) => {
-                    const isCurrentUser =
-                      String(currentUser?.id) === String(user.id);
-
-                    console.log("Rendering user:", isCurrentUser);
-
-                    return (
-                    <tr key={user.encrypted_id || user.id}>
-                      <td>
-                        <div className="d-flex align-items-center gap-3">
-                          {resolveAvatarUrl(user.avatar) ? (
-                            <img
-                              src={resolveAvatarUrl(user.avatar)}
-                              alt={user.name || "Avatar utilisateur"}
-                              className="rounded-circle object-fit-cover border"
-                              style={{ width: "44px", height: "44px" }}
-                            />
-                          ) : (
-                            <div
-                              className="rounded-circle bg-dark text-white d-inline-flex align-items-center justify-content-center fw-semibold"
-                              style={{ width: "44px", height: "44px", minWidth: "44px" }}
-                            >
-                              {(user.name || "?").slice(0, 1).toUpperCase()}
-                            </div>
-                          )}
-                          <div>
-                            <div className="fw-semibold">{user.name}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td>{user.email || "-"}</td>
-                      <td>{user.phone || "-"}</td>
-                      <td>
-                        <div className="d-flex flex-wrap gap-2">
-                          {formatRoles(user.roles).length > 0 ? (
-                            formatRoles(user.roles).map((role) => (
-                              <span key={`${user.encrypted_id}-${role}`} className="badge text-bg-light border text-dark">
-                                {role}
-                              </span>
-                            ))
-                          ) : (
-                            <span className="text-secondary small">Aucun role</span>
-                          )}
-                        </div>
-                      </td>
-                      <td>
-                        <span className={`badge ${user.is_active ? "text-bg-success" : "text-bg-secondary"}`}>
-                          {user.is_active ? "Actif" : "Inactif"}
-                        </span>
-                      </td>
-                      <td className="text-end">
-                        <div className="d-inline-flex gap-2">
-                          <button
-                            type="button"
-                            className="btn btn-sm btn-outline-secondary"
-                            data-user-action="show"
-                            data-user-index={index}
-                          >
-                            <i className="bi bi-eye" />
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-sm btn-outline-primary"
-                            data-user-action="edit"
-                            data-user-index={index}
-                          >
-                            <i className="bi bi-pencil-square" />
-                          </button>
-                          {!isCurrentUser ? (
-                            <button
-                              type="button"
-                              className="btn btn-sm btn-outline-danger"
-                              data-user-action="delete"
-                              data-user-index={index}
-                              title="Supprimer"
-                            >
-                              <i className="bi bi-trash3" />
-                            </button>
-                          ) : null}
-                        </div>
-                      </td>
-                    </tr>
-                    );
-                  })
-                )}
-              </tbody>
+              <tbody />
             </table>
           </div>
         </div>
       </div>
 
-      <div className="modal fade" tabIndex="-1" ref={viewModalRef} aria-hidden="true">
-        <div className="modal-dialog modal-lg modal-dialog-centered">
-          <div className="modal-content border-0 shadow">
-            <div className="modal-header">
-              <h5 className="modal-title">Details utilisateur</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-            </div>
-            <div className="modal-body">
-              {viewLoading ? (
-                <div className="text-center py-4 text-secondary">Chargement...</div>
-              ) : selectedUser ? (
-                <div className="row g-4">
-                  <div className="col-12">
-                    <div className="shadow-sm border-0 bg-light rounded-4 p-3 p-md-4">
-                      <div className="d-flex flex-column flex-md-row align-items-md-center gap-3 gap-md-4">
-                      {resolveAvatarUrl(selectedUser.avatar) ? (
-                        <img
-                          src={resolveAvatarUrl(selectedUser.avatar)}
-                          alt={selectedUser.name || "Avatar utilisateur"}
-                          className="rounded-circle object-fit-cover border shadow-sm"
-                          style={{ width: "84px", height: "84px" }}
-                        />
-                      ) : (
-                        <div
-                          className="rounded-circle bg-dark text-white d-inline-flex align-items-center justify-content-center fw-semibold fs-3 shadow-sm"
-                          style={{ width: "84px", height: "84px" }}
-                        >
-                          {(selectedUser.name || "?").slice(0, 1).toUpperCase()}
-                        </div>
-                      )}
-                      <div>
-                        <div className="h5 mb-1">{selectedUser.name || "-"}</div>
-                        <div className="text-secondary">{selectedUser.email || "-"}</div>
-                        <div className="d-flex flex-wrap gap-2 mt-3">
-                          <span className={`badge ${selectedUser.is_active ? "text-bg-success" : "text-bg-secondary"}`}>
-                            {selectedUser.is_active ? "Actif" : "Inactif"}
-                          </span>
-                        </div>
-                      </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-md-12">
-                    <div className="border shadow-sm bg-light border-0 p-3 h-100">
-                      <div className="small text-uppercase text-secondary fw-semibold mb-3">Informations personnelles</div>
-                      <div className="mb-3">
-                        <div className="small text-secondary mb-1">Nom</div>
-                        <div className="fw-semibold">{selectedUser.name || "-"}</div>
-                      </div>
-                      <div className="mb-3">
-                        <div className="small text-secondary mb-1">Email</div>
-                        <div className="fw-semibold">{selectedUser.email || "-"}</div>
-                      </div>
-                      <div>
-                        <div className="small text-secondary mb-1">Telephone</div>
-                        <div className="fw-semibold">{selectedUser.phone || "-"}</div>
-                      </div>
-                                <div className="small text-uppercase text-secondary fw-semibold mb-3">Acces et statut</div>
-                      <div className="row">
-                      <div className="col-md-6 mb-3">
-                        <div className="small text-secondary mb-1">Statut du compte</div>
-                        <div className="fw-semibold">
-                          <span className={`badge ${selectedUser.is_active ? "text-bg-success" : "text-bg-secondary"}`}>
-                            {selectedUser.is_active ? "Actif" : "Inactif"}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="small text-secondary mb-2">Roles attribues</div>
-                        <div className="d-flex flex-wrap gap-2">
-                          {formatRoles(selectedUser.roles).length > 0 ? (
-                            formatRoles(selectedUser.roles).map((role) => (
-                              <span key={`view-${role}`} className="badge text-bg-light border text-dark text-uppercase">
-                                {role}
-                              </span>
-                            ))
-                          ) : (
-                            <span className="text-secondary small">Aucun role</span>
-                          )}
-                        </div>
-                      </div>
-                      </div>
-                    </div>
-                  </div>
+      {showOpen && (
+        <>
+          <div className="modal fade show" style={{ display: "block" }} role="dialog" aria-modal="true">
+            <div className="modal-dialog modal-lg modal-dialog-centered">
+              <div className="modal-content border-0 shadow">
+                <div className="modal-header">
+                  <h5 className="modal-title">{t("users.show.title", "Details utilisateur")}</h5>
+                  <button type="button" className="btn-close" onClick={closeShow} />
                 </div>
-              ) : null}
+
+                <div className="modal-body">
+                  {showLoading ? (
+                    <div className="text-center py-4 text-secondary">{t("users.show.loading", "Chargement...")}</div>
+                  ) : showing ? (
+                    <div className="row g-4">
+                      <div className="col-12">
+                        <div className="rounded-4 border bg-light-subtle p-3 p-md-4">
+                          <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
+                            <div className="d-flex align-items-center gap-3">
+                              {resolveAvatarUrl(showing.avatar) ? (
+                                <img
+                                  src={resolveAvatarUrl(showing.avatar)}
+                                  alt={showing.name || "Avatar utilisateur"}
+                                  className="rounded-circle object-fit-cover border shadow-sm"
+                                  style={{ width: "84px", height: "84px" }}
+                                />
+                              ) : (
+                                <div
+                                  className="rounded-circle bg-dark text-white d-inline-flex align-items-center justify-content-center fw-semibold fs-3 shadow-sm"
+                                  style={{ width: "84px", height: "84px" }}
+                                >
+                                  {(showing.name || "?").slice(0, 1).toUpperCase()}
+                                </div>
+                              )}
+
+                              <div>
+                                <div className="h4 mb-1">{showing.name || "-"}</div>
+                                <div className="text-secondary">{showing.email || "-"}</div>
+                              </div>
+                            </div>
+
+                            <div className="d-flex gap-2 flex-wrap align-items-start">
+                              <span className={`badge ${showing.is_active ? "text-bg-success" : "text-bg-secondary"}`}>
+                                {showing.is_active
+                                  ? t("users.table.active", "Actif")
+                                  : t("users.table.inactive", "Inactif")}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="col-md-6">
+                        <div className="border rounded-4 p-3 h-100">
+                          <div className="small text-uppercase text-secondary fw-semibold mb-3">
+                            {t("users.show.personal", "Informations personnelles")}
+                          </div>
+
+                          <div className="mb-3">
+                            <div className="text-muted small">{t("users.table.name", "Nom")}</div>
+                            <div className="fw-semibold">{showing.name || "-"}</div>
+                          </div>
+
+                          <div className="mb-3">
+                            <div className="text-muted small">{t("users.table.email", "Email")}</div>
+                            <div className="fw-semibold">{showing.email || "-"}</div>
+                          </div>
+
+                          <div>
+                            <div className="text-muted small">{t("users.table.phone", "Telephone")}</div>
+                            <div className="fw-semibold">{showing.phone || "-"}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="col-md-6">
+                        <div className="border rounded-4 p-3 h-100">
+                          <div className="small text-uppercase text-secondary fw-semibold mb-3">
+                            {t("users.show.access", "Acces et statut")}
+                          </div>
+
+                          <div className="mb-3">
+                            <div className="text-muted small">{t("users.table.status", "Statut")}</div>
+                            <div>
+                              <span className={`badge ${showing.is_active ? "text-bg-success" : "text-bg-secondary"}`}>
+                                {showing.is_active
+                                  ? t("users.table.active", "Actif")
+                                  : t("users.table.inactive", "Inactif")}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div>
+                            <div className="text-muted small mb-2">{t("users.table.roles", "Roles")}</div>
+                            <div className="d-flex flex-wrap gap-2">
+                              {formatRoles(showing.roles).length > 0 ? (
+                                formatRoles(showing.roles).map((role) => (
+                                  <span key={`show-${role}`} className="badge text-bg-light border text-dark text-uppercase">
+                                    {role}
+                                  </span>
+                                ))
+                              ) : (
+                                <span className="text-muted small">{t("users.table.noRoles", "Aucun role")}</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-outline-secondary" onClick={closeShow}>
+                    {t("users.modal.close", "Fermer")}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className="modal fade" tabIndex="-1" ref={editModalRef} aria-hidden="true">
-        <div className="modal-dialog modal-lg modal-dialog-centered">
-          <div className="modal-content border-0 shadow">
-            <form onSubmit={handleUpdateSubmit}>
-              <div className="modal-header">
-                <h5 className="modal-title">Modifier les roles</h5>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-              </div>
-              <div className="modal-body">
-                <div className="mb-3">
-                  <div className="fw-semibold">{selectedUser?.name || "-"}</div>
-                  <div className="small text-secondary">{selectedUser?.email || "-"}</div>
+          <div className="modal-backdrop fade show" onClick={closeShow} />
+        </>
+      )}
+
+      {editOpen && (
+        <>
+          <div className="modal fade show" style={{ display: "block" }} role="dialog" aria-modal="true">
+            <div className="modal-dialog modal-lg modal-dialog-centered">
+              <div className="modal-content border-0 shadow">
+                <div className="modal-header">
+                  <h5 className="modal-title">{t("users.edit.title", "Modifier les roles")}</h5>
+                  <button type="button" className="btn-close" onClick={closeEdit} />
                 </div>
 
-                <div className="row g-3">
-                  <div className="col-12">
-                    <label className="form-label">Roles attribues</label>
+                <form onSubmit={onSubmit}>
+                  <div className="modal-body">
+                    {globalError ? <div className="alert alert-danger py-2">{globalError}</div> : null}
+
+                    <div className="mb-3">
+                      <div className="fw-semibold">{editing?.name || "-"}</div>
+                      <div className="small text-secondary">{editing?.email || "-"}</div>
+                    </div>
+
                     <div className="row g-2">
                       {AVAILABLE_ROLES.map((roleCode) => (
                         <div className="col-md-6" key={roleCode}>
@@ -597,49 +627,104 @@ export default function UsersPage() {
                         </div>
                       ))}
                     </div>
-                    <div className="form-text">
-                      Seuls les roles sont modifiables depuis l&apos;administration. Les informations personnelles sont
-                      gerees par chaque utilisateur depuis son compte.
+
+                    {errors.roles ? <div className="text-danger small mt-2">{errors.roles[0]}</div> : null}
+
+                    <div className="form-text mt-3">
+                      {t(
+                        "users.edit.help",
+                        "Seuls les roles sont modifiables depuis l'administration. Les informations personnelles sont gerees par chaque utilisateur depuis son compte."
+                      )}
                     </div>
                   </div>
+
+                  <div className="modal-footer">
+                    <button type="button" className="btn btn-outline-secondary" onClick={closeEdit} disabled={saving}>
+                      {t("users.modal.cancel", "Annuler")}
+                    </button>
+                    <button className="btn btn-dark" disabled={saving}>
+                      {saving ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" />
+                          {t("users.edit.saving", "Enregistrement...")}
+                        </>
+                      ) : (
+                        t("users.edit.save", "Enregistrer")
+                      )}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div className="modal-backdrop fade show" onClick={closeEdit} />
+        </>
+      )}
+
+      {deleteOpen && (
+        <>
+          <div className="modal fade show" style={{ display: "block" }} role="dialog" aria-modal="true">
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content border-0 shadow">
+                <div className="modal-header">
+                  <h5 className="modal-title">{t("users.delete.title", "Confirmer la suppression")}</h5>
+                  <button type="button" className="btn-close" onClick={closeDeleteModal} />
+                </div>
+
+                <div className="modal-body">
+                  {deleteTarget ? (
+                    <p className="mb-0">
+                      {t("users.delete.message", "Supprimer l'utilisateur")} <b>{deleteTarget.name}</b> ?
+                    </p>
+                  ) : (
+                    <p className="mb-0">{t("users.delete.message2", "Supprimer cet utilisateur ?")}</p>
+                  )}
+                </div>
+
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={closeDeleteModal}
+                    disabled={deleting}
+                  >
+                    {t("users.modal.cancel", "Annuler")}
+                  </button>
+
+                  <button type="button" className="btn btn-danger" onClick={confirmDelete} disabled={deleting}>
+                    {deleting ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm me-2" />
+                        {t("users.delete.deleting", "Suppression...")}
+                      </>
+                    ) : (
+                      t("users.delete.btn", "Supprimer")
+                    )}
+                  </button>
                 </div>
               </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-light border" data-bs-dismiss="modal">
-                  Annuler
-                </button>
-                <button type="submit" className="btn btn-primary" disabled={saving}>
-                  {saving ? "Enregistrement..." : "Enregistrer"}
-                </button>
-              </div>
-            </form>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div className="modal fade" tabIndex="-1" ref={deleteModalRef} aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content border-0 shadow">
-            <div className="modal-header">
-              <h5 className="modal-title">Confirmer la suppression</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-            </div>
-            <div className="modal-body">
-              <p className="mb-0">
-                Supprimer l&apos;utilisateur <strong>{selectedUser?.name || "-"}</strong> ?
-              </p>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-light border" data-bs-dismiss="modal">
-                Annuler
-              </button>
-              <button type="button" className="btn btn-danger" onClick={() => void handleDeleteConfirm()} disabled={deleting}>
-                {deleting ? "Suppression..." : "Supprimer"}
-              </button>
+          <div className="modal-backdrop fade show" onClick={closeDeleteModal} />
+        </>
+      )}
+
+      {toast.open ? (
+        <div className="toast-container position-fixed bottom-0 end-0 p-3" style={{ zIndex: 9999 }}>
+          <div className={`toast show text-bg-${toast.type} border-0`}>
+            <div className="d-flex">
+              <div className="toast-body">{toast.message}</div>
+              <button
+                type="button"
+                className="btn-close btn-close-white me-2 m-auto"
+                onClick={() => setToast((current) => ({ ...current, open: false }))}
+              />
             </div>
           </div>
         </div>
-      </div>
+      ) : null}
     </div>
   );
 }
