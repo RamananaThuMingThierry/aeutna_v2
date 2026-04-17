@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AxeController;
 use App\Http\Controllers\EducationLevelController;
+use App\Http\Controllers\FunctionController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,4 +41,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/education-levels/{encryptedId}', [EducationLevelController::class, 'show'])->name('education_levels.show');
     Route::put('/education-levels/{encryptedId}', [EducationLevelController::class, 'update'])->name('education_levels.update');
     Route::delete('/education-levels/{encryptedId}', [EducationLevelController::class, 'destroy'])->name('education_levels.destroy');
+    Route::get('/functions', [FunctionController::class, 'index'])->name('functions.index');
+    Route::post('/functions', [FunctionController::class, 'store'])->name('functions.store');
+    Route::get('/functions/{encryptedId}', [FunctionController::class, 'show'])->name('functions.show');
+    Route::put('/functions/{encryptedId}', [FunctionController::class, 'update'])->name('functions.update');
+    Route::delete('/functions/{encryptedId}', [FunctionController::class, 'destroy'])->name('functions.destroy');
+    Route::get('/members', [MemberController::class, 'index'])->name('members.index');
+    Route::post('/members', [MemberController::class, 'store'])->name('members.store');
+    Route::get('/members/{encryptedId}', [MemberController::class, 'show'])->name('members.show');
+    Route::put('/members/{encryptedId}', [MemberController::class, 'update'])->name('members.update');
+    Route::delete('/members/{encryptedId}', [MemberController::class, 'destroy'])->name('members.destroy');
 });

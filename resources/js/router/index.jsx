@@ -3,7 +3,11 @@ import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 
 import AdminLayout from "../layouts/AdminLayout";
 import AxesPage from "../pages/admin/AxesPage";
+import DetailMemberPage from "../pages/admin/DetailMemberPage";
 import EducationLevelsPage from "../pages/admin/EducationLevelsPage";
+import FormMemberPage from "../pages/admin/FormMemberPage";
+import FunctionsPage from "../pages/admin/FunctionsPage";
+import MembersPage from "../pages/admin/MembersPage";
 import RootLayout from "../layouts/RootLayout";
 import ActivityLogPage from "../pages/admin/ActivityLogPage";
 import DashboardPage from "../pages/admin/DashboardPage";
@@ -174,6 +178,26 @@ export const router = createBrowserRouter([
           {
             path: "education-levels",
             element: <EducationLevelsPage />,
+          },
+          {
+            path: "functions",
+            element: <FunctionsPage />,
+          },
+          {
+            path: "members",
+            element: <MembersPage />,
+          },
+          {
+            path: "members/new",
+            element: <FormMemberPage />,
+          },
+          {
+            path: "members/:encryptedId",
+            element: <DetailMemberPage />,
+          },
+          {
+            path: "members/:encryptedId/edit",
+            element: <FormMemberPage />,
           },
           {
             path: "categories",

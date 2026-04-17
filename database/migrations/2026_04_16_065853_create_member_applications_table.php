@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('axis_id')->nullable()->constrained('axes')->nullOnDelete();
             $table->foreignId('education_level_id')->nullable()->constrained('education_levels')->nullOnDelete();
 
+            $table->enum('member_type', ['member', 'bureau'])->default('member');
+
             $table->string('first_name');
             $table->string('last_name');
             $table->string('gender', 20)->nullable();
@@ -31,7 +33,6 @@ return new class extends Migration
 
             $table->string('address')->nullable();
             $table->string('city')->nullable();
-            $table->string('region')->nullable();
 
             $table->string('institution_name')->nullable();
             $table->string('field_of_study')->nullable();
