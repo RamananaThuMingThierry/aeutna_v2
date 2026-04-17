@@ -10,6 +10,7 @@ import FeePaymentsPage from "../pages/admin/FeePaymentsPage";
 import FormMemberPage from "../pages/admin/FormMemberPage";
 import FunctionsPage from "../pages/admin/FunctionsPage";
 import MembersPage from "../pages/admin/MembersPage";
+import MembershipCardsPage from "../pages/admin/MembershipCardsPage";
 import RootLayout from "../layouts/RootLayout";
 import ActivityLogPage from "../pages/admin/ActivityLogPage";
 import DashboardPage from "../pages/admin/DashboardPage";
@@ -196,6 +197,10 @@ export const router = createBrowserRouter([
           {
             path: "members",
             element: <MembersPage />,
+          },
+          {
+            path: "membership-cards",
+            element: <MembershipCardsPage />,
           },
           {
             path: "members/new",

@@ -109,4 +109,16 @@ class Member extends Model
     {
         return $this->hasMany(FeePayment::class);
     }
+
+    public function membershipCards(): HasMany
+    {
+        return $this->hasMany(MembershipCard::class);
+    }
+
+    public function currentMembershipCard(): HasOne
+    {
+        return $this->hasOne(MembershipCard::class)
+            ->where('status', 'active')
+            ->latestOfMany('issued_at');
+    }
 }

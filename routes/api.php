@@ -8,6 +8,7 @@ use App\Http\Controllers\EducationLevelController;
 use App\Http\Controllers\FeePaymentController;
 use App\Http\Controllers\FunctionController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MembershipCardController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +59,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/members/{encryptedId}', [MemberController::class, 'show'])->name('members.show');
     Route::put('/members/{encryptedId}', [MemberController::class, 'update'])->name('members.update');
     Route::delete('/members/{encryptedId}', [MemberController::class, 'destroy'])->name('members.destroy');
+    Route::get('/membership-cards', [MembershipCardController::class, 'index'])->name('membership_cards.index');
+    Route::post('/membership-cards', [MembershipCardController::class, 'store'])->name('membership_cards.store');
+    Route::get('/membership-cards/{encryptedId}', [MembershipCardController::class, 'show'])->name('membership_cards.show');
+    Route::put('/membership-cards/{encryptedId}', [MembershipCardController::class, 'update'])->name('membership_cards.update');
+    Route::delete('/membership-cards/{encryptedId}', [MembershipCardController::class, 'destroy'])->name('membership_cards.destroy');
     Route::get('/fee-payments', [FeePaymentController::class, 'index'])->name('fee_payments.index');
     Route::post('/fee-payments', [FeePaymentController::class, 'store'])->name('fee_payments.store');
     Route::get('/fee-payments/{encryptedId}', [FeePaymentController::class, 'show'])->name('fee_payments.show');
