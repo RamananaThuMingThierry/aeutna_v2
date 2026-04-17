@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('member_id')->constrained()->cascadeOnDelete();
 
             $table->string('card_number')->unique();
-            $table->string('qr_code')->nullable();
+            $table->string('qr_code')->nullable()->unique();
             $table->year('issue_year');
             $table->date('issued_at')->nullable();
             $table->date('expires_at')->nullable();

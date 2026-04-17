@@ -20,11 +20,29 @@ function resolvePhotoUrl(photo) {
 
 function currentFunctionNames(member) {
   const items = Array.isArray(member?.current_member_functions) ? member.current_member_functions : [];
-  const names = items
-    .map((item) => item?.function?.name)
-    .filter(Boolean);
-
+  const names = items.map((item) => item?.function?.name).filter(Boolean);
   return names.join(", ");
+}
+
+function paymentStatusBadge(status) {
+  const map = {
+    unpaid: "secondary",
+    partial: "warning",
+    paid: "success",
+    cancelled: "danger",
+  };
+
+  return map[status] || "secondary";
+}
+
+function validationStatusBadge(status) {
+  const map = {
+    pending: "info",
+    validated: "success",
+    cancelled: "danger",
+  };
+
+  return map[status] || "secondary";
 }
 
 function DetailCard({ title, children }) {
@@ -131,18 +149,17 @@ export default function DetailMemberPage() {
                     disabled={!hasMemberPhoto}
                     title={hasMemberPhoto ? "Afficher l'image en grand" : "Aucune image disponible"}
                   >
-                    <img
-                      src={resolvePhotoUrl(member.photo)}
-                      alt="Photo membre"
-                      className="w-100 h-100 object-fit-cover"
-                    />
+                    <img src={resolvePhotoUrl(member.photo)} alt="Photo membre" className="w-100 h-100 object-fit-cover" />
                   </button>
                 </div>
+
                 <div className="col">
                   <div className="d-flex flex-wrap gap-2 mb-3">
                     <span className="badge text-bg-light border text-dark text-uppercase">{member.status || "-"}</span>
                     <span className="badge text-bg-secondary">{member.member_number || "Sans numero"}</span>
-                    <span className={`badge ${member.member_type === "bureau" ? "text-bg-warning" : "text-bg-secondary"}`}>{member.member_type || "member"}</span>
+                    <span className={`badge ${member.member_type === "bureau" ? "text-bg-warning" : "text-bg-secondary"}`}>
+                      {member.member_type || "member"}
+                    </span>
                   </div>
                   <h2 className="h3 mb-1">{[member.first_name, member.last_name].filter(Boolean).join(" ") || "-"}</h2>
                   <div className="text-secondary mb-2">{member.email || member.phone || "-"}</div>
@@ -164,6 +181,7 @@ export default function DetailMemberPage() {
                 <DetailItem label="Lieu naissance" value={member.birth_place || "-"} />
               </DetailCard>
             </div>
+
             <div className="col-xl-6">
               <DetailCard title="Contact">
                 <DetailItem label="Email" value={member.email || "-"} />
@@ -173,6 +191,7 @@ export default function DetailMemberPage() {
                 <DetailItem label="Ville / Region" value={[member.city, member.region].filter(Boolean).join(" / ") || "-"} />
               </DetailCard>
             </div>
+
             <div className="col-xl-6">
               <DetailCard title="Parcours">
                 <DetailItem label="Institution" value={member.institution_name || "-"} />
@@ -182,6 +201,7 @@ export default function DetailMemberPage() {
                 <DetailItem label="Originaire d'Antalaha" value={member.is_from_antalaha ? "Oui" : "Non"} />
               </DetailCard>
             </div>
+
             <div className="col-xl-6">
               <DetailCard title="Adhesion">
                 <DetailItem label="Numero membre" value={member.member_number || "-"} />
@@ -192,6 +212,7 @@ export default function DetailMemberPage() {
                 <DetailItem label="Niveau d'education" value={member.educationLevel?.name || member.education_level?.name || "-"} />
               </DetailCard>
             </div>
+
             <div className="col-12">
               <DetailCard title="Notes">
                 <div className="text-secondary" style={{ whiteSpace: "pre-wrap" }}>
@@ -199,11 +220,69 @@ export default function DetailMemberPage() {
                 </div>
               </DetailCard>
             </div>
+
             <div className="col-12">
               <DetailCard title="Cotisations et annulations">
-                <div className="text-secondary">
-                  Cette zone servira a afficher les cotisations, les annulations et l'utilisateur qui a effectue chaque action.
-                </div>
+                {Array.isArray(member.fee_payments) && member.fee_payments.length ? (
+                  <div className="table-responsive">
+                    <table className="table table-sm align-middle mb-0">
+                      <thead>
+                        <tr className="text-muted small">
+                          <th>Annee</th>
+                          <th>Montant du</th>
+                          <th>Montant paye</th>
+                          <th>Paiement</th>
+                          <th>Validation</th>
+                          <th>Details</th>
+                          <th>Suivi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {member.fee_payments.map((payment) => (
+                          <tr key={payment.id}>
+                            <td>{payment.annual_fee?.year || "-"}</td>
+                            <td>{payment.amount_due || "-"}</td>
+                            <td>{payment.amount_paid || "-"}</td>
+                            <td>
+                              <span className={`badge text-bg-${paymentStatusBadge(payment.payment_status)}`}>
+                                {payment.payment_status || "-"}
+                              </span>
+                            </td>
+                            <td>
+                              <span className={`badge text-bg-${validationStatusBadge(payment.validation_status)}`}>
+                                {payment.validation_status || "-"}
+                              </span>
+                            </td>
+                            <td>
+                              <div>{payment.payment_method || "-"}</div>
+                              <div className="small text-muted">{payment.reference || "-"}</div>
+                            </td>
+                            <td>
+                              {payment.validation_status === "cancelled" ? (
+                                <>
+                                  <div className="small">Annule par {payment.canceller?.name || "-"}</div>
+                                  <div className="small text-muted">{payment.cancel_reason || "-"}</div>
+                                </>
+                              ) : payment.validation_status === "validated" ? (
+                                <>
+                                  <div className="small">Valide par {payment.validator?.name || "-"}</div>
+                                  <div className="small text-muted">{formatDate(payment.validated_at || payment.paid_at)}</div>
+                                </>
+                              ) : (
+                                <>
+                                  <div className="small">En attente de validation</div>
+                                  <div className="small text-muted">{formatDate(payment.paid_at)}</div>
+                                </>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="text-secondary">Aucune cotisation enregistree pour ce membre.</div>
+                )}
               </DetailCard>
             </div>
           </div>

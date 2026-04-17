@@ -2,9 +2,11 @@ import React from "react";
 import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 
 import AdminLayout from "../layouts/AdminLayout";
+import AnnualFeesPage from "../pages/admin/AnnualFeesPage";
 import AxesPage from "../pages/admin/AxesPage";
 import DetailMemberPage from "../pages/admin/DetailMemberPage";
 import EducationLevelsPage from "../pages/admin/EducationLevelsPage";
+import FeePaymentsPage from "../pages/admin/FeePaymentsPage";
 import FormMemberPage from "../pages/admin/FormMemberPage";
 import FunctionsPage from "../pages/admin/FunctionsPage";
 import MembersPage from "../pages/admin/MembersPage";
@@ -182,6 +184,14 @@ export const router = createBrowserRouter([
           {
             path: "functions",
             element: <FunctionsPage />,
+          },
+          {
+            path: "annual-fees",
+            element: <AnnualFeesPage />,
+          },
+          {
+            path: "fee-payments",
+            element: <FeePaymentsPage />,
           },
           {
             path: "members",

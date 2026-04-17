@@ -66,7 +66,7 @@ class MemberController extends Controller
         try {
             $members = $this->memberService->getAllMembers(
                 fields: ['*'],
-                relations: ['user', 'application', 'axe', 'educationLevel', 'currentMemberFunction.function', 'currentMemberFunctions.function'],
+                relations: ['user', 'application', 'axe', 'educationLevel', 'currentMemberFunction.function', 'currentMemberFunctions.function', 'feePayments.annualFee'],
                 withTrashed: $request->boolean('with_trashed'),
                 onlyTrashed: $request->boolean('only_trashed'),
                 paginate: $request->integer('per_page')
@@ -95,7 +95,7 @@ class MemberController extends Controller
 
         try {
             $id = $this->resolveEncryptedMemberId($encryptedId);
-            $member = $this->memberService->getByIdMember($id, ['*'], ['user', 'application', 'axe', 'educationLevel', 'memberFunctions.function', 'currentMemberFunction.function', 'currentMemberFunctions.function'], true);
+            $member = $this->memberService->getByIdMember($id, ['*'], ['user', 'application', 'axe', 'educationLevel', 'memberFunctions.function', 'currentMemberFunction.function', 'currentMemberFunctions.function', 'feePayments.annualFee', 'feePayments.validator', 'feePayments.canceller'], true);
 
             return response()->json([
                 'member' => $member,
@@ -162,7 +162,7 @@ class MemberController extends Controller
 
             return response()->json([
                 'message' => 'Membre cree avec succes.',
-                'member' => $member->fresh(['user', 'application', 'axe', 'educationLevel', 'memberFunctions.function', 'currentMemberFunction.function', 'currentMemberFunctions.function']),
+                'member' => $member->fresh(['user', 'application', 'axe', 'educationLevel', 'memberFunctions.function', 'currentMemberFunction.function', 'currentMemberFunctions.function', 'feePayments.annualFee', 'feePayments.validator', 'feePayments.canceller']),
             ], 201);
         } catch (ValidationException $exception) {
             $this->activityLogService->logWarning(
@@ -230,7 +230,7 @@ class MemberController extends Controller
 
             return response()->json([
                 'message' => 'Membre mis a jour avec succes.',
-                'member' => $member->fresh(['user', 'application', 'axe', 'educationLevel', 'memberFunctions.function', 'currentMemberFunction.function', 'currentMemberFunctions.function']),
+                'member' => $member->fresh(['user', 'application', 'axe', 'educationLevel', 'memberFunctions.function', 'currentMemberFunction.function', 'currentMemberFunctions.function', 'feePayments.annualFee', 'feePayments.validator', 'feePayments.canceller']),
             ]);
         } catch (ValidationException $exception) {
             $this->activityLogService->logWarning(

@@ -104,4 +104,9 @@ class Member extends Model
     {
         return $this->hasMany(MemberFunction::class)->where('is_current', true);
     }
+
+    public function feePayments(): HasMany
+    {
+        return $this->hasMany(FeePayment::class);
+    }
 }

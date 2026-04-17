@@ -20,14 +20,18 @@ return new class extends Migration
             $table->decimal('amount_due', 12, 2);
             $table->decimal('amount_paid', 12, 2)->default(0);
 
-            $table->enum('status', [
+            $table->enum('payment_status', [
                 'unpaid',
                 'partial',
                 'paid',
-                'pending_validation',
                 'cancelled',
-                'exempted'
             ])->default('unpaid');
+
+            $table->enum('validation_status', [
+                'pending',
+                'validated',
+                'cancelled',
+            ])->default('pending');
 
             $table->string('payment_method')->nullable();
             $table->string('reference')->nullable();
@@ -39,6 +43,10 @@ return new class extends Migration
 
             $table->text('notes')->nullable();
             $table->timestamps();
+
+            $table->foreignId('cancelled_by')->nullable();
+            $table->timestamp('cancelled_at')->nullable();
+            $table->text('cancel_reason')->nullable();
 
             $table->unique(['member_id', 'annual_fee_id']);
         });

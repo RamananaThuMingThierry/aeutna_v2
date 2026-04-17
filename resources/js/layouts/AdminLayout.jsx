@@ -7,6 +7,8 @@ const menuItems = [
   { to: "/admin/education-levels", label: "Niveaux", icon: "bi-mortarboard-fill" },
   { to: "/admin/functions", label: "Fonctions", icon: "bi-briefcase-fill" },
   { to: "/admin/members", label: "Membres", icon: "bi-person-vcard-fill" },
+  { to: "/admin/annual-fees", label: "Cotisations annuelles", icon: "bi-calendar-event-fill" },
+  { to: "/admin/fee-payments", label: "Cotisations", icon: "bi-cash-coin" },
   { to: "/admin/users", label: "Utilisateurs", icon: "bi-people-fill" },
   { to: "/admin/categories", label: "Categories", icon: "bi-tags-fill" },
   { to: "/admin/testimonials", label: "Temoignages", icon: "bi-chat-square-quote-fill" },

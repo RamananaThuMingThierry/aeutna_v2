@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\AnnualFeeController;
 use App\Http\Controllers\AxeController;
 use App\Http\Controllers\EducationLevelController;
+use App\Http\Controllers\FeePaymentController;
 use App\Http\Controllers\FunctionController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\UserController;
@@ -31,6 +33,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/users/{encryptedId}/roles/sync', [UserController::class, 'syncRoles'])->name('users.roles.sync');
     Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity_logs.index');
     Route::get('/activity-logs/{id}', [ActivityLogController::class, 'show'])->name('activity_logs.show');
+    Route::get('/annual-fees', [AnnualFeeController::class, 'index'])->name('annual_fees.index');
+    Route::post('/annual-fees', [AnnualFeeController::class, 'store'])->name('annual_fees.store');
+    Route::get('/annual-fees/{encryptedId}', [AnnualFeeController::class, 'show'])->name('annual_fees.show');
+    Route::put('/annual-fees/{encryptedId}', [AnnualFeeController::class, 'update'])->name('annual_fees.update');
+    Route::delete('/annual-fees/{encryptedId}', [AnnualFeeController::class, 'destroy'])->name('annual_fees.destroy');
     Route::get('/axes', [AxeController::class, 'index'])->name('axes.index');
     Route::post('/axes', [AxeController::class, 'store'])->name('axes.store');
     Route::get('/axes/{encryptedId}', [AxeController::class, 'show'])->name('axes.show');
@@ -51,4 +58,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/members/{encryptedId}', [MemberController::class, 'show'])->name('members.show');
     Route::put('/members/{encryptedId}', [MemberController::class, 'update'])->name('members.update');
     Route::delete('/members/{encryptedId}', [MemberController::class, 'destroy'])->name('members.destroy');
+    Route::get('/fee-payments', [FeePaymentController::class, 'index'])->name('fee_payments.index');
+    Route::post('/fee-payments', [FeePaymentController::class, 'store'])->name('fee_payments.store');
+    Route::get('/fee-payments/{encryptedId}', [FeePaymentController::class, 'show'])->name('fee_payments.show');
+    Route::put('/fee-payments/{encryptedId}', [FeePaymentController::class, 'update'])->name('fee_payments.update');
+    Route::post('/fee-payments/{encryptedId}/validate', [FeePaymentController::class, 'validatePayment'])->name('fee_payments.validate');
+    Route::post('/fee-payments/{encryptedId}/cancel', [FeePaymentController::class, 'cancel'])->name('fee_payments.cancel');
+    Route::delete('/fee-payments/{encryptedId}', [FeePaymentController::class, 'destroy'])->name('fee_payments.destroy');
 });
