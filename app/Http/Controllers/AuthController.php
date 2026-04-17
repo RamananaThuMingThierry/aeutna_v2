@@ -190,19 +190,6 @@ class AuthController extends Controller
         try {
             $user = $request->user()->load('roles');
 
-            $this->activityLogService->logInfo(
-                $request,
-                'me',
-                'Consultation du profil authentifie.',
-                $user,
-                User::class,
-                $user->id,
-                200,
-                [
-                    'roles' => $user->roles->pluck('code')->all(),
-                ]
-            );
-
             return response()->json([
                 'user' => $user,
                 'roles' => $user->roles->pluck('code')->all(),

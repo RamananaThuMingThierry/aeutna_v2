@@ -46,21 +46,6 @@ class UserController extends Controller
                 paginate: $request->integer('per_page')
             );
 
-            $this->activityLogService->logInfo(
-                $request,
-                'users_index',
-                'Consultation de la liste des utilisateurs.',
-                $request->user(),
-                User::class,
-                null,
-                200,
-                [
-                    'with_trashed' => $request->boolean('with_trashed'),
-                    'only_trashed' => $request->boolean('only_trashed'),
-                    'per_page' => $request->integer('per_page'),
-                ]
-            );
-
             return response()->json($users);
         } catch (Throwable $exception) {
             $this->activityLogService->logError(
@@ -86,19 +71,6 @@ class UserController extends Controller
             $id = $this->resolveEncryptedUserId($encryptedId);
 
             $user = $this->userService->getByIdUser($id, ['*'], ['roles']);
-
-            $this->activityLogService->logInfo(
-                $request,
-                'users_show',
-                'Consultation d un utilisateur.',
-                $request->user(),
-                User::class,
-                $user->id,
-                200,
-                [
-                    'target_email' => $user->email,
-                ]
-            );
 
             return response()->json([
                 'user' => $user,

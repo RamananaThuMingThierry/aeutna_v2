@@ -213,7 +213,7 @@ export default function UsersPage() {
         $table.off("click", ".js-del");
       } catch {}
 
-      dtRef.current.destroy(true);
+      dtRef.current.destroy();
       dtRef.current = null;
       $table.find("tbody").empty();
     }

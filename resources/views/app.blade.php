@@ -4,7 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>{{ config('app.name', 'Aeutna') }}</title>
+        <link rel="icon" href="{{ asset('images/logo_aeutna.jpg') }}" type="image/x-icon">
+        <title>{{ config('app.name', 'AEUTNA') }}</title>
           @viteReactRefresh()
         @vite(['resources/css/app.css', 'resources/js/app.jsx'])
     </head>

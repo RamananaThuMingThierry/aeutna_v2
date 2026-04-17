@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AxeController;
+use App\Http\Controllers\EducationLevelController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,4 +34,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/axes/{encryptedId}', [AxeController::class, 'show'])->name('axes.show');
     Route::put('/axes/{encryptedId}', [AxeController::class, 'update'])->name('axes.update');
     Route::delete('/axes/{encryptedId}', [AxeController::class, 'destroy'])->name('axes.destroy');
+    Route::get('/education-levels', [EducationLevelController::class, 'index'])->name('education_levels.index');
+    Route::post('/education-levels', [EducationLevelController::class, 'store'])->name('education_levels.store');
+    Route::get('/education-levels/{encryptedId}', [EducationLevelController::class, 'show'])->name('education_levels.show');
+    Route::put('/education-levels/{encryptedId}', [EducationLevelController::class, 'update'])->name('education_levels.update');
+    Route::delete('/education-levels/{encryptedId}', [EducationLevelController::class, 'destroy'])->name('education_levels.destroy');
 });

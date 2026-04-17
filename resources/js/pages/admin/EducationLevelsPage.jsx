@@ -3,7 +3,7 @@ import $ from "jquery";
 import "datatables.net";
 import "datatables.net-bs5";
 
-import { axesApi } from "../../api/axe";
+import { educationLevelsApi } from "../../api/education-level";
 import { useI18n } from "../../hooks/website/I18nContext";
 
 function normalizeCollection(payload) {
@@ -30,7 +30,7 @@ function formatDate(value) {
   return date.toLocaleString("fr-FR");
 }
 
-export default function AxesPage() {
+export default function EducationLevelsPage() {
   const { lang, t } = useI18n();
   const DT_LANG_URL = useMemo(() => `/lang/datatables/${lang}.json`, [lang]);
 
@@ -55,7 +55,6 @@ export default function AxesPage() {
   const [form, setForm] = useState({
     name: "",
     code: "",
-    description: "",
     is_active: true,
   });
 
@@ -98,12 +97,12 @@ export default function AxesPage() {
     }
 
     try {
-      const list = await axesApi.list();
+      const list = await educationLevelsApi.list();
       setItems(normalizeCollection(list));
     } catch (error) {
       const message =
         error?.response?.data?.message ||
-        t("axes.toast.loadFailed", "Impossible de charger les axes.");
+        t("educationLevels.toast.loadFailed", "Impossible de charger les niveaux d'education.");
 
       if (mode === "initial") {
         setGlobalError(message);
@@ -128,7 +127,6 @@ export default function AxesPage() {
     setForm({
       name: "",
       code: "",
-      description: "",
       is_active: true,
     });
     setErrors({});
@@ -136,13 +134,12 @@ export default function AxesPage() {
     setOpen(true);
   }
 
-  function openEdit(axe) {
-    setEditing(axe);
+  function openEdit(educationLevel) {
+    setEditing(educationLevel);
     setForm({
-      name: axe?.name ?? "",
-      code: axe?.code ?? "",
-      description: axe?.description ?? "",
-      is_active: !!axe?.is_active,
+      name: educationLevel?.name ?? "",
+      code: educationLevel?.code ?? "",
+      is_active: !!educationLevel?.is_active,
     });
     setErrors({});
     setGlobalError("");
@@ -154,8 +151,8 @@ export default function AxesPage() {
     setOpen(false);
   }
 
-  function onDeleteAsk(axe) {
-    setDeleteTarget(axe);
+  function onDeleteAsk(educationLevel) {
+    setDeleteTarget(educationLevel);
     setDeleteOpen(true);
   }
 
@@ -165,12 +162,12 @@ export default function AxesPage() {
     setDeleteTarget(null);
   }
 
-  async function openShow(axe) {
+  async function openShow(educationLevel) {
     try {
-      const data = await axesApi.show(getRowId(axe));
-      setShowing(data?.axe || axe);
+      const data = await educationLevelsApi.show(getRowId(educationLevel));
+      setShowing(data?.education_level || educationLevel);
     } catch {
-      setShowing(axe);
+      setShowing(educationLevel);
     }
 
     setShowOpen(true);
@@ -224,18 +221,8 @@ export default function AxesPage() {
           width: 120,
           render: (value) =>
             value
-              ? `<span class="badge text-bg-success">${t("axes.table.active", "Actif")}</span>`
-              : `<span class="badge text-bg-secondary">${t("axes.table.inactive", "Inactif")}</span>`,
-        },
-        {
-          data: "description",
-          defaultContent: "",
-          render: (value) => {
-            const raw = (value ?? "").toString();
-            const safe = raw.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            const shortText = safe.length > 90 ? `${safe.slice(0, 90)}...` : safe;
-            return shortText || `<span class="text-muted small">-</span>`;
-          },
+              ? `<span class="badge text-bg-success">${t("educationLevels.table.active", "Actif")}</span>`
+              : `<span class="badge text-bg-secondary">${t("educationLevels.table.inactive", "Inactif")}</span>`,
         },
         {
           data: null,
@@ -264,20 +251,20 @@ export default function AxesPage() {
 
     $table.on("click", ".js-show", (event) => {
       const id = $(event.currentTarget).data("id");
-      const axe = itemsRef.current.find((item) => String(getRowId(item)) === String(id));
-      if (axe) void openShow(axe);
+      const educationLevel = itemsRef.current.find((item) => String(getRowId(item)) === String(id));
+      if (educationLevel) void openShow(educationLevel);
     });
 
     $table.on("click", ".js-edit", (event) => {
       const id = $(event.currentTarget).data("id");
-      const axe = itemsRef.current.find((item) => String(getRowId(item)) === String(id));
-      if (axe) openEdit(axe);
+      const educationLevel = itemsRef.current.find((item) => String(getRowId(item)) === String(id));
+      if (educationLevel) openEdit(educationLevel);
     });
 
     $table.on("click", ".js-del", (event) => {
       const id = $(event.currentTarget).data("id");
-      const axe = itemsRef.current.find((item) => String(getRowId(item)) === String(id));
-      if (axe) onDeleteAsk(axe);
+      const educationLevel = itemsRef.current.find((item) => String(getRowId(item)) === String(id));
+      if (educationLevel) onDeleteAsk(educationLevel);
     });
 
     return () => {
@@ -314,7 +301,7 @@ export default function AxesPage() {
     setGlobalError("");
 
     if (!form.name.trim()) {
-      setErrors({ name: [t("axes.toast.nameRequired", "Le nom est obligatoire.")] });
+      setErrors({ name: [t("educationLevels.toast.nameRequired", "Le nom est obligatoire.")] });
       return;
     }
 
@@ -322,17 +309,15 @@ export default function AxesPage() {
 
     try {
       if (editing) {
-        await axesApi.update(getRowId(editing), {
+        await educationLevelsApi.update(getRowId(editing), {
           name: form.name.trim(),
           code: form.code.trim() || null,
-          description: form.description.trim() || null,
           is_active: form.is_active,
         });
       } else {
-        await axesApi.create({
+        await educationLevelsApi.create({
           name: form.name.trim(),
           code: form.code.trim() || null,
-          description: form.description.trim() || null,
           is_active: form.is_active,
         });
       }
@@ -343,8 +328,8 @@ export default function AxesPage() {
       showToast(
         "success",
         editing
-          ? t("axes.toast.updated", "Axe mis a jour.")
-          : t("axes.toast.created", "Axe cree.")
+          ? t("educationLevels.toast.updated", "Niveau d'education mis a jour.")
+          : t("educationLevels.toast.created", "Niveau d'education cree.")
       );
     } catch (error) {
       const data = error?.response?.data;
@@ -352,7 +337,9 @@ export default function AxesPage() {
       if (data?.errors) {
         setErrors(data.errors);
       } else {
-        setGlobalError(data?.message || t("axes.toast.saveFailed", "Echec de l'enregistrement."));
+        setGlobalError(
+          data?.message || t("educationLevels.toast.saveFailed", "Echec de l'enregistrement.")
+        );
       }
     } finally {
       setSaving(false);
@@ -365,14 +352,14 @@ export default function AxesPage() {
     setDeleting(true);
 
     try {
-      await axesApi.remove(getRowId(deleteTarget));
+      await educationLevelsApi.remove(getRowId(deleteTarget));
       await load({ mode: "refresh" });
       setDeleteOpen(false);
       setDeleteTarget(null);
-      showToast("success", t("axes.toast.deleted", "Axe supprime."));
+      showToast("success", t("educationLevels.toast.deleted", "Niveau d'education supprime."));
     } catch (error) {
       const message =
-        error?.response?.data?.message || t("axes.toast.deleteFailed", "Echec de la suppression.");
+        error?.response?.data?.message || t("educationLevels.toast.deleteFailed", "Echec de la suppression.");
       showToast("danger", message);
     } finally {
       setDeleting(false);
@@ -383,8 +370,10 @@ export default function AxesPage() {
     <div className="container-fluid">
       <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 mb-3">
         <div>
-          <h4 className="mb-1">{t("axes.title", "Axes")}</h4>
-          <div className="text-muted small">{t("axes.subtitle", "Gestion des axes")}</div>
+          <h4 className="mb-1">{t("educationLevels.title", "Niveaux d'education")}</h4>
+          <div className="text-muted small">
+            {t("educationLevels.subtitle", "Gestion des niveaux d'education")}
+          </div>
         </div>
 
         <div className="d-flex gap-2">
@@ -396,19 +385,19 @@ export default function AxesPage() {
             {initialLoading || refreshing ? (
               <>
                 <span className="spinner-border spinner-border-sm me-2" />
-                {t("axes.refreshing", "Rafraichissement...")}
+                {t("educationLevels.refreshing", "Rafraichissement...")}
               </>
             ) : (
               <>
                 <i className="bi bi-arrow-clockwise me-2" />
-                {t("axes.refresh", "Rafraichir")}
+                {t("educationLevels.refresh", "Rafraichir")}
               </>
             )}
           </button>
 
           <button className="btn btn-dark" onClick={openCreate} disabled={initialLoading}>
             <i className="bi bi-plus-lg me-2" />
-            {t("axes.new", "Nouvel axe")}
+            {t("educationLevels.new", "Nouveau niveau")}
           </button>
         </div>
       </div>
@@ -418,7 +407,7 @@ export default function AxesPage() {
           {initialLoading ? (
             <div className="d-flex align-items-center gap-2 text-muted mb-3">
               <div className="spinner-border spinner-border-sm" />
-              {t("axes.loading", "Chargement...")}
+              {t("educationLevels.loading", "Chargement...")}
             </div>
           ) : null}
 
@@ -428,12 +417,11 @@ export default function AxesPage() {
             <table ref={tableRef} className="table align-middle mb-0">
               <thead>
                 <tr className="text-muted small">
-                  <th>{t("axes.table.name", "Nom")}</th>
-                  <th>{t("axes.table.code", "Code")}</th>
-                  <th style={{ width: 120 }}>{t("axes.table.status", "Statut")}</th>
-                  <th>{t("axes.table.description", "Description")}</th>
+                  <th>{t("educationLevels.table.name", "Nom")}</th>
+                  <th>{t("educationLevels.table.code", "Code")}</th>
+                  <th style={{ width: 120 }}>{t("educationLevels.table.status", "Statut")}</th>
                   <th style={{ width: 180 }} className="text-end">
-                    {t("axes.table.actions", "Actions")}
+                    {t("educationLevels.table.actions", "Actions")}
                   </th>
                 </tr>
               </thead>
@@ -443,14 +431,16 @@ export default function AxesPage() {
         </div>
       </div>
 
-      {open && (
+      {open ? (
         <>
           <div className="modal fade show" style={{ display: "block" }} role="dialog" aria-modal="true">
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content border-0 shadow">
                 <div className="modal-header">
                   <h5 className="modal-title">
-                    {editing ? t("axes.modal.editTitle", "Modifier") : t("axes.modal.createTitle", "Creer")}
+                    {editing
+                      ? t("educationLevels.modal.editTitle", "Modifier")
+                      : t("educationLevels.modal.createTitle", "Creer")}
                   </h5>
                   <button type="button" className="btn-close" onClick={closeModal} />
                 </div>
@@ -460,72 +450,56 @@ export default function AxesPage() {
                     {globalError ? <div className="alert alert-danger py-2">{globalError}</div> : null}
 
                     <div className="mb-3">
-                      <label className="form-label">{t("axes.modal.name", "Nom")}</label>
+                      <label className="form-label">{t("educationLevels.modal.name", "Nom")}</label>
                       <input
                         className={`form-control ${errors.name ? "is-invalid" : ""}`}
                         value={form.name}
                         onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
-                        placeholder={t("axes.modal.placeholderName", "Ex: Axe strategique")}
+                        placeholder={t("educationLevels.modal.placeholderName", "Ex: Licence 1")}
                         autoFocus
                       />
                       {errors.name ? <span className="text-danger small">{errors.name[0]}</span> : null}
                     </div>
 
                     <div className="mb-3">
-                      <label className="form-label">{t("axes.modal.code", "Code")}</label>
+                      <label className="form-label">{t("educationLevels.modal.code", "Code")}</label>
                       <input
                         className={`form-control ${errors.code ? "is-invalid" : ""}`}
                         value={form.code}
                         onChange={(event) => setForm((current) => ({ ...current, code: event.target.value }))}
-                        placeholder={t("axes.modal.placeholderCode", "Ex: AX-01")}
+                        placeholder={t("educationLevels.modal.placeholderCode", "Ex: L1")}
                       />
                       {errors.code ? <span className="text-danger small">{errors.code[0]}</span> : null}
-                    </div>
-
-                    <div className="mb-3">
-                      <label className="form-label">{t("axes.modal.description", "Description")}</label>
-                      <textarea
-                        className={`form-control ${errors.description ? "is-invalid" : ""}`}
-                        rows={3}
-                        value={form.description}
-                        onChange={(event) =>
-                          setForm((current) => ({ ...current, description: event.target.value }))
-                        }
-                        placeholder={t("axes.modal.placeholderDescription", "Description courte")}
-                      />
-                      {errors.description ? (
-                        <span className="text-danger small">{errors.description[0]}</span>
-                      ) : null}
                     </div>
 
                     <div className="form-check">
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        id="axe-active"
+                        id="education-level-active"
                         checked={!!form.is_active}
                         onChange={(event) =>
                           setForm((current) => ({ ...current, is_active: event.target.checked }))
                         }
                       />
-                      <label className="form-check-label" htmlFor="axe-active">
-                        {t("axes.modal.active", "Actif")}
+                      <label className="form-check-label" htmlFor="education-level-active">
+                        {t("educationLevels.modal.active", "Actif")}
                       </label>
                     </div>
                   </div>
 
                   <div className="modal-footer">
                     <button type="button" className="btn btn-outline-secondary" onClick={closeModal} disabled={saving}>
-                      {t("axes.modal.cancel", "Annuler")}
+                      {t("educationLevels.modal.cancel", "Annuler")}
                     </button>
                     <button className="btn btn-warning" disabled={saving}>
                       {saving ? (
                         <>
                           <span className="spinner-border spinner-border-sm me-2" />
-                          {t("axes.modal.saving", "Enregistrement...")}
+                          {t("educationLevels.modal.saving", "Enregistrement...")}
                         </>
                       ) : (
-                        t("axes.modal.save", "Enregistrer")
+                        t("educationLevels.modal.save", "Enregistrer")
                       )}
                     </button>
                   </div>
@@ -536,15 +510,15 @@ export default function AxesPage() {
 
           <div className="modal-backdrop fade show" onClick={closeModal} />
         </>
-      )}
+      ) : null}
 
-      {showOpen && (
+      {showOpen ? (
         <>
           <div className="modal fade show" style={{ display: "block" }} role="dialog" aria-modal="true">
             <div className="modal-dialog modal-lg modal-dialog-centered">
               <div className="modal-content border-0 shadow">
                 <div className="modal-header">
-                  <h5 className="modal-title">{t("axes.show.title", "Details axe")}</h5>
+                  <h5 className="modal-title">{t("educationLevels.show.title", "Details niveau d'education")}</h5>
                   <button type="button" className="btn-close" onClick={closeShow} />
                 </div>
 
@@ -554,26 +528,30 @@ export default function AxesPage() {
                       <div className="col-md-6">
                         <div className="border-0 bg-light rounded-4 p-3 h-100">
                           <div className="small text-uppercase text-secondary fw-semibold mb-3">
-                            {t("axes.show.identity", "Identification")}
+                            {t("educationLevels.show.identity", "Identification")}
                           </div>
 
                           <div className="mb-3">
-                            <div className="text-muted small">{t("axes.table.name", "Nom")}</div>
+                            <div className="text-muted small">{t("educationLevels.table.name", "Nom")}</div>
                             <div className="fw-semibold">{showing.name || "-"}</div>
                           </div>
 
                           <div className="mb-3">
-                            <div className="text-muted small">{t("axes.table.code", "Code")}</div>
+                            <div className="text-muted small">{t("educationLevels.table.code", "Code")}</div>
                             <div>{showing.code || "-"}</div>
                           </div>
 
                           <div>
-                            <div className="text-muted small">{t("axes.table.status", "Statut")}</div>
+                            <div className="text-muted small">{t("educationLevels.table.status", "Statut")}</div>
                             <div>
                               {showing.is_active ? (
-                                <span className="badge text-bg-success">{t("axes.table.active", "Actif")}</span>
+                                <span className="badge text-bg-success">
+                                  {t("educationLevels.table.active", "Actif")}
+                                </span>
                               ) : (
-                                <span className="badge text-bg-secondary">{t("axes.table.inactive", "Inactif")}</span>
+                                <span className="badge text-bg-secondary">
+                                  {t("educationLevels.table.inactive", "Inactif")}
+                                </span>
                               )}
                             </div>
                           </div>
@@ -583,28 +561,17 @@ export default function AxesPage() {
                       <div className="col-md-6">
                         <div className="border-0 bg-light rounded-4 p-3 h-100">
                           <div className="small text-uppercase text-secondary fw-semibold mb-3">
-                            {t("axes.show.timeline", "Suivi")}
+                            {t("educationLevels.show.timeline", "Suivi")}
                           </div>
 
                           <div className="mb-3">
-                            <div className="text-muted small">{t("axes.show.createdAt", "Cree le")}</div>
+                            <div className="text-muted small">{t("educationLevels.show.createdAt", "Cree le")}</div>
                             <div className="fw-semibold">{formatDate(showing.created_at)}</div>
                           </div>
 
                           <div>
-                            <div className="text-muted small">{t("axes.show.updatedAt", "Mis a jour le")}</div>
+                            <div className="text-muted small">{t("educationLevels.show.updatedAt", "Mis a jour le")}</div>
                             <div className="fw-semibold">{formatDate(showing.updated_at)}</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="col-12">
-                        <div className="border-0 bg-light rounded-4 p-3">
-                          <div className="small text-uppercase text-secondary fw-semibold mb-3">
-                            {t("axes.table.description", "Description")}
-                          </div>
-                          <div className="text-secondary" style={{ whiteSpace: "pre-wrap" }}>
-                            {showing.description || t("axes.show.noDescription", "Aucune description.")}
                           </div>
                         </div>
                       </div>
@@ -614,7 +581,7 @@ export default function AxesPage() {
 
                 <div className="modal-footer">
                   <button type="button" className="btn btn-outline-secondary" onClick={closeShow}>
-                    {t("axes.modal.close", "Fermer")}
+                    {t("educationLevels.modal.close", "Fermer")}
                   </button>
                 </div>
               </div>
@@ -623,25 +590,25 @@ export default function AxesPage() {
 
           <div className="modal-backdrop fade show" onClick={closeShow} />
         </>
-      )}
+      ) : null}
 
-      {deleteOpen && (
+      {deleteOpen ? (
         <>
           <div className="modal fade show" style={{ display: "block" }} role="dialog" aria-modal="true">
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content border-0 shadow">
                 <div className="modal-header">
-                  <h5 className="modal-title">{t("axes.delete.title", "Confirmation")}</h5>
+                  <h5 className="modal-title">{t("educationLevels.delete.title", "Confirmation")}</h5>
                   <button type="button" className="btn-close" onClick={closeDeleteModal} />
                 </div>
 
                 <div className="modal-body">
                   {deleteTarget ? (
                     <p className="mb-0">
-                      {t("axes.delete.message", "Supprimer l'axe")} <b>{deleteTarget.name}</b> ?
+                      {t("educationLevels.delete.message", "Supprimer le niveau")} <b>{deleteTarget.name}</b> ?
                     </p>
                   ) : (
-                    <p className="mb-0">{t("axes.delete.message2", "Supprimer cet axe ?")}</p>
+                    <p className="mb-0">{t("educationLevels.delete.message2", "Supprimer ce niveau ?")}</p>
                   )}
                 </div>
 
@@ -652,17 +619,17 @@ export default function AxesPage() {
                     onClick={closeDeleteModal}
                     disabled={deleting}
                   >
-                    {t("axes.modal.cancel", "Annuler")}
+                    {t("educationLevels.modal.cancel", "Annuler")}
                   </button>
 
                   <button type="button" className="btn btn-danger" onClick={confirmDelete} disabled={deleting}>
                     {deleting ? (
                       <>
                         <span className="spinner-border spinner-border-sm me-2" />
-                        {t("axes.delete.deleting", "Suppression...")}
+                        {t("educationLevels.delete.deleting", "Suppression...")}
                       </>
                     ) : (
-                      t("axes.delete.btn", "Supprimer")
+                      t("educationLevels.delete.btn", "Supprimer")
                     )}
                   </button>
                 </div>
@@ -672,7 +639,7 @@ export default function AxesPage() {
 
           <div className="modal-backdrop fade show" onClick={closeDeleteModal} />
         </>
-      )}
+      ) : null}
 
       {toast.open ? (
         <div className="toast-container position-fixed bottom-0 end-0 p-3" style={{ zIndex: 9999 }}>

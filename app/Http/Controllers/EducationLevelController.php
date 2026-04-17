@@ -2,31 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Axes\StoreAxeRequest;
-use App\Http\Requests\Axes\UpdateAxeRequest;
-use App\Models\Axe;
+use App\Http\Requests\EducationLevels\StoreEducationLevelRequest;
+use App\Http\Requests\EducationLevels\UpdateEducationLevelRequest;
+use App\Models\EducationLevel;
 use App\Services\ActivityLogService;
-use App\Services\AxeService;
+use App\Services\EducationLevelService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 
-class AxeController extends Controller
+class EducationLevelController extends Controller
 {
     public function __construct(
-        private AxeService $axeService,
+        private EducationLevelService $educationLevelService,
         private ActivityLogService $activityLogService
     ) {}
 
-    private function resolveEncryptedAxeId(string $encryptedId): int
+    private function resolveEncryptedEducationLevelId(string $encryptedId): int
     {
         $id = decrypt_to_int_or_null($encryptedId);
 
         if (is_null($id)) {
             throw ValidationException::withMessages([
-                'encrypted_id' => ['Identifiant axe invalide.'],
+                'encrypted_id' => ['Identifiant niveau d education invalide.'],
             ]);
         }
 
@@ -36,20 +35,20 @@ class AxeController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
-            $axes = $this->axeService->getAllAxes(
+            $educationLevels = $this->educationLevelService->getAllEducationLevels(
                 fields: ['*'],
                 paginate: $request->integer('per_page')
             );
 
-            return response()->json($axes);
+            return response()->json($educationLevels);
         } catch (Throwable $exception) {
             $this->activityLogService->logError(
                 $request,
-                'axes_index_error',
-                'Erreur lors de la consultation de la liste des axes.',
+                'education_levels_index_error',
+                'Erreur lors de la consultation de la liste des niveaux d education.',
                 $exception,
                 $request->user(),
-                Axe::class,
+                EducationLevel::class,
                 null,
                 500
             );
@@ -63,19 +62,19 @@ class AxeController extends Controller
         $id = null;
 
         try {
-            $id = $this->resolveEncryptedAxeId($encryptedId);
-            $axe = $this->axeService->getByIdAxe($id);
+            $id = $this->resolveEncryptedEducationLevelId($encryptedId);
+            $educationLevel = $this->educationLevelService->getByIdEducationLevel($id);
 
             return response()->json([
-                'axe' => $axe,
+                'education_level' => $educationLevel,
             ]);
         } catch (ValidationException $exception) {
             $this->activityLogService->logWarning(
                 $request,
-                'axes_show_validation_failed',
-                'Echec de validation lors de la consultation d un axe.',
+                'education_levels_show_validation_failed',
+                'Echec de validation lors de la consultation d un niveau d education.',
                 $request->user(),
-                Axe::class,
+                EducationLevel::class,
                 null,
                 422,
                 [
@@ -88,11 +87,11 @@ class AxeController extends Controller
         } catch (Throwable $exception) {
             $this->activityLogService->logError(
                 $request,
-                'axes_show_error',
-                'Erreur lors de la consultation d un axe.',
+                'education_levels_show_error',
+                'Erreur lors de la consultation d un niveau d education.',
                 $exception,
                 $request->user(),
-                Axe::class,
+                EducationLevel::class,
                 $id,
                 500,
                 [
@@ -104,43 +103,42 @@ class AxeController extends Controller
         }
     }
 
-    public function store(StoreAxeRequest $request): JsonResponse
+    public function store(StoreEducationLevelRequest $request): JsonResponse
     {
         try {
             $validated = $request->validated();
 
-            $axe = $this->axeService->createAxe([
+            $educationLevel = $this->educationLevelService->createEducationLevel([
                 'name' => $validated['name'],
                 'code' => $validated['code'] ?? null,
-                'description' => $validated['description'] ?? null,
                 'is_active' => $validated['is_active'] ?? true,
             ]);
 
             $this->activityLogService->logSuccess(
                 $request,
-                'axes_store',
-                'Creation axe reussie.',
+                'education_levels_store',
+                'Creation niveau d education reussie.',
                 $request->user(),
-                Axe::class,
-                $axe->id,
+                EducationLevel::class,
+                $educationLevel->id,
                 201,
                 [
-                    'target_name' => $axe->name,
-                    'target_code' => $axe->code,
+                    'target_name' => $educationLevel->name,
+                    'target_code' => $educationLevel->code,
                 ]
             );
 
             return response()->json([
-                'message' => 'Axe cree avec succes.',
-                'axe' => $axe,
+                'message' => 'Niveau d education cree avec succes.',
+                'education_level' => $educationLevel,
             ], 201);
         } catch (ValidationException $exception) {
             $this->activityLogService->logWarning(
                 $request,
-                'axes_store_validation_failed',
-                'Echec de validation lors de la creation axe.',
+                'education_levels_store_validation_failed',
+                'Echec de validation lors de la creation niveau d education.',
                 $request->user(),
-                Axe::class,
+                EducationLevel::class,
                 null,
                 422,
                 [
@@ -154,11 +152,11 @@ class AxeController extends Controller
         } catch (Throwable $exception) {
             $this->activityLogService->logError(
                 $request,
-                'axes_store_error',
-                'Erreur lors de la creation axe.',
+                'education_levels_store_error',
+                'Erreur lors de la creation niveau d education.',
                 $exception,
                 $request->user(),
-                Axe::class,
+                EducationLevel::class,
                 null,
                 500,
                 [
@@ -171,43 +169,43 @@ class AxeController extends Controller
         }
     }
 
-    public function update(UpdateAxeRequest $request, string $encryptedId): JsonResponse
+    public function update(UpdateEducationLevelRequest $request, string $encryptedId): JsonResponse
     {
         $id = null;
 
         try {
-            $id = $this->resolveEncryptedAxeId($encryptedId);
-            $axe = $this->axeService->getByIdAxe($id);
+            $id = $this->resolveEncryptedEducationLevelId($encryptedId);
+            $educationLevel = $this->educationLevelService->getByIdEducationLevel($id);
             $validated = $request->validated();
 
-            $axe = $this->axeService->updateAxe($axe, $validated);
+            $educationLevel = $this->educationLevelService->updateEducationLevel($educationLevel, $validated);
 
             $this->activityLogService->logSuccess(
                 $request,
-                'axes_update',
-                'Mise a jour axe reussie.',
+                'education_levels_update',
+                'Mise a jour niveau d education reussie.',
                 $request->user(),
-                Axe::class,
-                $axe->id,
+                EducationLevel::class,
+                $educationLevel->id,
                 200,
                 [
-                    'target_name' => $axe->name,
-                    'target_code' => $axe->code,
+                    'target_name' => $educationLevel->name,
+                    'target_code' => $educationLevel->code,
                     'updated_fields' => array_keys($validated),
                 ]
             );
 
             return response()->json([
-                'message' => 'Axe mis a jour avec succes.',
-                'axe' => $axe,
+                'message' => 'Niveau d education mis a jour avec succes.',
+                'education_level' => $educationLevel,
             ]);
         } catch (ValidationException $exception) {
             $this->activityLogService->logWarning(
                 $request,
-                'axes_update_validation_failed',
-                'Echec de validation lors de la mise a jour axe.',
+                'education_levels_update_validation_failed',
+                'Echec de validation lors de la mise a jour niveau d education.',
                 $request->user(),
-                Axe::class,
+                EducationLevel::class,
                 $id,
                 422,
                 [
@@ -220,11 +218,11 @@ class AxeController extends Controller
         } catch (Throwable $exception) {
             $this->activityLogService->logError(
                 $request,
-                'axes_update_error',
-                'Erreur lors de la mise a jour axe.',
+                'education_levels_update_error',
+                'Erreur lors de la mise a jour niveau d education.',
                 $exception,
                 $request->user(),
-                Axe::class,
+                EducationLevel::class,
                 $id,
                 500,
                 [
@@ -241,20 +239,20 @@ class AxeController extends Controller
         $id = null;
 
         try {
-            $id = $this->resolveEncryptedAxeId($encryptedId);
-            $axe = $this->axeService->getByIdAxe($id);
+            $id = $this->resolveEncryptedEducationLevelId($encryptedId);
+            $educationLevel = $this->educationLevelService->getByIdEducationLevel($id);
 
-            $targetName = $axe->name;
-            $targetCode = $axe->code;
+            $targetName = $educationLevel->name;
+            $targetCode = $educationLevel->code;
 
-            $this->axeService->deleteAxe($axe);
+            $this->educationLevelService->deleteEducationLevel($educationLevel);
 
             $this->activityLogService->logInfo(
                 $request,
-                'axes_delete',
-                'Suppression axe reussie.',
+                'education_levels_delete',
+                'Suppression niveau d education reussie.',
                 $request->user(),
-                Axe::class,
+                EducationLevel::class,
                 $id,
                 200,
                 [
@@ -264,15 +262,15 @@ class AxeController extends Controller
             );
 
             return response()->json([
-                'message' => 'Axe supprime avec succes.',
+                'message' => 'Niveau d education supprime avec succes.',
             ]);
         } catch (ValidationException $exception) {
             $this->activityLogService->logWarning(
                 $request,
-                'axes_delete_validation_failed',
-                'Echec de validation lors de la suppression axe.',
+                'education_levels_delete_validation_failed',
+                'Echec de validation lors de la suppression niveau d education.',
                 $request->user(),
-                Axe::class,
+                EducationLevel::class,
                 null,
                 422,
                 [
@@ -285,11 +283,11 @@ class AxeController extends Controller
         } catch (Throwable $exception) {
             $this->activityLogService->logError(
                 $request,
-                'axes_delete_error',
-                'Erreur lors de la suppression axe.',
+                'education_levels_delete_error',
+                'Erreur lors de la suppression niveau d education.',
                 $exception,
                 $request->user(),
-                Axe::class,
+                EducationLevel::class,
                 $id,
                 500,
                 [

@@ -3,6 +3,7 @@ import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 
 import AdminLayout from "../layouts/AdminLayout";
 import AxesPage from "../pages/admin/AxesPage";
+import EducationLevelsPage from "../pages/admin/EducationLevelsPage";
 import RootLayout from "../layouts/RootLayout";
 import ActivityLogPage from "../pages/admin/ActivityLogPage";
 import DashboardPage from "../pages/admin/DashboardPage";
@@ -169,6 +170,10 @@ export const router = createBrowserRouter([
           {
             path: "axes",
             element: <AxesPage />,
+          },
+          {
+            path: "education-levels",
+            element: <EducationLevelsPage />,
           },
           {
             path: "categories",
