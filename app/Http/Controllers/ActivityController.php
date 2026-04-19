@@ -2,30 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Functions\StoreFunctionRequest;
-use App\Http\Requests\Functions\UpdateFunctionRequest;
-use App\Models\Functions;
+use App\Http\Requests\Activities\StoreActivityRequest;
+use App\Http\Requests\Activities\UpdateActivityRequest;
+use App\Models\Activity;
 use App\Services\ActivityLogService;
-use App\Services\FunctionService;
+use App\Services\ActivityService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 
-class FunctionController extends Controller
+class ActivityController extends Controller
 {
     public function __construct(
-        private FunctionService $functionService,
+        private ActivityService $activityService,
         private ActivityLogService $activityLogService
     ) {}
 
-    private function resolveEncryptedFunctionId(string $encryptedId): int
+    private function resolveEncryptedActivityId(string $encryptedId): int
     {
         $id = decrypt_to_int_or_null($encryptedId);
 
         if (is_null($id)) {
             throw ValidationException::withMessages([
-                'encrypted_id' => ['Identifiant fonction invalide.'],
+                'encrypted_id' => ['Identifiant activite invalide.'],
             ]);
         }
 
@@ -35,20 +35,30 @@ class FunctionController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
-            $functions = $this->functionService->getAllFunctions(
-                fields: ['*'],
+            $keys = [];
+            $values = [];
+
+            if ($request->filled('status')) {
+                $keys[] = 'status';
+                $values[] = $request->string('status')->toString();
+            }
+
+            $activities = $this->activityService->getAllActivities(
+                keys: !empty($keys) ? $keys : null,
+                values: !empty($values) ? $values : null,
+                relations: ['creator', 'images'],
                 paginate: $request->integer('per_page')
             );
 
-            return response()->json($functions);
+            return response()->json($activities);
         } catch (Throwable $exception) {
             $this->activityLogService->logError(
                 $request,
-                'functions_index_error',
-                'Erreur lors de la consultation de la liste des fonctions.',
+                'activities_index_error',
+                'Erreur lors de la consultation des activites.',
                 $exception,
                 $request->user(),
-                Functions::class,
+                Activity::class,
                 null,
                 500
             );
@@ -62,19 +72,19 @@ class FunctionController extends Controller
         $id = null;
 
         try {
-            $id = $this->resolveEncryptedFunctionId($encryptedId);
-            $function = $this->functionService->getByIdFunction($id);
+            $id = $this->resolveEncryptedActivityId($encryptedId);
+            $activity = $this->activityService->getByIdActivity($id, ['*'], ['creator', 'images']);
 
             return response()->json([
-                'function' => $function,
+                'activity' => $activity,
             ]);
         } catch (ValidationException $exception) {
             $this->activityLogService->logWarning(
                 $request,
-                'functions_show_validation_failed',
-                'Echec de validation lors de la consultation d une fonction.',
+                'activities_show_validation_failed',
+                'Echec de validation lors de la consultation d une activite.',
                 $request->user(),
-                Functions::class,
+                Activity::class,
                 null,
                 422,
                 [
@@ -87,66 +97,57 @@ class FunctionController extends Controller
         } catch (Throwable $exception) {
             $this->activityLogService->logError(
                 $request,
-                'functions_show_error',
-                'Erreur lors de la consultation d une fonction.',
+                'activities_show_error',
+                'Erreur lors de la consultation d une activite.',
                 $exception,
                 $request->user(),
-                Functions::class,
+                Activity::class,
                 $id,
                 500,
-                [
-                    'encrypted_id' => $encryptedId,
-                ]
+                ['encrypted_id' => $encryptedId]
             );
 
             throw $exception;
         }
     }
 
-    public function store(StoreFunctionRequest $request): JsonResponse
+    public function store(StoreActivityRequest $request): JsonResponse
     {
         try {
             $validated = $request->validated();
+            $validated['created_by'] = $request->user()?->id;
 
-            $function = $this->functionService->createFunction([
-                'name' => $validated['name'],
-                'code' => $validated['code'] ?? null,
-                'description' => $validated['description'] ?? null,
-                'is_executive' => $validated['is_executive'] ?? false,
-                'is_active' => $validated['is_active'] ?? true,
-            ]);
+            $activity = $this->activityService->createActivity($validated, $request->file('images', []));
 
             $this->activityLogService->logSuccess(
                 $request,
-                'functions_store',
-                'Creation fonction reussie.',
+                'activities_store',
+                'Creation activite reussie.',
                 $request->user(),
-                Functions::class,
-                $function->id,
+                Activity::class,
+                $activity->id,
                 201,
                 [
-                    'target_name' => $function->name,
-                    'target_code' => $function->code,
-                    'is_executive' => $function->is_executive,
+                    'target_title' => $activity->title,
+                    'images_count' => $activity->images->count(),
                 ]
             );
 
             return response()->json([
-                'message' => 'Fonction creee avec succes.',
-                'function' => $function,
+                'message' => 'Activite creee avec succes.',
+                'activity' => $activity,
             ], 201);
         } catch (ValidationException $exception) {
             $this->activityLogService->logWarning(
                 $request,
-                'functions_store_validation_failed',
-                'Echec de validation lors de la creation fonction.',
+                'activities_store_validation_failed',
+                'Echec de validation lors de la creation activite.',
                 $request->user(),
-                Functions::class,
+                Activity::class,
                 null,
                 422,
                 [
-                    'name' => $request->input('name'),
-                    'code' => $request->input('code'),
+                    'title' => $request->input('title'),
                     'errors' => $exception->errors(),
                 ]
             );
@@ -155,60 +156,57 @@ class FunctionController extends Controller
         } catch (Throwable $exception) {
             $this->activityLogService->logError(
                 $request,
-                'functions_store_error',
-                'Erreur lors de la creation fonction.',
+                'activities_store_error',
+                'Erreur lors de la creation activite.',
                 $exception,
                 $request->user(),
-                Functions::class,
+                Activity::class,
                 null,
                 500,
-                [
-                    'name' => $request->input('name'),
-                    'code' => $request->input('code'),
-                ]
+                ['title' => $request->input('title')]
             );
 
             throw $exception;
         }
     }
 
-    public function update(UpdateFunctionRequest $request, string $encryptedId): JsonResponse
+    public function update(UpdateActivityRequest $request, string $encryptedId): JsonResponse
     {
         $id = null;
 
         try {
-            $id = $this->resolveEncryptedFunctionId($encryptedId);
-            $function = $this->functionService->getByIdFunction($id);
+            $id = $this->resolveEncryptedActivityId($encryptedId);
+            $activity = $this->activityService->getByIdActivity($id, ['*'], ['images']);
             $validated = $request->validated();
 
-            $function = $this->functionService->updateFunction($function, $validated);
+            $activity = $this->activityService->updateActivity($activity, $validated, $request->file('images', []));
 
             $this->activityLogService->logSuccess(
                 $request,
-                'functions_update',
-                'Mise a jour fonction reussie.',
+                'activities_update',
+                'Mise a jour activite reussie.',
                 $request->user(),
-                Functions::class,
-                $function->id,
+                Activity::class,
+                $activity->id,
                 200,
                 [
-                    'target_name' => $function->name,
-                    'target_code' => $function->code,
+                    'target_title' => $activity->title,
                     'updated_fields' => array_keys($validated),
+                    'images_count' => $activity->images->count(),
                 ]
             );
 
             return response()->json([
-                'message' => 'Fonction mise a jour avec succes.',
-                'function' => $function,
+                'message' => 'Activite mise a jour avec succes.',
+                'activity' => $activity,
             ]);
         } catch (ValidationException $exception) {
             $this->activityLogService->logWarning(
                 $request,
-                'functions_update_validation_failed',
-                'Echec de validation lors de la mise a jour fonction.',
+                'activities_update_validation_failed',
+                'Echec de validation lors de la mise a jour activite.',
                 $request->user(),
-                Functions::class,
+                Activity::class,
                 $id,
                 422,
                 [
@@ -221,16 +219,14 @@ class FunctionController extends Controller
         } catch (Throwable $exception) {
             $this->activityLogService->logError(
                 $request,
-                'functions_update_error',
-                'Erreur lors de la mise a jour fonction.',
+                'activities_update_error',
+                'Erreur lors de la mise a jour activite.',
                 $exception,
                 $request->user(),
-                Functions::class,
+                Activity::class,
                 $id,
                 500,
-                [
-                    'encrypted_id' => $encryptedId,
-                ]
+                ['encrypted_id' => $encryptedId]
             );
 
             throw $exception;
@@ -242,38 +238,33 @@ class FunctionController extends Controller
         $id = null;
 
         try {
-            $id = $this->resolveEncryptedFunctionId($encryptedId);
-            $function = $this->functionService->getByIdFunction($id);
+            $id = $this->resolveEncryptedActivityId($encryptedId);
+            $activity = $this->activityService->getByIdActivity($id, ['*'], ['images']);
+            $title = $activity->title;
 
-            $targetName = $function->name;
-            $targetCode = $function->code;
-
-            $this->functionService->deleteFunction($function);
+            $this->activityService->deleteActivity($activity);
 
             $this->activityLogService->logInfo(
                 $request,
-                'functions_delete',
-                'Suppression fonction reussie.',
+                'activities_delete',
+                'Suppression activite reussie.',
                 $request->user(),
-                Functions::class,
+                Activity::class,
                 $id,
                 200,
-                [
-                    'target_name' => $targetName,
-                    'target_code' => $targetCode,
-                ]
+                ['target_title' => $title]
             );
 
             return response()->json([
-                'message' => 'Fonction supprimee avec succes.',
+                'message' => 'Activite supprimee avec succes.',
             ]);
         } catch (ValidationException $exception) {
             $this->activityLogService->logWarning(
                 $request,
-                'functions_delete_validation_failed',
-                'Echec de validation lors de la suppression fonction.',
+                'activities_delete_validation_failed',
+                'Echec de validation lors de la suppression activite.',
                 $request->user(),
-                Functions::class,
+                Activity::class,
                 null,
                 422,
                 [
@@ -286,16 +277,14 @@ class FunctionController extends Controller
         } catch (Throwable $exception) {
             $this->activityLogService->logError(
                 $request,
-                'functions_delete_error',
-                'Erreur lors de la suppression fonction.',
+                'activities_delete_error',
+                'Erreur lors de la suppression activite.',
                 $exception,
                 $request->user(),
-                Functions::class,
+                Activity::class,
                 $id,
                 500,
-                [
-                    'encrypted_id' => $encryptedId,
-                ]
+                ['encrypted_id' => $encryptedId]
             );
 
             throw $exception;

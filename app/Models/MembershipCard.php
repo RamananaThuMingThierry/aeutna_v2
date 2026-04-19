@@ -21,7 +21,6 @@ class MembershipCard extends Model
         'issued_at',
         'expires_at',
         'status',
-        'pdf_path',
     ];
 
     protected $casts = [

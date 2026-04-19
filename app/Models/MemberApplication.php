@@ -24,6 +24,8 @@ class MemberApplication extends Model
         'birth_date',
         'birth_place',
         'photo',
+        'cin',
+        'facebook',
         'email',
         'phone',
         'alternative_phone',

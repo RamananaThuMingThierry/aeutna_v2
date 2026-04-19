@@ -213,16 +213,6 @@ export default function FunctionsPage() {
       columns: [
         { data: "name", defaultContent: "" },
         {
-          data: "code",
-          defaultContent: "",
-          render: (value) => {
-            const safe = String(value ?? "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            return safe
-              ? `<span class="badge text-bg-light border text-dark">${safe}</span>`
-              : `<span class="text-muted small">-</span>`;
-          },
-        },
-        {
           data: "is_executive",
           width: 120,
           render: (value) =>
@@ -442,7 +432,6 @@ export default function FunctionsPage() {
               <thead>
                 <tr className="text-muted small">
                   <th>{t("functions.table.name", "Nom")}</th>
-                  <th>{t("functions.table.code", "Code")}</th>
                   <th style={{ width: 120 }}>{t("functions.table.scope", "Type")}</th>
                   <th style={{ width: 120 }}>{t("functions.table.status", "Statut")}</th>
                   <th>{t("functions.table.description", "Description")}</th>

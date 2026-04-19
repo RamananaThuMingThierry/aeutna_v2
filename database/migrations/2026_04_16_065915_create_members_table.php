@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('gender', 20)->nullable();
             $table->date('birth_date')->nullable();
             $table->string('birth_place')->nullable();
+            $table->string('cin', 12)->nullable();
 
             $table->string('photo')->nullable();
 
@@ -37,6 +38,7 @@ return new class extends Migration
 
             $table->string('address')->nullable();
             $table->string('city')->nullable();
+            $table->string('facebook')->nullable();
 
             $table->string('institution_name')->nullable();
             $table->string('field_of_study')->nullable();

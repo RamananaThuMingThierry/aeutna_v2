@@ -207,16 +207,6 @@ export default function EducationLevelsPage() {
       columns: [
         { data: "name", defaultContent: "" },
         {
-          data: "code",
-          defaultContent: "",
-          render: (value) => {
-            const safe = String(value ?? "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            return safe
-              ? `<span class="badge text-bg-light border text-dark">${safe}</span>`
-              : `<span class="text-muted small">-</span>`;
-          },
-        },
-        {
           data: "is_active",
           width: 120,
           render: (value) =>
@@ -418,7 +408,6 @@ export default function EducationLevelsPage() {
               <thead>
                 <tr className="text-muted small">
                   <th>{t("educationLevels.table.name", "Nom")}</th>
-                  <th>{t("educationLevels.table.code", "Code")}</th>
                   <th style={{ width: 120 }}>{t("educationLevels.table.status", "Statut")}</th>
                   <th style={{ width: 180 }} className="text-end">
                     {t("educationLevels.table.actions", "Actions")}

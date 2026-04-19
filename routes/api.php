@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AnnualFeeController;
 use App\Http\Controllers\AxeController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\FeePaymentController;
 use App\Http\Controllers\FunctionController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MembershipCardController;
+use App\Http\Controllers\SlideController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +36,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/users/{encryptedId}/roles/sync', [UserController::class, 'syncRoles'])->name('users.roles.sync');
     Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity_logs.index');
     Route::get('/activity-logs/{id}', [ActivityLogController::class, 'show'])->name('activity_logs.show');
+    Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
+    Route::post('/activities', [ActivityController::class, 'store'])->name('activities.store');
+    Route::get('/activities/{encryptedId}', [ActivityController::class, 'show'])->name('activities.show');
+    Route::put('/activities/{encryptedId}', [ActivityController::class, 'update'])->name('activities.update');
+    Route::delete('/activities/{encryptedId}', [ActivityController::class, 'destroy'])->name('activities.destroy');
     Route::get('/annual-fees', [AnnualFeeController::class, 'index'])->name('annual_fees.index');
     Route::post('/annual-fees', [AnnualFeeController::class, 'store'])->name('annual_fees.store');
     Route::get('/annual-fees/{encryptedId}', [AnnualFeeController::class, 'show'])->name('annual_fees.show');
@@ -64,6 +71,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/membership-cards/{encryptedId}', [MembershipCardController::class, 'show'])->name('membership_cards.show');
     Route::put('/membership-cards/{encryptedId}', [MembershipCardController::class, 'update'])->name('membership_cards.update');
     Route::delete('/membership-cards/{encryptedId}', [MembershipCardController::class, 'destroy'])->name('membership_cards.destroy');
+    Route::get('/slides', [SlideController::class, 'index'])->name('slides.index');
+    Route::post('/slides', [SlideController::class, 'store'])->name('slides.store');
+    Route::get('/slides/{encryptedId}', [SlideController::class, 'show'])->name('slides.show');
+    Route::put('/slides/{encryptedId}', [SlideController::class, 'update'])->name('slides.update');
+    Route::delete('/slides/{encryptedId}', [SlideController::class, 'destroy'])->name('slides.destroy');
     Route::get('/fee-payments', [FeePaymentController::class, 'index'])->name('fee_payments.index');
     Route::post('/fee-payments', [FeePaymentController::class, 'store'])->name('fee_payments.store');
     Route::get('/fee-payments/{encryptedId}', [FeePaymentController::class, 'show'])->name('fee_payments.show');

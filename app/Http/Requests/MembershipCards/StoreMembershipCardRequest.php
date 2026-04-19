@@ -3,13 +3,14 @@
 namespace App\Http\Requests\MembershipCards;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class StoreMembershipCardRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return Auth::check();
     }
 
     public function rules(): array
@@ -20,7 +21,6 @@ class StoreMembershipCardRequest extends FormRequest
             'issued_at' => ['nullable', 'date'],
             'expires_at' => ['nullable', 'date', 'after_or_equal:issued_at'],
             'status' => ['nullable', Rule::in(['active', 'expired', 'revoked'])],
-            'pdf_path' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

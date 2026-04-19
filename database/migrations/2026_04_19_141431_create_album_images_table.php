@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('slides', function (Blueprint $table) {
+        Schema::create('album_images', function (Blueprint $table) {
             $table->id();
-                        $table->string('title')->nullable();
-            $table->string('subtitle')->nullable();
+            $table->foreignId('album_id')->nullable()->constrained()->nullOnDelete();
             $table->string('image_url');
-            $table->unsignedInteger('position')->default(0);
-            $table->boolean('is_active')->default(true);
+            $table->string('name')->nullable();
+            $table->text('description')->nullable();
+            $table->integer('position')->default(0); // ordre d'affichage
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('slides');
+        Schema::dropIfExists('album_images');
     }
 };

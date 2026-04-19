@@ -3,13 +3,14 @@
 namespace App\Http\Requests\Members;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class StoreMemberRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return Auth::check();
     }
 
     public function rules(): array
@@ -24,6 +25,8 @@ class StoreMemberRequest extends FormRequest
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'gender' => ['nullable', 'string', 'max:20'],
+            'cin' => ['nullable', 'string', 'max:12', 'min:12'],
+            'facebook' => ['nullable', 'string'],
             'birth_date' => ['nullable', 'date'],
             'birth_place' => ['nullable', 'string', 'max:255'],
             'photo' => ['nullable', 'image', 'max:2048'],

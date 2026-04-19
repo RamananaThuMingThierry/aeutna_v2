@@ -42,7 +42,7 @@ function emptyForm() {
   return {
     member_type: "member", axis_id: "", education_level_id: "", member_number: "",
     first_name: "", last_name: "", gender: "", birth_date: "", birth_place: "", photo: "",
-    email: "", phone: "", alternative_phone: "", address: "", city: "",
+    email: "", phone: "", alternative_phone: "", address: "", city: "", cin: "", facebook: "",
     institution_name: "", field_of_study: "", is_student: false, is_sympathizer: false,
     is_from_antalaha: true, status: "pending", joined_at: todayIsoDate(), notes: "",
     function_ids: [], function_start_date: todayIsoDate(), function_end_date: "", function_notes: "",
@@ -129,6 +129,8 @@ export default function FormMemberPage() {
             birth_place: member?.birth_place ?? "",
             photo: member?.photo ?? "",
             email: member?.email ?? "",
+            cin: member?.cin ?? "",
+            facebook: member?.facebook ?? "",
             phone: member?.phone ?? "",
             alternative_phone: member?.alternative_phone ?? "",
             address: member?.address ?? "",
@@ -220,6 +222,8 @@ export default function FormMemberPage() {
       birth_place: form.birth_place.trim(),
       email: form.email.trim(),
       phone: form.phone.trim(),
+      cin: form.cin.trim(),
+      facebook: form.facebook.trim(),
       alternative_phone: form.alternative_phone.trim(),
       address: form.address.trim(),
       city: form.city.trim(),
@@ -453,7 +457,12 @@ export default function FormMemberPage() {
                       <input className={`form-control ${errors.last_name ? "is-invalid" : ""}`} name="last_name" value={form.last_name} onChange={handleFormChange} />
                       <FieldError error={errors.last_name} />
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-6">
+                      <label className="form-label">Carte d'identité National (C.I.N)</label>
+                      <input type="number" className={`form-control ${errors.cin ? "is-invalid" : ""}`} name="cin" value={form.cin} onChange={handleFormChange}/>
+                      <FieldError error={errors.cin} />
+                    </div>
+                    <div className="col-md-6">
                       <label className="form-label">Genre</label>
                       <select className="form-select" name="gender" value={form.gender} onChange={handleFormChange}>
                         <option value="">Selectionner</option>
@@ -461,11 +470,11 @@ export default function FormMemberPage() {
                         <option value="Femme">Femme</option>
                       </select>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-6">
                       <label className="form-label">Date naissance</label>
                       <input type="date" className="form-control" name="birth_date" value={form.birth_date} onChange={handleFormChange} />
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-6">
                       <label className="form-label">Lieu naissance</label>
                       <input className="form-control" name="birth_place" value={form.birth_place} onChange={handleFormChange} />
                     </div>
@@ -479,6 +488,10 @@ export default function FormMemberPage() {
                       <input type="email" className="form-control" name="email" value={form.email} onChange={handleFormChange} />
                     </div>
                     <div className="col-md-6">
+                      <label className="form-label">Facebook</label>
+                      <input className="form-control" name="facebook" value={form.facebook} onChange={handleFormChange} />
+                    </div>
+                    <div className="col-md-6">
                       <label className="form-label">Téléphone</label>
                       <input className="form-control" name="phone" value={form.phone} onChange={handleFormChange} />
                     </div>
@@ -490,7 +503,7 @@ export default function FormMemberPage() {
                       <label className="form-label">Adresse</label>
                       <input className="form-control" name="address" value={form.address} onChange={handleFormChange} />
                     </div>
-                    <div className="col-12">
+                    <div className="col-md-6">
                       <label className="form-label">Ville</label>
                       <input className="form-control" name="city" value={form.city} onChange={handleFormChange} />
                     </div>

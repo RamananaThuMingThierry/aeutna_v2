@@ -3,13 +3,14 @@
 namespace App\Http\Requests\Members;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class UpdateMemberRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return Auth::check();
     }
 
     public function rules(): array
@@ -27,6 +28,8 @@ class UpdateMemberRequest extends FormRequest
             'last_name' => ['sometimes', 'required', 'string', 'max:255'],
             'gender' => ['nullable', 'string', 'max:20'],
             'birth_date' => ['nullable', 'date'],
+            'cin' => ['nullable', 'string', 'max:12', 'min:12'],
+            'facebook' => ['nullable', 'string'],
             'birth_place' => ['nullable', 'string', 'max:255'],
             'photo' => ['nullable', 'image', 'max:2048'],
             'email' => ['nullable', 'email', 'max:255'],

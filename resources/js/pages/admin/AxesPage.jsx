@@ -446,7 +446,7 @@ export default function AxesPage() {
       {open && (
         <>
           <div className="modal fade show" style={{ display: "block" }} role="dialog" aria-modal="true">
-            <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-dialog modal-lg modal-dialog-centered">
               <div className="modal-content border-0 shadow">
                 <div className="modal-header">
                   <h5 className="modal-title">
@@ -518,7 +518,7 @@ export default function AxesPage() {
                     <button type="button" className="btn btn-outline-secondary" onClick={closeModal} disabled={saving}>
                       {t("axes.modal.cancel", "Annuler")}
                     </button>
-                    <button className="btn btn-warning" disabled={saving}>
+                    <button className="btn btn-dark" disabled={saving}>
                       {saving ? (
                         <>
                           <span className="spinner-border spinner-border-sm me-2" />

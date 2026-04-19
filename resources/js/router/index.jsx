@@ -2,16 +2,19 @@ import React from "react";
 import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 
 import AdminLayout from "../layouts/AdminLayout";
+import ActivitiesPage from "../pages/admin/ActivitiesPage";
 import AnnualFeesPage from "../pages/admin/AnnualFeesPage";
 import AxesPage from "../pages/admin/AxesPage";
 import DetailMemberPage from "../pages/admin/DetailMemberPage";
 import EducationLevelsPage from "../pages/admin/EducationLevelsPage";
 import FeePaymentsPage from "../pages/admin/FeePaymentsPage";
+import FormActivityPage from "../pages/admin/FormActivityPage";
 import FormMemberPage from "../pages/admin/FormMemberPage";
 import FunctionsPage from "../pages/admin/FunctionsPage";
 import MembersPage from "../pages/admin/MembersPage";
 import MembershipCardsPage from "../pages/admin/MembershipCardsPage";
 import RootLayout from "../layouts/RootLayout";
+import SlidesPage from "../pages/admin/SlidesPage";
 import ActivityLogPage from "../pages/admin/ActivityLogPage";
 import DashboardPage from "../pages/admin/DashboardPage";
 import UsersPage from "../pages/admin/UsersPage";
@@ -187,6 +190,18 @@ export const router = createBrowserRouter([
             element: <FunctionsPage />,
           },
           {
+            path: "activities",
+            element: <ActivitiesPage />,
+          },
+          {
+            path: "activities/new",
+            element: <FormActivityPage />,
+          },
+          {
+            path: "activities/:encryptedId/edit",
+            element: <FormActivityPage />,
+          },
+          {
             path: "annual-fees",
             element: <AnnualFeesPage />,
           },
@@ -260,22 +275,8 @@ export const router = createBrowserRouter([
             ),
           },
           {
-            path: "reservations",
-            element: (
-              <PlaceholderPage
-                title="Reservations"
-                description="Module reservations en attente d'implementation."
-              />
-            ),
-          },
-          {
             path: "sliders",
-            element: (
-              <PlaceholderPage
-                title="Sliders"
-                description="Module sliders en attente d'implementation."
-              />
-            ),
+            element: <SlidesPage />,
           },
           {
             path: "users",

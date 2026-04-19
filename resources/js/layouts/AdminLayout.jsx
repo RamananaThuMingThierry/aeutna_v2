@@ -6,6 +6,7 @@ const menuItems = [
   { to: "/admin/axes", label: "Axes", icon: "bi-diagram-3-fill" },
   { to: "/admin/education-levels", label: "Niveaux", icon: "bi-mortarboard-fill" },
   { to: "/admin/functions", label: "Fonctions", icon: "bi-briefcase-fill" },
+  { to: "/admin/activities", label: "Activites", icon: "bi-calendar2-event-fill" },
   { to: "/admin/members", label: "Membres", icon: "bi-person-vcard-fill" },
   { to: "/admin/membership-cards", label: "Cartes membres", icon: "bi-person-badge-fill" },
   { to: "/admin/annual-fees", label: "Cotisations annuelles", icon: "bi-calendar-event-fill" },
@@ -189,7 +190,7 @@ export default function AdminLayout() {
             </nav>
 
             <main className="p-3 p-md-4 p-xl-5">
-              <div className="container-fluid px-0">
+              <div className="container-fluid px-0 bg-danger">
                 <div className="card border-0 shadow-sm">
                   <div className="card-body p-3 p-md-4">
                     <Outlet />

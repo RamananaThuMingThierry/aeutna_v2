@@ -26,6 +26,8 @@ class Member extends Model
         'first_name',
         'last_name',
         'gender',
+        'cin',
+        'facebook',
         'birth_date',
         'birth_place',
         'photo',

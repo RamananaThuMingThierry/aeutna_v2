@@ -23,9 +23,6 @@ return new class extends Migration
             $table->date('expires_at')->nullable();
 
             $table->enum('status', ['active', 'expired', 'revoked'])->default('active');
-
-            $table->string('pdf_path')->nullable();
-
             $table->timestamps();
         });
     }
