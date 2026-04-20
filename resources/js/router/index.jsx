@@ -2,9 +2,11 @@ import React from "react";
 import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 
 import AdminLayout from "../layouts/AdminLayout";
+import PublicLayout from "../layouts/PublicLayout";
 import ActivitiesPage from "../pages/admin/ActivitiesPage";
 import AnnualFeesPage from "../pages/admin/AnnualFeesPage";
 import AxesPage from "../pages/admin/AxesPage";
+import ContactsAdminPage from "../pages/admin/ContactsAdminPage";
 import DetailMemberPage from "../pages/admin/DetailMemberPage";
 import EducationLevelsPage from "../pages/admin/EducationLevelsPage";
 import FeePaymentsPage from "../pages/admin/FeePaymentsPage";
@@ -21,6 +23,11 @@ import UsersPage from "../pages/admin/UsersPage";
 import ProfilePage from "../pages/account/ProfilePage";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
+import ActivitiesPublicPage from "../pages/public/ActivitiesPublicPage";
+import AboutPage from "../pages/public/AboutPage";
+import ContactsPage from "../pages/public/ContactsPage";
+import GalleryPage from "../pages/public/GalleryPage";
+import HomePage from "../pages/public/HomePage";
 
 function PlaceholderPage({ title, description }) {
   return (
@@ -28,14 +35,6 @@ function PlaceholderPage({ title, description }) {
       <h1>{title}</h1>
       <p>{description}</p>
     </section>
-  );
-}
-
-function PublicShell() {
-  return (
-    <div>
-      <Outlet />
-    </div>
   );
 }
 
@@ -86,25 +85,27 @@ export const router = createBrowserRouter([
       },
       {
         path: "/",
-        element: <PublicShell />,
+        element: <PublicLayout />,
         children: [
           {
             index: true,
-            element: (
-              <PlaceholderPage
-                title="Accueil"
-                description="Point d'entree public du frontend."
-              />
-            ),
+            element: <HomePage />,
           },
           {
             path: "about",
-            element: (
-              <PlaceholderPage
-                title="A propos"
-                description="Page publique en attente d'implementation."
-              />
-            ),
+            element: <AboutPage />,
+          },
+          {
+            path: "gallery",
+            element: <GalleryPage />,
+          },
+          {
+            path: "activities",
+            element: <ActivitiesPublicPage />,
+          },
+          {
+            path: "contacts",
+            element: <ContactsPage />,
           },
           {
             path: "login",
@@ -288,12 +289,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "contacts",
-            element: (
-              <PlaceholderPage
-                title="Contacts"
-                description="Module contacts en attente d'implementation."
-              />
-            ),
+            element: <ContactsAdminPage />,
           },
           {
             path: "notifications",

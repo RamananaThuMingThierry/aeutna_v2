@@ -5,6 +5,8 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AnnualFeeController;
 use App\Http\Controllers\AxeController;
+use App\Http\Controllers\ContactUsController;
+use App\Http\Controllers\ContactAdminController;
 use App\Http\Controllers\EducationLevelController;
 use App\Http\Controllers\FeePaymentController;
 use App\Http\Controllers\FunctionController;
@@ -12,12 +14,16 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MembershipCardController;
 use App\Http\Controllers\SlideController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 });
+
+Route::get('/website/home', [WebsiteController::class, 'homeData'])->name('website.home');
+Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact_us.store');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('auth')->group(function () {
@@ -76,6 +82,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/slides/{encryptedId}', [SlideController::class, 'show'])->name('slides.show');
     Route::put('/slides/{encryptedId}', [SlideController::class, 'update'])->name('slides.update');
     Route::delete('/slides/{encryptedId}', [SlideController::class, 'destroy'])->name('slides.destroy');
+    Route::get('/contacts', [ContactAdminController::class, 'index'])->name('contacts.index');
+    Route::get('/contacts/{encryptedId}', [ContactAdminController::class, 'show'])->name('contacts.show');
+    Route::post('/contacts/{encryptedId}/reply', [ContactAdminController::class, 'reply'])->name('contacts.reply');
+    Route::delete('/contacts/{encryptedId}', [ContactAdminController::class, 'destroy'])->name('contacts.destroy');
     Route::get('/fee-payments', [FeePaymentController::class, 'index'])->name('fee_payments.index');
     Route::post('/fee-payments', [FeePaymentController::class, 'store'])->name('fee_payments.store');
     Route::get('/fee-payments/{encryptedId}', [FeePaymentController::class, 'show'])->name('fee_payments.show');

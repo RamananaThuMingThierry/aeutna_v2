@@ -32,6 +32,22 @@ body {
     min-height: 100vh;
 }
 
+#root,
+#app {
+    min-height: 100vh;
+}
+
+.py-lg-6 {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+}
+
+.carousel-indicators [data-bs-target] {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+}
+
 .profile-avatar-preview {
     width: 104px;
     height: 104px;
