@@ -155,7 +155,7 @@ export default function AdminLayout() {
 
       <div className="admin-shell">
           <aside
-            className={`admin-sidebar-desktop d-none d-lg-block border-end bg-white min-vh-100 position-sticky top-0 ${
+            className={`admin-sidebar-desktop d-none d-lg-block border-end bg-white ${
               sidebarCollapsed ? "is-collapsed" : ""
             }`}
           >

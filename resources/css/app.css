@@ -304,30 +304,39 @@ body {
 }
 
 @media (min-width: 992px) {
+    :root {
+        --admin-sidebar-width: min(320px, 24vw);
+    }
+
     .admin-shell {
-        display: flex;
-        align-items: stretch;
         min-height: 100vh;
     }
 
     .admin-sidebar-desktop {
-        width: min(320px, 24vw);
-        flex: 0 0 min(320px, 24vw);
-        transition: width 0.25s ease, flex-basis 0.25s ease, opacity 0.2s ease;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: var(--admin-sidebar-width);
         overflow: hidden;
         z-index: 1020;
+        transition: width 0.25s ease, opacity 0.2s ease;
     }
 
     .admin-sidebar-desktop.is-collapsed {
         width: 0;
-        flex-basis: 0;
         opacity: 0;
         border-right: 0 !important;
     }
 
     .admin-content {
-        flex: 1 1 auto;
         min-width: 0;
+        margin-left: var(--admin-sidebar-width);
+        transition: margin-left 0.25s ease;
+    }
+
+    .admin-content.is-expanded {
+        margin-left: 0;
     }
 }
 
