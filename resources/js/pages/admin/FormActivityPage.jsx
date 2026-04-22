@@ -112,7 +112,7 @@ export default function FormActivityPage() {
         setCoverSelection(currentCover ? `existing:${currentCover.id}` : "");
       } catch (error) {
         if (!active) return;
-        setGlobalError(error?.response?.data?.message || "Impossible de charger l'activite.");
+        setGlobalError(error?.response?.data?.message || "Impossible de charger l'actualite.");
       } finally {
         if (active) setLoading(false);
       }
@@ -272,8 +272,8 @@ export default function FormActivityPage() {
     <div>
       <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
         <div>
-          <h3 className="h4 mb-1">{isEdit ? "Modifier activite" : "Nouvelle activite"}</h3>
-          <p className="text-secondary mb-0">Formulaire de creation et de mise a jour d&apos;une activite.</p>
+          <h3 className="h4 mb-1">{isEdit ? "Modifier actualite" : "Nouvelle actualite"}</h3>
+          <p className="text-secondary mb-0">Formulaire de creation et de mise a jour d&apos;une actualite.</p>
         </div>
         <div className="d-flex gap-2">
           <Link to="/admin/activities" className="btn btn-outline-secondary">
@@ -299,7 +299,7 @@ export default function FormActivityPage() {
           <div className="row g-4">
             <div className="col-xl-7">
               <div className="d-flex flex-column gap-4">
-                <SectionCard title="Informations" subtitle="Contenu principal de l'activite">
+                <SectionCard title="Informations" subtitle="Contenu principal de l'actualite">
                   <div className="row g-3">
                     <div className="col-md-6">
                       <label className="form-label">Titre</label>

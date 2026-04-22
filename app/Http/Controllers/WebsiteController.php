@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\Album;
+use App\Models\AlbumImage;
 use App\Models\MemberFunction;
 use App\Models\Slide;
 use Illuminate\Http\JsonResponse;
@@ -81,19 +83,74 @@ class WebsiteController extends Controller
         return response()->json([
             'slides' => $slides,
             'about' => [
-                'title' => 'Association des Etudiants et Universitaires de Tanambao V',
-                'summary' => 'AEUTNA rassemble, accompagne et valorise les etudiants et universitaires autour de la solidarite, de l entraide et du developpement communautaire.',
+                'title' => 'Association des Etudiants d\'Université de Tananarive Natifs d\'Antalaha',
+                'summary' => 'AEUTNA rassemble, accompagne et valorise les membres autour de la solidarite, de l entraide et du developpement communautaire.',
             ],
             'contacts' => [
-                'email' => 'contact@aeutna.local',
-                'phone' => '+261 00 000 00',
-                'whatsapp' => '+261 00 000 00',
+                'email' => 'ramananathumingthierry@gmail.com',
+                'phone' => '+261 32 75 637 70',
+                'whatsapp' => '+261 32 75 637 70',
                 'facebook' => 'https://facebook.com/aeutna',
                 'address' => 'Tanambao V, Antalaha, Madagascar',
             ],
             'activities' => $activities,
             'gallery' => $gallery,
             'role_history' => $roleHistory,
+        ]);
+    }
+
+    public function galleryData(): JsonResponse
+    {
+        $albums = Album::query()
+            ->where('status', 'active')
+            ->with(['images' => function ($query) {
+                $query->where('status', 'active')->orderBy('position')->orderBy('id');
+            }])
+            ->orderByDesc('id')
+            ->get()
+            ->map(function (Album $album) {
+                return [
+                    'id' => $album->id,
+                    'encrypted_id' => $album->encrypted_id,
+                    'title' => $album->title,
+                    'slug' => $album->slug,
+                    'description' => $album->description,
+                    'status' => $album->status,
+                    'images_count' => $album->images->count(),
+                    'cover_image' => $album->images->first() ? [
+                        'image_url' => '/' . ltrim($album->images->first()->image_url, '/'),
+                        'name' => $album->images->first()->name,
+                    ] : null,
+                    'images' => $album->images->map(function (AlbumImage $image) {
+                        return [
+                            'id' => $image->id,
+                            'encrypted_id' => $image->encrypted_id,
+                            'image_url' => '/' . ltrim($image->image_url, '/'),
+                            'name' => $image->name,
+                            'description' => $image->description,
+                            'position' => $image->position,
+                        ];
+                    })->values(),
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'albums' => $albums,
+        ]);
+    }
+
+    public function activitiesData(): JsonResponse
+    {
+        $activities = Activity::query()
+            ->with(['images'])
+            ->whereIn('status', ['published', 'completed'])
+            ->orderByDesc('starts_at')
+            ->orderByDesc('id')
+            ->get(['id', 'title', 'description', 'location', 'starts_at', 'ends_at', 'status']);
+
+        return response()->json([
+            'activities' => $activities,
         ]);
     }
 }

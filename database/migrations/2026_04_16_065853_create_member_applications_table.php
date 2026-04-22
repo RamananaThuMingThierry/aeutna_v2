@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('member_applications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('axis_id')->nullable()->constrained('axes')->nullOnDelete();
             $table->foreignId('education_level_id')->nullable()->constrained('education_levels')->nullOnDelete();
 
@@ -34,7 +34,6 @@ return new class extends Migration
             $table->string('facebook')->nullable();
 
             $table->string('address')->nullable();
-            $table->string('city')->nullable();
 
             $table->string('institution_name')->nullable();
             $table->string('field_of_study')->nullable();

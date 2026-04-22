@@ -210,7 +210,7 @@ export default function MembershipCardsPage() {
 
                 <div class="main">
                   <h2>${fullName}</h2>
-                  <p class="subtitle">Association des Etudiants Universitaires et Travailleurs Natifs d'Antalaha</p>
+                  <p class="subtitle">Association des Etudiants de l'univeersité de Tananarive Natifs d'Antalaha</p>
                   <div class="grid">
                     <div class="item">
                       <div class="label">Numero membre</div>
@@ -252,7 +252,6 @@ export default function MembershipCardsPage() {
 
               <div class="footer">
                 <div class="note">Cette carte certifie l'appartenance du titulaire a l'AEUTNA pour la periode indiquee.</div>
-                <div>www.aeutna.local</div>
               </div>
             </div>
           </div>

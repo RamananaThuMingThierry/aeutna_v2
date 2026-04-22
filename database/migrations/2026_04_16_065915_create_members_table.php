@@ -37,7 +37,6 @@ return new class extends Migration
             $table->string('alternative_phone', 30)->nullable()->index();
 
             $table->string('address')->nullable();
-            $table->string('city')->nullable();
             $table->string('facebook')->nullable();
 
             $table->string('institution_name')->nullable();

@@ -150,7 +150,7 @@ export default function ActivitiesPage() {
       const list = await activitiesApi.list();
       setItems(normalizeCollection(list));
     } catch (error) {
-      const message = error?.response?.data?.message || "Impossible de charger les activites.";
+      const message = error?.response?.data?.message || "Impossible de charger les actualites.";
       if (mode === "initial") setGlobalError(message);
       else showToast("danger", message);
     } finally {
@@ -193,13 +193,13 @@ export default function ActivitiesPage() {
     <div className="container-fluid">
       <div className="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-4">
         <div>
-          <h4 className="mb-1">Activites</h4>
-          <div className="text-muted small">Gestion des activites et de leurs images</div>
+          <h4 className="mb-1">Actualites</h4>
+          <div className="text-muted small">Gestion des actualites et de leurs images</div>
         </div>
         <div className="d-flex flex-column flex-md-row gap-2">
           <input
             className="form-control"
-            placeholder="Rechercher une activite"
+            placeholder="Rechercher une actualite"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
@@ -207,7 +207,7 @@ export default function ActivitiesPage() {
             {initialLoading || refreshing ? "Rafraichissement..." : "Rafraichir"}
           </button>
           <button className="btn btn-sm btn-dark" onClick={() => navigate("/admin/activities/new")} disabled={initialLoading}>
-            Nouvelle activite
+            Nouvelle actualite
           </button>
         </div>
       </div>
@@ -268,7 +268,7 @@ export default function ActivitiesPage() {
         ) : (
           <div className="col-12">
             <div className="card border-0 shadow-sm">
-              <div className="card-body text-muted">Aucune activite trouvee.</div>
+              <div className="card-body text-muted">Aucune actualite trouvee.</div>
             </div>
           </div>
         )}
@@ -280,7 +280,7 @@ export default function ActivitiesPage() {
             <div className="modal-dialog modal-xl modal-dialog-scrollable">
               <div className="modal-content border-0 shadow">
                 <div className="modal-header">
-                  <h5 className="modal-title">Detail activite</h5>
+                  <h5 className="modal-title">Detail actualite</h5>
                   <button type="button" className="btn-close" onClick={() => setShowOpen(false)} />
                 </div>
                 <div className="modal-body">
@@ -339,7 +339,7 @@ export default function ActivitiesPage() {
                   <button type="button" className="btn-close" onClick={() => !deleting && setDeleteOpen(false)} />
                 </div>
                 <div className="modal-body">
-                  <p className="mb-0">Supprimer l'activite <b>{deleteTarget?.title || "#"}</b> ?</p>
+                  <p className="mb-0">Supprimer l'actualite <b>{deleteTarget?.title || "#"}</b> ?</p>
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-outline-secondary" onClick={() => !deleting && setDeleteOpen(false)}>Annuler</button>

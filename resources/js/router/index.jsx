@@ -13,6 +13,7 @@ import FeePaymentsPage from "../pages/admin/FeePaymentsPage";
 import FormActivityPage from "../pages/admin/FormActivityPage";
 import FormMemberPage from "../pages/admin/FormMemberPage";
 import FunctionsPage from "../pages/admin/FunctionsPage";
+import GalleryAdminPage from "../pages/admin/GalleryAdminPage";
 import MembersPage from "../pages/admin/MembersPage";
 import MembershipCardsPage from "../pages/admin/MembershipCardsPage";
 import RootLayout from "../layouts/RootLayout";
@@ -25,9 +26,12 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import ActivitiesPublicPage from "../pages/public/ActivitiesPublicPage";
 import AboutPage from "../pages/public/AboutPage";
+import BecomeMemberPage from "../pages/public/BecomeMemberPage";
+import BureauPage from "../pages/public/BureauPage";
 import ContactsPage from "../pages/public/ContactsPage";
 import GalleryPage from "../pages/public/GalleryPage";
 import HomePage from "../pages/public/HomePage";
+import MemberApplicationsPage from "../pages/admin/MemberApplicationsPage";
 
 function PlaceholderPage({ title, description }) {
   return (
@@ -98,6 +102,14 @@ export const router = createBrowserRouter([
           {
             path: "gallery",
             element: <GalleryPage />,
+          },
+          {
+            path: "bureau",
+            element: <BureauPage />,
+          },
+          {
+            path: "devenir-membre",
+            element: <BecomeMemberPage />,
           },
           {
             path: "activities",
@@ -215,6 +227,10 @@ export const router = createBrowserRouter([
             element: <MembersPage />,
           },
           {
+            path: "member-applications",
+            element: <MemberApplicationsPage />,
+          },
+          {
             path: "membership-cards",
             element: <MembershipCardsPage />,
           },
@@ -268,12 +284,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "gallery",
-            element: (
-              <PlaceholderPage
-                title="Galerie"
-                description="Module galerie en attente d'implementation."
-              />
-            ),
+            element: <GalleryAdminPage />,
           },
           {
             path: "sliders",

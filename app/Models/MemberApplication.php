@@ -30,7 +30,6 @@ class MemberApplication extends Model
         'phone',
         'alternative_phone',
         'address',
-        'city',
         'institution_name',
         'field_of_study',
         'is_student',
@@ -64,5 +63,20 @@ class MemberApplication extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function axis(): BelongsTo
+    {
+        return $this->belongsTo(Axe::class, 'axis_id');
+    }
+
+    public function educationLevel(): BelongsTo
+    {
+        return $this->belongsTo(EducationLevel::class, 'education_level_id');
+    }
+
+    public function reviewer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'reviewed_by');
     }
 }

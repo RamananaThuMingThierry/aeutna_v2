@@ -3,15 +3,18 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\AnnualFeeController;
 use App\Http\Controllers\AxeController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\ContactAdminController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EducationLevelController;
 use App\Http\Controllers\FeePaymentController;
 use App\Http\Controllers\FunctionController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MembershipCardController;
+use App\Http\Controllers\MemberApplicationController;
 use App\Http\Controllers\SlideController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
@@ -23,6 +26,10 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::get('/website/home', [WebsiteController::class, 'homeData'])->name('website.home');
+Route::get('/website/gallery', [WebsiteController::class, 'galleryData'])->name('website.gallery');
+Route::get('/website/activities', [WebsiteController::class, 'activitiesData'])->name('website.activities');
+Route::get('/website/member-application-meta', [MemberApplicationController::class, 'publicMeta'])->name('website.member_application_meta');
+Route::post('/member-applications', [MemberApplicationController::class, 'store'])->name('member_applications.store');
 Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact_us.store');
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -32,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
     });
 
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::get('/users/{encryptedId}', [UserController::class, 'show'])->name('users.show');
@@ -47,6 +55,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/activities/{encryptedId}', [ActivityController::class, 'show'])->name('activities.show');
     Route::put('/activities/{encryptedId}', [ActivityController::class, 'update'])->name('activities.update');
     Route::delete('/activities/{encryptedId}', [ActivityController::class, 'destroy'])->name('activities.destroy');
+    Route::get('/albums', [AlbumController::class, 'index'])->name('albums.index');
+    Route::post('/albums', [AlbumController::class, 'store'])->name('albums.store');
+    Route::get('/albums/{encryptedId}', [AlbumController::class, 'show'])->name('albums.show');
+    Route::put('/albums/{encryptedId}', [AlbumController::class, 'update'])->name('albums.update');
+    Route::delete('/albums/{encryptedId}', [AlbumController::class, 'destroy'])->name('albums.destroy');
     Route::get('/annual-fees', [AnnualFeeController::class, 'index'])->name('annual_fees.index');
     Route::post('/annual-fees', [AnnualFeeController::class, 'store'])->name('annual_fees.store');
     Route::get('/annual-fees/{encryptedId}', [AnnualFeeController::class, 'show'])->name('annual_fees.show');
@@ -68,6 +81,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/functions/{encryptedId}', [FunctionController::class, 'update'])->name('functions.update');
     Route::delete('/functions/{encryptedId}', [FunctionController::class, 'destroy'])->name('functions.destroy');
     Route::get('/members', [MemberController::class, 'index'])->name('members.index');
+    Route::get('/member-applications', [MemberApplicationController::class, 'index'])->name('member_applications.index');
+    Route::get('/member-applications/{encryptedId}', [MemberApplicationController::class, 'show'])->name('member_applications.show');
+    Route::post('/member-applications/{encryptedId}/review', [MemberApplicationController::class, 'review'])->name('member_applications.review');
     Route::post('/members', [MemberController::class, 'store'])->name('members.store');
     Route::get('/members/{encryptedId}', [MemberController::class, 'show'])->name('members.show');
     Route::put('/members/{encryptedId}', [MemberController::class, 'update'])->name('members.update');

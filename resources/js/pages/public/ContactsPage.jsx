@@ -1,41 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 
 import { submitContactApi } from "../../api/contact";
 import { websiteApi } from "../../api/website";
 
 function normalizePhone(value) {
   return String(value || "").replace(/[^\d+]/g, "");
-}
-
-function ContactCard({ icon, title, description, href, label, variant = "outline" }) {
-  const className =
-    variant === "solid"
-      ? "btn btn-dark rounded-pill px-4"
-      : "btn btn-outline-dark rounded-pill px-4";
-
-  return (
-    <article className="card border-0 shadow-sm h-100" style={{ background: "var(--panel)" }}>
-      <div className="card-body p-4 p-lg-5 d-flex flex-column">
-        <div
-          className="d-inline-flex align-items-center justify-content-center rounded-circle mb-4"
-          style={{
-            width: 64,
-            height: 64,
-            background: "linear-gradient(135deg, rgba(15,118,110,0.16), rgba(194,65,12,0.18))",
-            color: "var(--accent-strong)",
-          }}
-        >
-          <i className={`bi ${icon} fs-4`} />
-        </div>
-        <h2 className="h4 fw-bold mb-2">{title}</h2>
-        <p className="text-secondary mb-4 flex-grow-1">{description}</p>
-        <a href={href} target="_blank" rel="noreferrer" className={className}>
-          {label}
-        </a>
-      </div>
-    </article>
-  );
 }
 
 function ContactInfoItem({ icon, label, value, href, accent = "rgba(15,118,110,0.16)" }) {
@@ -189,13 +158,13 @@ export default function ContactsPage() {
 
   return (
     <div>
-      <section className="p-5 pb-lg-6">
+      <section className="p-5">
         <div className="container">
           <div className="row g-4 align-items-start">
             <div className="col-lg-5">
               <div className="rounded-5 p-4 p-lg-5 shadow-sm h-100" style={{ background: "var(--panel)" }}>
                 <div className="text-uppercase small fw-bold mb-2" style={{ color: "var(--warm)", letterSpacing: "0.14em" }}>
-                  Contact
+                  CONTACTEZ-NOUS
                 </div>
                 <p className="text-secondary mb-4">
                   Utilisez le formulaire ou contactez directement l association par email, WhatsApp ou Facebook.
@@ -229,16 +198,6 @@ export default function ContactsPage() {
             <div className="col-lg-7">
               <div className="card border-0 shadow-sm" style={{ background: "var(--panel)" }}>
                 <div className="card-body p-4 p-lg-5">
-                  <div className="mb-4">
-                    <div className="text-uppercase small fw-bold mb-2" style={{ color: "var(--warm)", letterSpacing: "0.14em" }}>
-                      Formulaire
-                    </div>
-                    <h2 className="h3 fw-bold mb-2">Envoyer un message</h2>
-                    <p className="text-secondary mb-0">
-                      Remplissez ce formulaire pour transmettre votre demande a l association.
-                    </p>
-                  </div>
-
                   {submitSuccess ? <div className="alert alert-success">{submitSuccess}</div> : null}
                   {submitError ? <div className="alert alert-danger">{submitError}</div> : null}
 
@@ -252,7 +211,7 @@ export default function ContactsPage() {
                         value={form.name}
                         onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
                         placeholder="Votre nom complet"
-                        style={{ minHeight: 52, borderRadius: "1rem", borderColor: "var(--line)", background: "rgba(255,255,255,0.75)" }}
+                        style={{ minHeight: 52, borderColor: "var(--line)", background: "rgba(255,255,255,0.75)" }}
                         required
                       />
                       {fieldErrors.name ? <div className="text-danger small mt-1">{fieldErrors.name[0]}</div> : null}
@@ -267,14 +226,14 @@ export default function ContactsPage() {
                         value={form.email}
                         onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
                         placeholder="nom@example.com"
-                        style={{ minHeight: 52, borderRadius: "1rem", borderColor: "var(--line)", background: "rgba(255,255,255,0.75)" }}
+                        style={{ minHeight: 52, borderColor: "var(--line)", background: "rgba(255,255,255,0.75)" }}
                         required
                       />
                       {fieldErrors.email ? <div className="text-danger small mt-1">{fieldErrors.email[0]}</div> : null}
                     </div>
 
                     <div className="col-md-6">
-                      <label htmlFor="contact-phone" className="form-label fw-semibold">Telephone</label>
+                      <label htmlFor="contact-phone" className="form-label fw-semibold">Téléphone</label>
                       <input
                         id="contact-phone"
                         type="text"
@@ -282,7 +241,7 @@ export default function ContactsPage() {
                         value={form.phone}
                         onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
                         placeholder="+261 ..."
-                        style={{ minHeight: 52, borderRadius: "1rem", borderColor: "var(--line)", background: "rgba(255,255,255,0.75)" }}
+                        style={{ minHeight: 52, borderColor: "var(--line)", background: "rgba(255,255,255,0.75)" }}
                       />
                       {fieldErrors.phone ? <div className="text-danger small mt-1">{fieldErrors.phone[0]}</div> : null}
                     </div>
@@ -296,7 +255,7 @@ export default function ContactsPage() {
                         value={form.subject}
                         onChange={(event) => setForm((current) => ({ ...current, subject: event.target.value }))}
                         placeholder="Objet de votre message"
-                        style={{ minHeight: 52, borderRadius: "1rem", borderColor: "var(--line)", background: "rgba(255,255,255,0.75)" }}
+                        style={{ minHeight: 52, borderColor: "var(--line)", background: "rgba(255,255,255,0.75)" }}
                         required
                       />
                       {fieldErrors.subject ? <div className="text-danger small mt-1">{fieldErrors.subject[0]}</div> : null}
@@ -311,25 +270,16 @@ export default function ContactsPage() {
                         value={form.message}
                         onChange={(event) => setForm((current) => ({ ...current, message: event.target.value }))}
                         placeholder="Ecrivez votre message ici..."
-                        style={{ borderRadius: "1.25rem", borderColor: "var(--line)", background: "rgba(255,255,255,0.75)", resize: "vertical" }}
+                        style={{ borderColor: "var(--line)", background: "rgba(255,255,255,0.75)", resize: "vertical" }}
                         required
                       />
                       {fieldErrors.message ? <div className="text-danger small mt-1">{fieldErrors.message[0]}</div> : null}
                     </div>
 
                     <div className="col-12 d-flex flex-wrap align-items-center justify-content-between gap-3 pt-2">
-                      <div className="small text-secondary">
-                        Les champs obligatoires permettent d enregistrer votre demande dans la table `contact_us`.
-                      </div>
                       <button
                         type="submit"
-                        className="btn rounded-pill px-4 py-3 fw-semibold"
-                        style={{
-                          background: "linear-gradient(135deg, var(--accent-strong), var(--warm))",
-                          color: "#fff",
-                          border: "none",
-                          minWidth: 220,
-                        }}
+                        className="btn btn-dark btn-sm d-block w-100 px-4 py-3 fw-semibold"
                         disabled={submitting}
                       >
                         <i className={`bi ${submitting ? "bi-hourglass-split" : "bi-send-fill"} me-2`} />

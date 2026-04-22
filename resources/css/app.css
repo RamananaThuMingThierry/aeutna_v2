@@ -53,6 +53,256 @@ body {
     height: 104px;
 }
 
+.public-nav-toggle {
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.public-nav-toggle.is-open {
+    transform: rotate(90deg) scale(1.03);
+}
+
+.public-mobile-menu-wrap {
+    transform-origin: top center;
+}
+
+.public-mobile-menu {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.985);
+    transition: opacity 0.24s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.public-mobile-menu.is-open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.public-mobile-menu.is-closing {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.99);
+}
+
+.public-mobile-backdrop {
+    background: rgba(0, 0, 0, 0.12);
+    opacity: 0;
+    transition: opacity 0.22s ease;
+}
+
+.public-mobile-backdrop.is-open {
+    opacity: 1;
+}
+
+.public-mobile-backdrop.is-closing {
+    opacity: 0;
+}
+
+.public-site-main > div > section {
+    animation: publicSectionFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    animation-fill-mode: both;
+}
+
+.public-site-main > div > section:nth-of-type(2) {
+    animation-delay: 0.03s;
+}
+
+.public-site-main > div > section:nth-of-type(3) {
+    animation-delay: 0.06s;
+}
+
+.public-site-main > div > section:nth-of-type(4) {
+    animation-delay: 0.09s;
+}
+
+.public-site-main > div > section:nth-of-type(5) {
+    animation-delay: 0.12s;
+}
+
+.public-site-main .card,
+.public-site-main .rounded-5.shadow-sm,
+.public-site-main .rounded-5.shadow-lg {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.public-site-main .card:hover,
+.public-site-main .rounded-5.shadow-sm:hover,
+.public-site-main .rounded-5.shadow-lg:hover {
+    transform: translateY(-1px);
+}
+
+.public-footer-shell {
+    background:
+        radial-gradient(circle at top left, rgba(245, 158, 11, 0.18), transparent 28%),
+        radial-gradient(circle at right 15%, rgba(20, 184, 166, 0.18), transparent 24%),
+        linear-gradient(145deg, rgba(14, 18, 24, 0.98) 0%, rgba(18, 24, 31, 0.97) 52%, rgba(22, 17, 11, 0.98) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
+}
+
+.public-footer-orb {
+    position: absolute;
+    border-radius: 999px;
+    filter: blur(8px);
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.public-footer-orb-one {
+    top: -52px;
+    left: -18px;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.34) 0%, rgba(245, 158, 11, 0) 72%);
+}
+
+.public-footer-orb-two {
+    right: -34px;
+    bottom: -72px;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(20, 184, 166, 0.22) 0%, rgba(20, 184, 166, 0) 72%);
+}
+
+.public-footer-kicker {
+    color: rgba(255, 214, 122, 0.9);
+    letter-spacing: 0.18em;
+}
+
+.public-footer-copy {
+    color: rgba(255, 255, 255, 0.72);
+    max-width: 32rem;
+    line-height: 1.55;
+    font-size: 0.96rem;
+}
+
+.public-footer-panel {
+    padding: 1rem;
+    border-radius: 1.25rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+}
+
+.public-footer-nav-grid {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.public-footer-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.8rem;
+    border-radius: 0.95rem;
+    color: rgba(255, 255, 255, 0.88);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    font-size: 0.95rem;
+}
+
+.public-footer-nav-link:hover {
+    transform: translateX(2px);
+    color: #fff;
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.26);
+}
+
+.public-footer-nav-icon {
+    width: 1.95rem;
+    height: 1.95rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 214, 122, 0.94);
+    flex: 0 0 auto;
+}
+
+.public-footer-nav-arrow {
+    margin-left: auto;
+    font-size: 1.2rem;
+    opacity: 0.72;
+}
+
+.public-footer-chip {
+    padding: 0.65rem 1rem;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.public-footer-chip:hover {
+    transform: translateY(-1px);
+    color: #fff;
+    background: rgba(245, 158, 11, 0.14);
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.public-footer-contact {
+    display: flex;
+    align-items: center;
+    gap: 0.95rem;
+    padding: 0.75rem 0.85rem;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.public-footer-contact:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.14);
+}
+
+.public-footer-contact-icon {
+    width: 2.2rem;
+    height: 2.2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.08);
+    flex: 0 0 auto;
+}
+
+.public-footer-contact-label {
+    color: rgba(255, 255, 255, 0.48);
+    letter-spacing: 0.14em;
+    font-size: 0.68rem;
+}
+
+.public-footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.public-footer-meta,
+.public-footer-meta-link {
+    color: rgba(255, 255, 255, 0.62);
+}
+
+.public-footer-meta-link {
+    transition: color 0.2s ease;
+}
+
+.public-footer-meta-link:hover {
+    color: rgba(255, 214, 122, 0.95);
+}
+
+@keyframes publicSectionFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 @media (min-width: 992px) {
     .admin-shell {
         display: flex;
@@ -78,5 +328,15 @@ body {
     .admin-content {
         flex: 1 1 auto;
         min-width: 0;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .public-footer-shell {
+        border-radius: 0 !important;
+    }
+
+    .public-footer-copy {
+        max-width: none;
     }
 }

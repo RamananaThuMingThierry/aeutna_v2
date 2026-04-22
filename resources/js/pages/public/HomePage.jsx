@@ -3,72 +3,6 @@ import { Link } from "react-router-dom";
 
 import { websiteApi } from "../../api/website";
 
-const PRESIDENT_HISTORY = [
-  {
-    id: 1,
-    period: "2024 - Aujourd hui",
-    name: "A renseigner",
-    note: "President actuel de l association.",
-  },
-  {
-    id: 2,
-    period: "2022 - 2024",
-    name: "A renseigner",
-    note: "Mandat precedent.",
-  },
-  {
-    id: 3,
-    period: "2020 - 2022",
-    name: "A renseigner",
-    note: "Mandat precedent.",
-  },
-  {
-    id: 4,
-    period: "2018 - 2020",
-    name: "A renseigner",
-    note: "Mandat precedent.",
-  },
-];
-
-const CURRENT_OFFICE_MEMBERS = [
-  {
-    id: 1,
-    name: "A renseigner",
-    role: "President",
-    phone: "+261 00 000 00",
-    email: "presidence@aeutna.local",
-    isPresident: true,
-  },
-  {
-    id: 2,
-    name: "A renseigner",
-    role: "Vice-president",
-    phone: "+261 00 000 00",
-    email: "vicepresidence@aeutna.local",
-  },
-  {
-    id: 3,
-    name: "A renseigner",
-    role: "Secretaire general",
-    phone: "+261 00 000 00",
-    email: "secretariat@aeutna.local",
-  },
-  {
-    id: 4,
-    name: "A renseigner",
-    role: "Tresorier",
-    phone: "+261 00 000 00",
-    email: "tresorerie@aeutna.local",
-  },
-  {
-    id: 5,
-    name: "A renseigner",
-    role: "Commissaire aux comptes",
-    phone: "+261 00 000 00",
-    email: "controle@aeutna.local",
-  },
-];
-
 function resolveImageUrl(imagePath) {
   if (!imagePath) return "/images/avatar.png";
   if (imagePath.startsWith("http://") || imagePath.startsWith("https://") || imagePath.startsWith("/")) {
@@ -89,7 +23,7 @@ function HeroCarousel({ slides = [] }) {
 
   return (
     <div id="homeHeroCarousel" className="carousel slide carousel-fade">
-      <div className="carousel-inner rounded-5 overflow-hidden shadow-lg">
+      <div className="carousel-inner overflow-hidden shadow-lg">
         {items.map((slide, index) => (
           <div key={slide.id ?? index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
             <div className="position-relative" style={{ minHeight: "68vh" }}>
@@ -108,10 +42,10 @@ function HeroCarousel({ slides = [] }) {
                     <div className="col-lg-8">
                       <span className="badge rounded-pill text-bg-warning px-3 py-2 mb-3">Association et reseau</span>
                       <h1 className="display-3 fw-bold text-white mb-3">{slide.title || "AEUTNA"}</h1>
-                      <p className="lead text-white-50 mb-4">{slide.subtitle || "Association des Etudiants Universitaire Tananarivo Natif d'Antalaha."}</p>
+                      <p className="lead text-white-50 mb-4">{slide.subtitle || "Association des Etudiants d'Université de Tananarive Natifs d'Antalaha."}</p>
                       <div className="d-flex flex-wrap gap-2">
-                        <a href="#activities" className="btn btn-warning btn-lg rounded-pill px-4">Voir les activites</a>
-                        <a href="#history" className="btn btn-outline-light btn-lg rounded-pill px-4">Voir l histoire</a>
+                        <a href="#activities" className="btn btn-warning btn-lg rounded-pill px-4">Voir les actualites</a>
+                        <Link to="/devenir-membre" className="btn btn-outline-light btn-lg rounded-pill px-4">Devenir membre</Link>
                       </div>
                     </div>
                   </div>
@@ -126,7 +60,7 @@ function HeroCarousel({ slides = [] }) {
         <>
           <button className="carousel-control-prev" type="button" data-bs-target="#homeHeroCarousel" data-bs-slide="prev">
             <span className="carousel-control-prev-icon" aria-hidden="true" />
-            <span className="visually-hidden">Precedent</span>
+            <span className="visually-hidden">Précedent</span>
           </button>
           <button className="carousel-control-next" type="button" data-bs-target="#homeHeroCarousel" data-bs-slide="next">
             <span className="carousel-control-next-icon" aria-hidden="true" />
@@ -145,72 +79,6 @@ function SectionTitle({ eyebrow, title, text }) {
       <h2 className="display-6 fw-bold mb-3">{title}</h2>
       {text ? <p className="text-secondary fs-5 mb-0">{text}</p> : null}
     </div>
-  );
-}
-
-function PresidentHistoryCard({ entry, index }) {
-  return (
-    <article
-      className="card border-0 shadow-sm h-100"
-      style={{
-        background: index === 0 ? "linear-gradient(145deg, rgba(15,118,110,0.12), rgba(255,247,235,0.96))" : "var(--panel)",
-      }}
-    >
-      <div className="card-body p-4">
-        <div className="d-flex align-items-start justify-content-between gap-3 mb-3">
-          <span
-            className={`badge rounded-pill px-3 py-2 ${index === 0 ? "text-bg-warning" : ""}`}
-            style={index === 0 ? {} : { background: "rgba(15,118,110,0.12)", color: "var(--accent-strong)" }}
-          >
-            {index === 0 ? "Le plus recent" : "Archive"}
-          </span>
-          <div className="small text-secondary">{entry.period}</div>
-        </div>
-        <h3 className="h4 fw-bold mb-2">{entry.name}</h3>
-        <div className="text-uppercase small fw-semibold mb-3" style={{ letterSpacing: "0.08em", color: "var(--warm)" }}>
-          President de l association
-        </div>
-        <p className="text-secondary mb-0">{entry.note}</p>
-      </div>
-    </article>
-  );
-}
-
-function OfficeMemberCard({ member }) {
-  return (
-    <article
-      className="card border-0 shadow-sm h-100"
-      style={{
-        background: member.isPresident
-          ? "linear-gradient(145deg, rgba(194,65,12,0.12), rgba(255,247,235,0.98))"
-          : "var(--panel)",
-      }}
-    >
-      <div className="card-body p-4">
-        <div className="d-flex align-items-start justify-content-between gap-3 mb-3">
-          <div>
-            <h3 className="h5 fw-bold mb-1">{member.name}</h3>
-            <div className="text-secondary">{member.role}</div>
-          </div>
-          {member.isPresident ? <span className="badge text-bg-warning rounded-pill px-3 py-2">President actuel</span> : null}
-        </div>
-
-        <div className="d-flex flex-column gap-3">
-          <div className="p-3 rounded-4" style={{ background: "rgba(255,255,255,0.58)", border: "1px solid var(--line)" }}>
-            <div className="small text-uppercase fw-semibold text-secondary mb-1">Telephone</div>
-            <a href={`tel:${member.phone}`} className="text-decoration-none fw-semibold" style={{ color: "var(--page-ink)" }}>
-              {member.phone}
-            </a>
-          </div>
-          <div className="p-3 rounded-4" style={{ background: "rgba(255,255,255,0.58)", border: "1px solid var(--line)" }}>
-            <div className="small text-uppercase fw-semibold text-secondary mb-1">Email</div>
-            <a href={`mailto:${member.email}`} className="text-decoration-none fw-semibold" style={{ color: "var(--page-ink)" }}>
-              {member.email}
-            </a>
-          </div>
-        </div>
-      </div>
-    </article>
   );
 }
 
@@ -275,7 +143,7 @@ export default function HomePage() {
                   <div className="col-sm-6">
                     <div className="p-3 rounded-4 h-100" style={{ background: "var(--panel-strong)" }}>
                       <div className="fw-bold fs-4 mb-1">{activities.length}</div>
-                      <div className="text-secondary small">Activites recentes</div>
+                      <div className="text-secondary small">Actualites recentes</div>
                     </div>
                   </div>
                   <div className="col-sm-6">
@@ -302,9 +170,9 @@ export default function HomePage() {
       <section id="activities" className="py-5 py-lg-6">
         <div className="container">
           <SectionTitle
-            eyebrow="Activites"
-            title="Dernieres activites"
-            text="Les actions recentes mises en avant sur la page d accueil."
+            eyebrow="Actualites"
+            title="Dernieres actualites"
+            text="Les actions recentes, les annonces et les evenements mis en avant sur la page d accueil."
           />
           <div className="row g-4">
             {activities.map((activity) => (
@@ -317,7 +185,7 @@ export default function HomePage() {
                     style={{ height: 220 }}
                   />
                   <div className="card-body p-4">
-                    <div className="small text-uppercase fw-bold mb-2" style={{ color: "var(--accent-strong)", letterSpacing: "0.08em" }}>{activity.location || "Activite"}</div>
+                    <div className="small text-uppercase fw-bold mb-2" style={{ color: "var(--accent-strong)", letterSpacing: "0.08em" }}>{activity.location || "Actualite"}</div>
                     <h3 className="h5 fw-bold">{activity.title}</h3>
                     <div className="small text-secondary mb-3">{formatDate(activity.starts_at)}</div>
                     <p className="text-secondary mb-0">{activity.description || "Aucune description disponible."}</p>
@@ -352,77 +220,6 @@ export default function HomePage() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="history" className="py-5 py-lg-6">
-        <div className="container">
-          <SectionTitle
-            eyebrow="Historique"
-            title="Historique des presidents"
-            text="Presentation statique des presidents de l association, du plus recent vers les mandats precedents."
-          />
-          <div className="row g-4">
-            {PRESIDENT_HISTORY.map((entry, index) => (
-              <div key={entry.id} className="col-lg-6">
-                <PresidentHistoryCard entry={entry} index={index} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="office" className="py-5 py-lg-6">
-        <div className="container">
-          <SectionTitle
-            eyebrow="Bureau actuel"
-            title="Membres du bureau et president actuel"
-            text="Chaque membre du bureau est affiche avec sa fonction et ses contacts directs."
-          />
-          <div className="row g-4">
-            {CURRENT_OFFICE_MEMBERS.map((member) => (
-              <div key={member.id} className="col-md-6 col-xl-4">
-                <OfficeMemberCard member={member} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="contacts" className="py-5 py-lg-6">
-        <div className="container">
-          <div className="rounded-5 shadow-sm overflow-hidden" style={{ background: "linear-gradient(135deg, #115e59, #0f766e 45%, #c2410c 100%)" }}>
-            <div className="row g-0">
-              <div className="col-lg-7 p-4 p-lg-5 text-white">
-                <SectionTitle eyebrow="Contacts" title="Restons en lien" text="Contacte l association pour toute information, collaboration ou actualite." />
-                <div className="row g-3">
-                  <div className="col-md-4">
-                    <div className="small text-uppercase text-white-50">Email</div>
-                    <div>{data?.contacts?.email}</div>
-                  </div>
-                  <div className="col-md-4">
-                    <div className="small text-uppercase text-white-50">Telephone</div>
-                    <div>{data?.contacts?.phone}</div>
-                  </div>
-                  <div className="col-md-4">
-                    <div className="small text-uppercase text-white-50">Adresse</div>
-                    <div>{data?.contacts?.address}</div>
-                  </div>
-                </div>
-              </div>
-              <div className="col-lg-5 p-4 p-lg-5 d-flex align-items-center">
-                <div className="rounded-5 p-4 w-100" style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.16)" }}>
-                  <div className="fw-bold fs-5 mb-2 text-white">Explorer davantage</div>
-                  <p className="text-white-50">Navigue vers les rubriques principales du site public.</p>
-                  <div className="d-flex flex-wrap gap-2">
-                    <Link to="/about" className="btn btn-light rounded-pill">A propos</Link>
-                    <Link to="/gallery" className="btn btn-outline-light rounded-pill">Galerie</Link>
-                    <Link to="/activities" className="btn btn-outline-light rounded-pill">Activites</Link>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
