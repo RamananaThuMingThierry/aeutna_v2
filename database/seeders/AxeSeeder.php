@@ -10,6 +10,7 @@ class AxeSeeder extends Seeder
     public function run(): void
     {
         $items = [
+            ['name' => 'Autres', 'code' => 'AUTRES'],
             ['name' => 'Ankavanana', 'code' => 'ANKAVANANA'],
             ['name' => 'Ankavia', 'code' => 'ANKAVIA'],
             ['name' => 'Cap-Est', 'code' => 'CAP-EST'],

@@ -7,6 +7,7 @@ const menuItems = [
   { to: "/admin/education-levels", label: "Niveaux", icon: "bi-mortarboard-fill" },
   { to: "/admin/functions", label: "Fonctions", icon: "bi-briefcase-fill" },
   { to: "/admin/activities", label: "Actualites", icon: "bi-calendar2-event-fill" },
+  { to: "/admin/reports", label: "Rapports", icon: "bi-journal-text" },
   { to: "/admin/members", label: "Membres", icon: "bi-person-vcard-fill" },
   { to: "/admin/bulk-messages", label: "Messages en masse", icon: "bi-chat-dots-fill" },
   { to: "/admin/member-applications", label: "Candidatures", icon: "bi-person-plus-fill" },

@@ -9,11 +9,13 @@ import AxesPage from "../pages/admin/AxesPage";
 import BulkMessagesPage from "../pages/admin/BulkMessagesPage";
 import ContactsAdminPage from "../pages/admin/ContactsAdminPage";
 import DetailMemberPage from "../pages/admin/DetailMemberPage";
+import DetailReportPage from "../pages/admin/DetailReportPage";
 import EducationLevelsPage from "../pages/admin/EducationLevelsPage";
 import FeePaymentsPage from "../pages/admin/FeePaymentsPage";
 import FormActivityPage from "../pages/admin/FormActivityPage";
 import FormMemberPage from "../pages/admin/FormMemberPage";
 import FunctionsPage from "../pages/admin/FunctionsPage";
+import FormReportPage from "../pages/admin/FormReportPage";
 import GalleryAdminPage from "../pages/admin/GalleryAdminPage";
 import MembersPage from "../pages/admin/MembersPage";
 import MembershipCardsPage from "../pages/admin/MembershipCardsPage";
@@ -33,6 +35,7 @@ import ContactsPage from "../pages/public/ContactsPage";
 import GalleryPage from "../pages/public/GalleryPage";
 import HomePage from "../pages/public/HomePage";
 import MemberApplicationsPage from "../pages/admin/MemberApplicationsPage";
+import ReportsPage from "../pages/admin/ReportsPage";
 
 function PlaceholderPage({ title, description }) {
   return (
@@ -206,6 +209,22 @@ export const router = createBrowserRouter([
           {
             path: "activities",
             element: <ActivitiesPage />,
+          },
+          {
+            path: "reports",
+            element: <ReportsPage />,
+          },
+          {
+            path: "reports/new",
+            element: <FormReportPage />,
+          },
+          {
+            path: "reports/:encryptedId",
+            element: <DetailReportPage />,
+          },
+          {
+            path: "reports/:encryptedId/edit",
+            element: <FormReportPage />,
           },
           {
             path: "activities/new",
