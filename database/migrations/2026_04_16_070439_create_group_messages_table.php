@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('title');
             $table->longText('content');
 
+            $table->string('target_label', 50)->nullable();
+
             $table->enum('target_type', [
                 'all_members',
                 'sympathizers',

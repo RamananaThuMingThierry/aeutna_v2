@@ -8,6 +8,7 @@ const menuItems = [
   { to: "/admin/functions", label: "Fonctions", icon: "bi-briefcase-fill" },
   { to: "/admin/activities", label: "Actualites", icon: "bi-calendar2-event-fill" },
   { to: "/admin/members", label: "Membres", icon: "bi-person-vcard-fill" },
+  { to: "/admin/bulk-messages", label: "Messages en masse", icon: "bi-chat-dots-fill" },
   { to: "/admin/member-applications", label: "Candidatures", icon: "bi-person-plus-fill" },
   { to: "/admin/membership-cards", label: "Cartes membres", icon: "bi-person-badge-fill" },
   { to: "/admin/annual-fees", label: "Cotisations annuelles", icon: "bi-calendar-event-fill" },

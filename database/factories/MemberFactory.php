@@ -33,7 +33,6 @@ class MemberFactory extends Factory
             'phone' => fake()->phoneNumber(),
             'alternative_phone' => fake()->optional()->phoneNumber(),
             'address' => fake()->streetAddress(),
-            'city' => fake()->city(),
             'institution_name' => fake()->company(),
             'field_of_study' => fake()->words(3, true),
             'is_student' => fake()->boolean(70),

@@ -12,6 +12,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EducationLevelController;
 use App\Http\Controllers\FeePaymentController;
 use App\Http\Controllers\FunctionController;
+use App\Http\Controllers\GroupMessageController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MembershipCardController;
 use App\Http\Controllers\MemberApplicationController;
@@ -81,6 +82,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/functions/{encryptedId}', [FunctionController::class, 'update'])->name('functions.update');
     Route::delete('/functions/{encryptedId}', [FunctionController::class, 'destroy'])->name('functions.destroy');
     Route::get('/members', [MemberController::class, 'index'])->name('members.index');
+    Route::get('/group-messages', [GroupMessageController::class, 'index'])->name('group_messages.index');
+    Route::post('/group-messages', [GroupMessageController::class, 'store'])->name('group_messages.store');
+    Route::get('/group-messages/{encryptedId}', [GroupMessageController::class, 'show'])->name('group_messages.show');
+    Route::delete('/group-messages/{encryptedId}', [GroupMessageController::class, 'destroy'])->name('group_messages.destroy');
     Route::get('/member-applications', [MemberApplicationController::class, 'index'])->name('member_applications.index');
     Route::get('/member-applications/{encryptedId}', [MemberApplicationController::class, 'show'])->name('member_applications.show');
     Route::post('/member-applications/{encryptedId}/review', [MemberApplicationController::class, 'review'])->name('member_applications.review');

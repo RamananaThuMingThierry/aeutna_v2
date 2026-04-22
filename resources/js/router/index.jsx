@@ -6,6 +6,7 @@ import PublicLayout from "../layouts/PublicLayout";
 import ActivitiesPage from "../pages/admin/ActivitiesPage";
 import AnnualFeesPage from "../pages/admin/AnnualFeesPage";
 import AxesPage from "../pages/admin/AxesPage";
+import BulkMessagesPage from "../pages/admin/BulkMessagesPage";
 import ContactsAdminPage from "../pages/admin/ContactsAdminPage";
 import DetailMemberPage from "../pages/admin/DetailMemberPage";
 import EducationLevelsPage from "../pages/admin/EducationLevelsPage";
@@ -225,6 +226,10 @@ export const router = createBrowserRouter([
           {
             path: "members",
             element: <MembersPage />,
+          },
+          {
+            path: "bulk-messages",
+            element: <BulkMessagesPage />,
           },
           {
             path: "member-applications",
