@@ -8,7 +8,10 @@ import AnnualFeesPage from "../pages/admin/AnnualFeesPage";
 import AxesPage from "../pages/admin/AxesPage";
 import BulkMessagesPage from "../pages/admin/BulkMessagesPage";
 import ContactsAdminPage from "../pages/admin/ContactsAdminPage";
+import CashCategoriesPage from "../pages/admin/CashCategoriesPage";
+import CashTransactionsPage from "../pages/admin/CashTransactionsPage";
 import DetailMemberPage from "../pages/admin/DetailMemberPage";
+import DonationsPage from "../pages/admin/DonationsPage";
 import DetailReportPage from "../pages/admin/DetailReportPage";
 import EducationLevelsPage from "../pages/admin/EducationLevelsPage";
 import FeePaymentsPage from "../pages/admin/FeePaymentsPage";
@@ -18,7 +21,13 @@ import FunctionsPage from "../pages/admin/FunctionsPage";
 import FormReportPage from "../pages/admin/FormReportPage";
 import GalleryAdminPage from "../pages/admin/GalleryAdminPage";
 import MembersPage from "../pages/admin/MembersPage";
+import MaterialLoansPage from "../pages/admin/MaterialLoansPage";
+import MaterialsPage from "../pages/admin/MaterialsPage";
+import MaterialMaintenancesPage from "../pages/admin/MaterialMaintenancesPage";
+import MaterialMovementsPage from "../pages/admin/MaterialMovementsPage";
+import SuppliersPage from "../pages/admin/SuppliersPage";
 import MembershipCardsPage from "../pages/admin/MembershipCardsPage";
+import ReportScanPage from "../pages/admin/ReportScanPage";
 import RootLayout from "../layouts/RootLayout";
 import SlidesPage from "../pages/admin/SlidesPage";
 import ActivityLogPage from "../pages/admin/ActivityLogPage";
@@ -227,6 +236,10 @@ export const router = createBrowserRouter([
             element: <FormReportPage />,
           },
           {
+            path: "reports/:encryptedId/scan",
+            element: <ReportScanPage />,
+          },
+          {
             path: "activities/new",
             element: <FormActivityPage />,
           },
@@ -241,6 +254,38 @@ export const router = createBrowserRouter([
           {
             path: "fee-payments",
             element: <FeePaymentsPage />,
+          },
+          {
+            path: "donations",
+            element: <DonationsPage />,
+          },
+          {
+            path: "cash-categories",
+            element: <CashCategoriesPage />,
+          },
+          {
+            path: "cash-transactions",
+            element: <CashTransactionsPage />,
+          },
+          {
+            path: "materials",
+            element: <MaterialsPage />,
+          },
+          {
+            path: "material-loans",
+            element: <MaterialLoansPage />,
+          },
+          {
+            path: "suppliers",
+            element: <SuppliersPage />,
+          },
+          {
+            path: "material-maintenances",
+            element: <MaterialMaintenancesPage />,
+          },
+          {
+            path: "material-movements",
+            element: <MaterialMovementsPage />,
           },
           {
             path: "members",

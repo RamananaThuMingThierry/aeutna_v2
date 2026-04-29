@@ -92,6 +92,7 @@ export default function DetailReportPage() {
         </div>
         <div className="d-flex gap-2">
           <Link to="/admin/reports" className="btn btn-outline-secondary">Retour</Link>
+          <Link to={`/admin/reports/${encryptedId}/scan`} className="btn btn-outline-success">Scan</Link>
           <Link to={`/admin/reports/${encryptedId}/edit`} className="btn btn-dark">Modifier</Link>
         </div>
       </div>

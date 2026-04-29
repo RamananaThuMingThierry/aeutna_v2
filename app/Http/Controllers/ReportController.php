@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Reports\StoreReportRequest;
+use App\Http\Requests\Reports\ScanReportAttendanceRequest;
 use App\Http\Requests\Reports\UpdateReportRequest;
+use App\Models\Member;
 use App\Models\Report;
+use App\Models\ReportAttendance;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -46,7 +49,7 @@ class ReportController extends Controller
             ->with([
                 'writer:id,name,email,avatar',
                 'approver:id,name,email,avatar',
-                'attendances.member:id,first_name,last_name,member_type,photo,phone,alternative_phone',
+                'attendances.member:id,first_name,last_name,member_type,photo,phone,alternative_phone,member_number',
                 'attendances.marker:id,name,email,avatar',
                 'attendances.recorder:id,name,email',
             ])
@@ -154,6 +157,42 @@ class ReportController extends Controller
         }
     }
 
+    public function scanAttendance(ScanReportAttendanceRequest $request, string $encryptedId): JsonResponse
+    {
+        $id = $this->resolveEncryptedReportId($encryptedId);
+        $validated = $request->validated();
+
+        $report = Report::query()->findOrFail($id);
+        $member = $this->resolveMemberFromQrValue($validated['qr_value']);
+        $checkInAt = $validated['check_in_at'] ?? now()->toISOString();
+
+        $attendance = ReportAttendance::query()->updateOrCreate(
+            [
+                'report_id' => $report->id,
+                'member_id' => $member->id,
+            ],
+            [
+                'attendance_status' => 'present',
+                'check_in_at' => $checkInAt,
+                'entry_method' => 'qr_scan',
+                'recorded_by' => $request->user()?->id,
+                'marked_by' => $request->user()?->id,
+            ]
+        );
+
+        $attendance->load([
+            'member:id,first_name,last_name,member_type,photo,phone,alternative_phone,member_number',
+            'marker:id,name,email,avatar',
+            'recorder:id,name,email,avatar',
+        ]);
+
+        return response()->json([
+            'message' => 'Presence enregistree avec succes.',
+            'attendance' => $attendance,
+            'report' => $this->loadReport($report->id),
+        ]);
+    }
+
     private function syncAttendances(Report $report, array $memberIds, array $scannedEntries, ?int $recordedBy): void
     {
         $report->attendances()->delete();
@@ -191,13 +230,30 @@ class ReportController extends Controller
         );
     }
 
+    private function resolveMemberFromQrValue(string $qrValue): Member
+    {
+        $normalized = trim($qrValue);
+
+        $member = Member::query()
+            ->where('member_number', $normalized)
+            ->first();
+
+        if ($member) {
+            return $member;
+        }
+
+        throw ValidationException::withMessages([
+            'qr_value' => ['Aucun membre trouve pour ce badge ou QR code.'],
+        ]);
+    }
+
     private function loadReport(int $id): Report
     {
         return Report::query()
             ->with([
                 'writer:id,name,email,avatar',
                 'approver:id,name,email,avatar',
-                'attendances.member:id,first_name,last_name,member_type,photo,phone,alternative_phone',
+                'attendances.member:id,first_name,last_name,member_type,photo,phone,alternative_phone,member_number',
                 'attendances.marker:id,name,email,avatar',
             ])
             ->withCount('attendances')

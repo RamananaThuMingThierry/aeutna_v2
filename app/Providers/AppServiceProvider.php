@@ -6,27 +6,43 @@ use App\Interfaces\ActivityLogInterface;
 use App\Interfaces\ActivityImageInterface;
 use App\Interfaces\ActivityInterface;
 use App\Interfaces\AnnualFeeInterface;
+use App\Interfaces\DonationInterface;
 use App\Interfaces\AxeInterface;
+use App\Interfaces\CashCategoryInterface;
+use App\Interfaces\CashTransactionInterface;
 use App\Interfaces\EducationLevelInterface;
 use App\Interfaces\FeePaymentInterface;
 use App\Interfaces\FunctionInterface;
 use App\Interfaces\MemberInterface;
 use App\Interfaces\MemberFunctionInterface;
+use App\Interfaces\MaterialInterface;
+use App\Interfaces\MaterialLoanInterface;
+use App\Interfaces\MaterialMaintenanceInterface;
+use App\Interfaces\MaterialMovementInterface;
 use App\Interfaces\MembershipCardInterface;
 use App\Interfaces\SlideInterface;
+use App\Interfaces\SupplierInterface;
 use App\Interfaces\UserInterface;
 use App\Repositories\ActivityLogRepository;
 use App\Repositories\ActivityImageRepository;
 use App\Repositories\ActivityRepository;
 use App\Repositories\AnnualFeeRepository;
+use App\Repositories\DonationRepository;
 use App\Repositories\AxeRepository;
+use App\Repositories\CashCategoryRepository;
+use App\Repositories\CashTransactionRepository;
 use App\Repositories\EducationLevelRepository;
 use App\Repositories\FeePaymentRepository;
 use App\Repositories\FunctionRepository;
 use App\Repositories\MemberRepository;
 use App\Repositories\MemberFunctionRepository;
+use App\Repositories\MaterialRepository;
+use App\Repositories\MaterialLoanRepository;
+use App\Repositories\MaterialMaintenanceRepository;
+use App\Repositories\MaterialMovementRepository;
 use App\Repositories\MembershipCardRepository;
 use App\Repositories\SlideRepository;
+use App\Repositories\SupplierRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
@@ -41,15 +57,23 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ActivityInterface::class, ActivityRepository::class);
         $this->app->bind(ActivityImageInterface::class, ActivityImageRepository::class);
         $this->app->bind(AnnualFeeInterface::class, AnnualFeeRepository::class);
+        $this->app->bind(DonationInterface::class, DonationRepository::class);
         $this->app->bind(UserInterface::class, UserRepository::class);
         $this->app->bind(AxeInterface::class, AxeRepository::class);
+        $this->app->bind(CashCategoryInterface::class, CashCategoryRepository::class);
+        $this->app->bind(CashTransactionInterface::class, CashTransactionRepository::class);
         $this->app->bind(EducationLevelInterface::class, EducationLevelRepository::class);
         $this->app->bind(FeePaymentInterface::class, FeePaymentRepository::class);
         $this->app->bind(FunctionInterface::class, FunctionRepository::class);
+        $this->app->bind(MaterialInterface::class, MaterialRepository::class);
+        $this->app->bind(MaterialLoanInterface::class, MaterialLoanRepository::class);
+        $this->app->bind(MaterialMaintenanceInterface::class, MaterialMaintenanceRepository::class);
+        $this->app->bind(MaterialMovementInterface::class, MaterialMovementRepository::class);
         $this->app->bind(MemberInterface::class, MemberRepository::class);
         $this->app->bind(MemberFunctionInterface::class, MemberFunctionRepository::class);
         $this->app->bind(MembershipCardInterface::class, MembershipCardRepository::class);
         $this->app->bind(SlideInterface::class, SlideRepository::class);
+        $this->app->bind(SupplierInterface::class, SupplierRepository::class);
     }
 
     /**
@@ -60,3 +84,4 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 }
+

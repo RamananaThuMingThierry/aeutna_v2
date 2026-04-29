@@ -109,6 +109,7 @@ export default function ReportsPage() {
       try {
         $table.off("click", ".js-view");
         $table.off("click", ".js-edit");
+        $table.off("click", ".js-scan");
         $table.off("click", ".js-del");
       } catch {}
       dtRef.current.destroy();
@@ -142,10 +143,11 @@ export default function ReportsPage() {
           orderable: false,
           searchable: false,
           className: "text-end",
-          width: 180,
+          width: 240,
           render: (d, t2, row) => {
             const id = getRowId(row);
             return `<button class="btn btn-sm btn-outline-primary me-2 js-view" data-id="${id}"><i class="bi bi-eye"></i></button>
+              <button class="btn btn-sm btn-outline-success me-2 js-scan" data-id="${id}"><i class="bi bi-qr-code-scan"></i></button>
               <button class="btn btn-sm btn-outline-dark me-2 js-edit" data-id="${id}"><i class="bi bi-pencil-square"></i></button>
               <button class="btn btn-sm btn-outline-danger js-del" data-id="${id}"><i class="bi bi-trash3"></i></button>`;
           },
@@ -163,6 +165,11 @@ export default function ReportsPage() {
       navigate(`/admin/reports/${id}/edit`);
     });
 
+    $table.on("click", ".js-scan", (event) => {
+      const id = $(event.currentTarget).data("id");
+      navigate(`/admin/reports/${id}/scan`);
+    });
+
     $table.on("click", ".js-del", (event) => {
       const id = $(event.currentTarget).data("id");
       const item = itemsRef.current.find((row) => String(getRowId(row)) === String(id));
@@ -176,6 +183,7 @@ export default function ReportsPage() {
       try {
         $table.off("click", ".js-view");
         $table.off("click", ".js-edit");
+        $table.off("click", ".js-scan");
         $table.off("click", ".js-del");
       } catch {}
       dtRef.current?.destroy();
@@ -245,7 +253,7 @@ export default function ReportsPage() {
                   <th>Lieu</th>
                   <th>Presents</th>
                   <th>Statut</th>
-                  <th className="text-end" style={{ width: 180 }}>Actions</th>
+                  <th className="text-end" style={{ width: 240 }}>Actions</th>
                 </tr>
               </thead>
               <tbody />

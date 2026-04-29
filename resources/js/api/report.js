@@ -21,6 +21,15 @@ export const reportsApi = {
     return { data: res.data.report ?? res.data, message: res.data.message };
   },
 
+  async scanAttendance(encryptedId, payload) {
+    const res = await api.post(`/reports/${encryptedId}/scan-attendance`, payload);
+    return {
+      data: res.data.report ?? null,
+      attendance: res.data.attendance ?? null,
+      message: res.data.message,
+    };
+  },
+
   async remove(encryptedId) {
     const res = await api.delete(`/reports/${encryptedId}`);
     return { message: res.data.message };

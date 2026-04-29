@@ -8,12 +8,20 @@ const menuItems = [
   { to: "/admin/functions", label: "Fonctions", icon: "bi-briefcase-fill" },
   { to: "/admin/activities", label: "Actualites", icon: "bi-calendar2-event-fill" },
   { to: "/admin/reports", label: "Rapports", icon: "bi-journal-text" },
+  { to: "/admin/materials", label: "Materials", icon: "bi-box-seam-fill" },
+  { to: "/admin/material-loans", label: "Prets materiels", icon: "bi-arrow-left-right" },
+  { to: "/admin/suppliers", label: "Fournisseurs", icon: "bi-truck" },
+  { to: "/admin/material-maintenances", label: "Maintenances", icon: "bi-tools" },
+  { to: "/admin/material-movements", label: "Mouvements", icon: "bi-arrow-repeat" },
   { to: "/admin/members", label: "Membres", icon: "bi-person-vcard-fill" },
   { to: "/admin/bulk-messages", label: "Messages en masse", icon: "bi-chat-dots-fill" },
   { to: "/admin/member-applications", label: "Candidatures", icon: "bi-person-plus-fill" },
   { to: "/admin/membership-cards", label: "Cartes membres", icon: "bi-person-badge-fill" },
   { to: "/admin/annual-fees", label: "Cotisations annuelles", icon: "bi-calendar-event-fill" },
   { to: "/admin/fee-payments", label: "Cotisations", icon: "bi-cash-coin" },
+  { to: "/admin/donations", label: "Donations", icon: "bi-gift-fill" },
+  { to: "/admin/cash-categories", label: "Categories caisse", icon: "bi-tags-fill" },
+  { to: "/admin/cash-transactions", label: "Transactions caisse", icon: "bi-wallet2" },
   { to: "/admin/users", label: "Utilisateurs", icon: "bi-people-fill" },
 //   { to: "/admin/categories", label: "Categories", icon: "bi-tags-fill" },
 //   { to: "/admin/testimonials", label: "Temoignages", icon: "bi-chat-square-quote-fill" },
@@ -193,7 +201,7 @@ export default function AdminLayout() {
             </nav>
 
             <main className="p-3 p-md-4 p-xl-5">
-              <div className="container-fluid px-0 bg-danger">
+              <div className="container-fluid px-0">
                 <div className="card border-0 shadow-sm">
                   <div className="card-body p-3 p-md-4">
                     <Outlet />
