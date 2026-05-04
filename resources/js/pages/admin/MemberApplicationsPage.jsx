@@ -300,7 +300,7 @@ export default function MemberApplicationsPage() {
                 {!loading && items.length === 0 ? (
                   <tr>
                     <td colSpan="6" className="text-center text-muted py-4">
-                      Aucune candidature trouvee.
+                      Aucune candidature trouvée.
                     </td>
                   </tr>
                 ) : null}

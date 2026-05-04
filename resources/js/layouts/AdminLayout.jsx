@@ -1,35 +1,70 @@
 import { useMemo, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 
-const menuItems = [
-  { to: "/admin/dashboard", label: "Dashboard", icon: "bi-grid-1x2-fill" },
-  { to: "/admin/axes", label: "Axes", icon: "bi-diagram-3-fill" },
-  { to: "/admin/education-levels", label: "Niveaux", icon: "bi-mortarboard-fill" },
-  { to: "/admin/functions", label: "Fonctions", icon: "bi-briefcase-fill" },
-  { to: "/admin/activities", label: "Actualites", icon: "bi-calendar2-event-fill" },
-  { to: "/admin/reports", label: "Rapports", icon: "bi-journal-text" },
-  { to: "/admin/materials", label: "Materials", icon: "bi-box-seam-fill" },
-  { to: "/admin/material-loans", label: "Prets materiels", icon: "bi-arrow-left-right" },
-  { to: "/admin/suppliers", label: "Fournisseurs", icon: "bi-truck" },
-  { to: "/admin/material-maintenances", label: "Maintenances", icon: "bi-tools" },
-  { to: "/admin/material-movements", label: "Mouvements", icon: "bi-arrow-repeat" },
-  { to: "/admin/members", label: "Membres", icon: "bi-person-vcard-fill" },
-  { to: "/admin/bulk-messages", label: "Messages en masse", icon: "bi-chat-dots-fill" },
-  { to: "/admin/member-applications", label: "Candidatures", icon: "bi-person-plus-fill" },
-  { to: "/admin/membership-cards", label: "Cartes membres", icon: "bi-person-badge-fill" },
-  { to: "/admin/annual-fees", label: "Cotisations annuelles", icon: "bi-calendar-event-fill" },
-  { to: "/admin/fee-payments", label: "Cotisations", icon: "bi-cash-coin" },
-  { to: "/admin/donations", label: "Donations", icon: "bi-gift-fill" },
-  { to: "/admin/cash-categories", label: "Categories caisse", icon: "bi-tags-fill" },
-  { to: "/admin/cash-transactions", label: "Transactions caisse", icon: "bi-wallet2" },
-  { to: "/admin/users", label: "Utilisateurs", icon: "bi-people-fill" },
-//   { to: "/admin/categories", label: "Categories", icon: "bi-tags-fill" },
-//   { to: "/admin/testimonials", label: "Temoignages", icon: "bi-chat-square-quote-fill" },
-  { to: "/admin/gallery", label: "Galerie", icon: "bi-images" },
-  { to: "/admin/sliders", label: "Sliders", icon: "bi-aspect-ratio-fill" },
-  { to: "/admin/contacts", label: "Contacts", icon: "bi-envelope-fill" },
-//   { to: "/admin/notifications", label: "Notifications", icon: "bi-bell-fill" },
-  { to: "/admin/activity-logs", label: "Activity logs", icon: "bi-clock-history" },
+const menuSections = [
+  {
+    title: "Suivi",
+    items: [
+      { to: "/admin/dashboard", label: "Dashboard", icon: "bi-grid-1x2-fill" },
+    ],
+  },
+  {
+    title: "Pilotage",
+    items: [
+      { to: "/admin/axes", label: "Axes", icon: "bi-diagram-3-fill" },
+      { to: "/admin/functions", label: "Fonctions", icon: "bi-briefcase-fill" },
+      { to: "/admin/education-levels", label: "Niveaux", icon: "bi-mortarboard-fill" },
+    { to: "/admin/gallery", label: "Galeries", icon: "bi-images" },
+    { to: "/admin/sliders", label: "Sliders", icon: "bi-aspect-ratio-fill" },
+          { to: "/admin/activities", label: "Actualités", icon: "bi-calendar2-event-fill" },
+    ],
+  },
+  {
+    title: "Vie Associative",
+    items: [
+      { to: "/admin/members", label: "Membres", icon: "bi-person-vcard-fill" },
+      { to: "/admin/member-applications", label: "Candidatures", icon: "bi-person-plus-fill" },
+      { to: "/admin/membership-cards", label: "Cartes membres", icon: "bi-person-badge-fill" },
+
+    ],
+  },
+  {
+    title: "Finances",
+    items: [
+      { to: "/admin/annual-fees", label: "Cotisations annuelles", icon: "bi-calendar-event-fill" },
+      { to: "/admin/fee-payments", label: "Paiements de cotisation", icon: "bi-cash-coin" },
+      { to: "/admin/donations", label: "Donations", icon: "bi-gift-fill" },
+      { to: "/admin/cash-categories", label: "Categories de caisse", icon: "bi-tags-fill" },
+      { to: "/admin/cash-transactions", label: "Transactions de caisse", icon: "bi-wallet2" },
+    ],
+  },
+  {
+    title: "Logistique",
+    items: [
+      { to: "/admin/materials", label: "Materiels", icon: "bi-box-seam-fill" },
+      { to: "/admin/material-loans", label: "Prets de materiels", icon: "bi-arrow-left-right" },
+      { to: "/admin/material-maintenances", label: "Maintenances", icon: "bi-tools" },
+      { to: "/admin/material-movements", label: "Mouvements", icon: "bi-arrow-repeat" },
+      { to: "/admin/suppliers", label: "Fournisseurs", icon: "bi-truck" },
+    ],
+  },
+  {
+    title: "Communication",
+    items: [
+      { to: "/admin/bulk-messages", label: "Messages en masse", icon: "bi-chat-dots-fill" },
+      { to: "/admin/contacts", label: "Contacts", icon: "bi-envelope-fill" },
+    ],
+  },
+  {
+    title: "Administration",
+    items: [
+      { to: "/admin/reports", label: "Rapports", icon: "bi-journal-text" },
+
+        { to: "/admin/users", label: "Utilisateurs", icon: "bi-people-fill" },
+      { to: "/admin/activity-logs", label: "Journaux d'activité", icon: "bi-clock-history" },
+
+    ],
+  },
 ];
 
 function SidebarContent({ currentUser, currentRoles, onLogout }) {
@@ -50,20 +85,27 @@ function SidebarContent({ currentUser, currentRoles, onLogout }) {
       </div>
 
       <div className="px-3 py-4 flex-grow-1 overflow-auto">
-        <div className="list-group list-group-flush">
-          {menuItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) =>
-                `list-group-item list-group-item-action border-0 rounded-3 mb-1 d-flex align-items-center gap-3 ${
-                  isActive ? "active shadow-sm" : "bg-transparent"
-                }`
-              }
-            >
-              <i className={`bi ${item.icon}`} />
-              <span>{item.label}</span>
-            </NavLink>
+        <div className="d-flex flex-column gap-4">
+          {menuSections.map((section) => (
+            <section key={section.title}>
+              <div className="px-3 mb-2 text-uppercase text-secondary small fw-semibold">{section.title}</div>
+              <div className="list-group list-group-flush">
+                {section.items.map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    className={({ isActive }) =>
+                      `list-group-item list-group-item-action border-0 rounded-3 mb-1 d-flex align-items-center gap-3 ${
+                        isActive ? "active shadow-sm" : "bg-transparent"
+                      }`
+                    }
+                  >
+                    <i className={`bi ${item.icon}`} />
+                    <span>{item.label}</span>
+                  </NavLink>
+                ))}
+              </div>
+            </section>
           ))}
         </div>
       </div>
@@ -193,14 +235,11 @@ export default function AdminLayout() {
                     <div className="fw-semibold small">{currentUser?.name || "Utilisateur"}</div>
                     <div className="text-secondary small">{currentUser?.email || ""}</div>
                   </div>
-                        <Link to="/admin/account/profile" className="btn btn-outline-dark d-none d-md-inline-flex align-items-center">
-                    <i className="bi bi-person-circle me-2"></i> Mon compte
-                  </Link>
                 </div>
               </div>
             </nav>
 
-            <main className="p-3 p-md-4 p-xl-5">
+            <main className="p-3">
               <div className="container-fluid px-0">
                 <div className="card border-0 shadow-sm">
                   <div className="card-body p-3 p-md-4">

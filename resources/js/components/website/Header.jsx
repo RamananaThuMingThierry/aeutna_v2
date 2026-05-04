@@ -3,11 +3,11 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 
 const navItems = [
   { to: "/", label: "Accueil" },
-  { to: "/about", label: "A propos" },
-  { to: "/activities", label: "Actualites" },
+  { to: "/about", label: "À propos" },
+  { to: "/activities", label: "Actualités" },
   { to: "/gallery", label: "Galeries" },
-  { to: "/bureau", label: "Les membres de bureau actifs" },
-  { to: "/contacts", label: "Contacts" },
+  { to: "/bureau", label: "Les membres du bureau actifs" },
+  { to: "/contacts", label: "Contacts" }
 ];
 
 function NavButtons({ mobile = false, onNavigate }) {
@@ -80,7 +80,7 @@ export default function Header() {
           <img
             src="/images/logo_aeutna.jpg"
             alt="AEUTNA"
-            className="rounded-circle object-fit-cover border"
+            className="rounded-pill object-fit-cover border"
             style={{ width: 52, height: 52 }}
           />
           <div className="d-none d-sm-block">

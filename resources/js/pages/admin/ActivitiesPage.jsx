@@ -268,7 +268,7 @@ export default function ActivitiesPage() {
         ) : (
           <div className="col-12">
             <div className="card border-0 shadow-sm">
-              <div className="card-body text-muted">Aucune actualite trouvee.</div>
+              <div className="card-body text-muted">Aucune actualite trouvée.</div>
             </div>
           </div>
         )}

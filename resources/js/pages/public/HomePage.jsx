@@ -23,51 +23,79 @@ function HeroCarousel({ slides = [] }) {
 
   return (
     <div id="homeHeroCarousel" className="carousel slide carousel-fade">
-      <div className="carousel-inner overflow-hidden shadow-lg">
+    <div className="carousel-inner overflow-hidden shadow-lg">
         {items.map((slide, index) => (
-          <div key={slide.id ?? index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
+        <div
+            key={slide.id ?? index}
+            className={`carousel-item ${index === 0 ? "active" : ""}`}
+        >
             <div className="position-relative" style={{ minHeight: "68vh" }}>
-              <img
+            <img
                 src={resolveImageUrl(slide.image_url)}
                 alt={slide.title || "Slide"}
                 className="w-100 h-100 object-fit-cover position-absolute top-0 start-0"
-              />
-              <div
-                className="position-absolute top-0 start-0 w-100 h-100"
-                style={{ background: "linear-gradient(115deg, rgba(19,16,12,0.72) 12%, rgba(19,16,12,0.18) 58%, rgba(15,118,110,0.35) 100%)" }}
-              />
-              <div className="position-relative h-100 d-flex align-items-end">
-                <div className="container py-5 py-lg-6">
-                  <div className="row">
-                    <div className="col-lg-8">
-                      <span className="badge rounded-pill text-bg-warning px-3 py-2 mb-3">Association et reseau</span>
-                      <h1 className="display-3 fw-bold text-white mb-3">{slide.title || "AEUTNA"}</h1>
-                      <p className="lead text-white-50 mb-4">{slide.subtitle || "Association des Etudiants d'Université de Tananarive Natifs d'Antalaha."}</p>
-                      <div className="d-flex flex-wrap gap-2">
-                        <a href="#activities" className="btn btn-warning btn-lg rounded-pill px-4">Voir les actualites</a>
-                        <Link to="/devenir-membre" className="btn btn-outline-light btn-lg rounded-pill px-4">Devenir membre</Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+            />
 
-      {items.length > 1 ? (
+            {/* Overlay */}
+            <div
+                className="position-absolute top-0 start-0 w-100 h-100"
+                style={{
+                background:
+                    "linear-gradient(115deg, rgba(19,16,12,0.72) 12%, rgba(19,16,12,0.18) 58%, rgba(15,118,110,0.35) 100%)",
+                }}
+            />
+
+            {/* CONTENU CENTRÉ */}
+            <div className="position-absolute w-100 h-100 d-flex align-items-center justify-content-center text-center">
+                <div className="container py-5 py-lg-6">
+                <div className="row justify-content-center">
+                    <div className="col-lg-7 col-xl-6">
+
+
+                    <p className="lead text-white-50 mb-4">
+                        Association des Étudiants de l'Université de Tananarive Natifs d'Antalaha</p>
+
+                    <div className="d-flex flex-wrap gap-2 justify-content-center">
+                        <Link
+                        to="/devenir-membre"
+                        className="btn btn-warning btn-lg rounded-pill px-4"
+                        >
+                        Devenir membre
+                        </Link>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            {/* FIN CONTENU */}
+            </div>
+        </div>
+        ))}
+    </div>
+
+    {items.length > 1 ? (
         <>
-          <button className="carousel-control-prev" type="button" data-bs-target="#homeHeroCarousel" data-bs-slide="prev">
+        <button
+            className="carousel-control-prev"
+            type="button"
+            data-bs-target="#homeHeroCarousel"
+            data-bs-slide="prev"
+        >
             <span className="carousel-control-prev-icon" aria-hidden="true" />
-            <span className="visually-hidden">Précedent</span>
-          </button>
-          <button className="carousel-control-next" type="button" data-bs-target="#homeHeroCarousel" data-bs-slide="next">
+            <span className="visually-hidden">Précédent</span>
+        </button>
+
+        <button
+            className="carousel-control-next"
+            type="button"
+            data-bs-target="#homeHeroCarousel"
+            data-bs-slide="next"
+        >
             <span className="carousel-control-next-icon" aria-hidden="true" />
             <span className="visually-hidden">Suivant</span>
-          </button>
+        </button>
         </>
-      ) : null}
+    ) : null}
     </div>
   );
 }
