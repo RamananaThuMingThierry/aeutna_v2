@@ -45,8 +45,7 @@ return new class extends Migration
 
         Schema::create('statute_titles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('statute_id')->constrained('statut
-            1es')->cascadeOnDelete();
+            $table->foreignId('statute_id')->constrained('statutes')->cascadeOnDelete();
             $table->string('number', 20);
             $table->string('heading');
             $table->unsignedInteger('sort_order')->default(0);
