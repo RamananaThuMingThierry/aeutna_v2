@@ -33,7 +33,7 @@ export default function ResetPassword() {
       });
 
       sessionStorage.removeItem("reset_password_token");
-      setSuccess(response?.message || "Mot de passe mis a jour.");
+      setSuccess(response?.message || "Mot de passe mis à jour.");
       window.setTimeout(() => navigate("/login", { replace: true }), 1200);
     } catch (err) {
       const errors = err?.response?.data?.errors;
@@ -50,7 +50,7 @@ export default function ResetPassword() {
         <div className="row justify-content-center">
           <div className="col-12 col-md-8 col-lg-5">
             <div className="alert alert-warning">
-              Session de reinitialisation manquante. <Link to="/forgot-password">Recommencer</Link>
+              SSession de réinitialisation manquante. <Link to="/forgot-password">Recommencer</Link>
             </div>
           </div>
         </div>
@@ -66,7 +66,7 @@ export default function ResetPassword() {
             <div className="card-body p-4 p-lg-5">
               <div className="mb-4 text-center">
                 <h1 className="h3 mb-2">Nouveau mot de passe</h1>
-                <p className="text-muted mb-0">Choisis un nouveau mot de passe securise.</p>
+                <p className="text-muted mb-0">Choisis un nouveau mot de passe sécurise.</p>
               </div>
 
               {success ? <div className="alert alert-success">{success}</div> : null}
@@ -113,12 +113,12 @@ export default function ResetPassword() {
                 </div>
 
                 <button type="submit" className="btn btn-dark py-2" disabled={loading}>
-                  {loading ? "Mise a jour..." : "Reinitialiser le mot de passe"}
+                  {loading ? "Mise a jour..." : "Réinitialiser le mot de passe"}
                 </button>
               </form>
 
               <div className="mt-4 text-center">
-                <Link to="/login" className="text-decoration-none">Retour a la connexion</Link>
+                <Link to="/login" className="text-decoration-none">Retour à la connexion</Link>
               </div>
             </div>
           </div>

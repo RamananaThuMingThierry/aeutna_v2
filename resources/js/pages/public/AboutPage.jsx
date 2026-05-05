@@ -8,34 +8,34 @@ const MANDATES = [
   {
     id: 1,
     period: "2024 - Aujourd'hui",
-    note: "Mandat actuel ou le plus recent.",
-    president: { name: "A renseigner", photo: DEFAULT_PHOTO },
-    treasurer: { name: "A renseigner", photo: DEFAULT_PHOTO },
-    commissioner: { name: "A renseigner", photo: DEFAULT_PHOTO },
+    note: "Mandat actuel ou le plus récent.",
+    president: { name: "À renseigner", photo: DEFAULT_PHOTO },
+    treasurer: { name: "À renseigner", photo: DEFAULT_PHOTO },
+    commissioner: { name: "À renseigner", photo: DEFAULT_PHOTO },
   },
   {
     id: 2,
     period: "2022 - 2024",
-    note: "Mandat precedent de l'association.",
-    president: { name: "A renseigner", photo: DEFAULT_PHOTO },
-    treasurer: { name: "A renseigner", photo: DEFAULT_PHOTO },
-    commissioner: { name: "A renseigner", photo: DEFAULT_PHOTO },
+    note: "Mandat précédent de l'association.",
+    president: { name: "À renseigner", photo: DEFAULT_PHOTO },
+    treasurer: { name: "À renseigner", photo: DEFAULT_PHOTO },
+    commissioner: { name: "À renseigner", photo: DEFAULT_PHOTO },
   },
   {
     id: 3,
     period: "2020 - 2022",
-    note: "Mandat precedent de l'association.",
-    president: { name: "A renseigner", photo: DEFAULT_PHOTO },
-    treasurer: { name: "A renseigner", photo: DEFAULT_PHOTO },
-    commissioner: { name: "A renseigner", photo: DEFAULT_PHOTO },
+    note: "Mandat précédent de l'association.",
+    president: { name: "À renseigner", photo: DEFAULT_PHOTO },
+    treasurer: { name: "À renseigner", photo: DEFAULT_PHOTO },
+    commissioner: { name: "À renseigner", photo: DEFAULT_PHOTO },
   },
   {
     id: 4,
     period: "2018 - 2020",
-    note: "Mandat precedent de l'association.",
-    president: { name: "A renseigner", photo: DEFAULT_PHOTO },
-    treasurer: { name: "A renseigner", photo: DEFAULT_PHOTO },
-    commissioner: { name: "A renseigner", photo: DEFAULT_PHOTO },
+    note: "Mandat précédent de l'association.",
+    president: { name: "À renseigner", photo: DEFAULT_PHOTO },
+    treasurer: { name: "À renseigner", photo: DEFAULT_PHOTO },
+    commissioner: { name: "À renseigner", photo: DEFAULT_PHOTO },
   },
 ];
 
@@ -166,13 +166,13 @@ export default function AboutPage() {
                   <div className="col-sm-6">
                     <div className="p-3 rounded-2 h-100" style={{ background: "var(--panel-strong)" }}>
                       <div className="fw-semibold mb-2">Vision</div>
-                      <div className="text-secondary small">{about.vision || "Construire une communaute unie, active et fiere de son histoire."}</div>
+                      <div className="text-secondary small">{about.vision || "Construire une communauté unie, active et fière de son histoire."}</div>
                     </div>
                   </div>
                   <div className="col-12">
                     <div className="p-3 rounded-4" style={{ background: "var(--panel-strong)" }}>
                       <div className="fw-semibold mb-2">Valeurs</div>
-                      <div className="text-secondary">{about.values || "Solidarite, responsabilite, memoire institutionnelle, engagement communautaire et valorisation de chaque generation."}</div>
+                      <div className="text-secondary">{about.values || "Solidarité, responsabilité, mémoire institutionnelle, engagement communautaire et valorisation de chaque génération."}</div>
                     </div>
                   </div>
                 </div>
@@ -216,7 +216,7 @@ export default function AboutPage() {
                     {statute.document?.file_url ? (
                       <a href={statute.document.file_url} className="btn btn-dark" target="_blank" rel="noreferrer" download>
                         <i className="bi bi-download me-2" />
-                        Telecharger le document
+                        Télécharger le document
                       </a>
                     ) : (
                       <div className="alert alert-warning mb-0 py-2 px-3 small">
@@ -260,7 +260,7 @@ export default function AboutPage() {
 
       <section className="pb-5 pb-lg-6">
         <div className="container">
-          <SectionTitle eyebrow="Historique" title="Bureau par mandat" text="Cette section est geree manuellement avec des donnees statiques pour chaque mandat." />
+          <SectionTitle eyebrow="Historique" title="Bureau par mandat" text="Cette section est gerée manuellement avec des données statiques pour chaque mandat." />
 
           <div className="row g-4">
             {MANDATES.map((mandate, index) => (

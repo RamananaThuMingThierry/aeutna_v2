@@ -176,25 +176,18 @@ export default function ActivitiesPublicPage() {
     <div>
       <section className="py-5 py-lg-6">
         <div className="container">
-           <div className="text-center">
-            <h1 className="h3">Les actualites publiques de l'association</h1>
-            <p className="">
-                Consultez ce que l'association fait, a fait ou prevoit de faire a travers ses publications et annonces.
-            </p>
-        </div>
-          {activities.length === 0 ? (
-            <div className="alert alert-secondary text-center">Aucune actualité ne correspond au filtre actuel.</div>
-          ) : (
-            <div className="row g-4">
-              {activities.map((activity) => (
-                <div key={activity.id} className="col-md-6 col-xl-4">
-                  <ActivityCard activity={activity} onOpen={setSelectedActivity} />
-                </div>
-              ))}
+          <div className="rounded-2 overflow-hidden shadow-lg p-4 p-lg-5 mb-5" style={{ background: "linear-gradient(135deg, rgba(17,94,89,0.96), rgba(194,65,12,0.86))" }}>
+            <div className="row g-4 align-items-center">
+              <div className="col-12 text-white">
+                <h1 className="fw-bold mb-3">Les actualités publiques de l’association</h1>
+                <p className="lead text-white-50 mb-0">
+                  Consultez ce que l’association fait, a fait ou prévoit de faire à travers ses publications et annonces.
+                </p>
+              </div>
             </div>
-          )}
-        </div>
-      </section>
+          </div>
+          </div>
+     </section>
 
       {selectedActivity ? (
         <>

@@ -66,7 +66,7 @@ export default function GalleryPage() {
               <div className="col-lg-8 text-white">
                 <h1 className="fw-bold mb-3">Albums et souvenirs de l'association</h1>
                 <p className="lead text-white-50 mb-0">
-                  Parcourez les albums publics et consultez les images partagees par l association.
+                  Parcourez les albums publics et consultez les images partagées par l’association.
                 </p>
               </div>
               <div className="col-lg-4">
@@ -116,7 +116,7 @@ export default function GalleryPage() {
                        <div className="col-12">
                       <div className="p-4 p-lg-5 rounded-2 shadow-sm h-100" style={{ background: "var(--panel)" }}>
                         <div className="text-uppercase small fw-bold mb-2" style={{ color: "var(--warm)", letterSpacing: "0.14em" }}>
-                          Album selectionne
+                            Album sélectionné
                         </div>
                         <h2 className="fw-bold mb-3">{activeAlbum.title}</h2>
                         <p className="text-secondary fs-5 mb-4">{activeAlbum.description || "Aucune description disponible pour cet album."}</p>

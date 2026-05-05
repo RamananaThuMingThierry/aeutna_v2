@@ -6,8 +6,8 @@ const DEFAULT_PHOTO = "/images/avatar.png";
 const LEADERS = [
   {
     id: 1,
-    role: "President",
-    name: "A renseigner",
+    role: "Président",
+    name: "À renseigner",
     photo: DEFAULT_PHOTO,
     accent: "rgba(194,65,12,0.14)",
     icon: "bi-person-badge-fill",
@@ -15,15 +15,15 @@ const LEADERS = [
   {
     id: 2,
     role: "Commissaire aux comptes",
-    name: "A renseigner",
+    name: "À renseigner",
     photo: DEFAULT_PHOTO,
     accent: "rgba(37,99,235,0.14)",
     icon: "bi-shield-check",
   },
   {
     id: 3,
-    role: "Tresorier",
-    name: "A renseigner",
+    role: "Trésorier",
+    name: "À renseigner",
     photo: DEFAULT_PHOTO,
     accent: "rgba(22,163,74,0.14)",
     icon: "bi-cash-coin",
@@ -31,12 +31,12 @@ const LEADERS = [
 ];
 
 const OFFICE_MEMBERS = [
-  { id: 1, name: "A renseigner", role: "Vice-president", photo: DEFAULT_PHOTO },
-  { id: 2, name: "A renseigner", role: "Secretaire general", photo: DEFAULT_PHOTO },
-  { id: 3, name: "A renseigner", role: "Secretaire adjoint", photo: DEFAULT_PHOTO },
-  { id: 4, name: "A renseigner", role: "Tresorier adjoint", photo: DEFAULT_PHOTO },
-  { id: 5, name: "A renseigner", role: "Charge de communication", photo: DEFAULT_PHOTO },
-  { id: 6, name: "A renseigner", role: "Charge d organisation", photo: DEFAULT_PHOTO },
+  { id: 1, name: "À renseigner", role: "Vice-président", photo: DEFAULT_PHOTO },
+  { id: 2, name: "À renseigner", role: "Sécretaire géneral", photo: DEFAULT_PHOTO },
+  { id: 3, name: "À renseigner", role: "Sécretaire adjoint", photo: DEFAULT_PHOTO },
+  { id: 4, name: "À renseigner", role: "Trésorier adjoint", photo: DEFAULT_PHOTO },
+  { id: 5, name: "À renseigner", role: "Charge de communication", photo: DEFAULT_PHOTO },
+  { id: 6, name: "À renseigner", role: "Charge d'organisation", photo: DEFAULT_PHOTO },
 ];
 
 function SectionTitle({ eyebrow, title, text }) {
@@ -111,7 +111,7 @@ export default function BureauPage() {
               <div className="col-12 text-white">
                 <h1 className="fw-bold mb-3">Les membres de bureau actifs</h1>
                 <p className="lead text-white-50 mb-0">
-                  Presentation statique des responsables actuels et des autres membres du bureau de l AEUTNA.
+                  Présentation statique des responsables actuels et des autres membres du bureau de l’AEUTNA.
                 </p>
               </div>
             </div>
@@ -123,8 +123,8 @@ export default function BureauPage() {
         <div className="container">
           <SectionTitle
             eyebrow="Responsables"
-            title="President, commissaire aux comptes et tresorier"
-            text="Les postes principaux du bureau actuel sont presentes avec leurs photos."
+            title="Président, commissaire aux comptes et trésorier"
+            text="Les postes principaux du bureau actuel sont présentés avec leurs photos."
           />
           <div className="row g-4">
             {LEADERS.map((leader) => (

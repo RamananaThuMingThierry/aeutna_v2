@@ -34,7 +34,7 @@ export default function VerifyCode() {
     } catch (err) {
       const errors = err?.response?.data?.errors;
       const firstError = errors ? Object.values(errors).flat().find(Boolean) : null;
-      setError(firstError || err?.response?.data?.message || "Verification impossible.");
+      setError(firstError || err?.response?.data?.message || "Vérification impossible.");
     } finally {
       setLoading(false);
     }
@@ -47,7 +47,7 @@ export default function VerifyCode() {
           <div className="card border-0 shadow-sm">
             <div className="card-body p-4 p-lg-5">
               <div className="mb-4 text-center">
-                <h1 className="h3 mb-2">Verification du code</h1>
+                <h1 className="h3 mb-2">Vérification du code</h1>
                 <p className="text-muted mb-0">{infoMessage}</p>
               </div>
 
@@ -83,12 +83,12 @@ export default function VerifyCode() {
                 </div>
 
                 <button type="submit" className="btn btn-dark py-2" disabled={loading}>
-                  {loading ? "Verification..." : "Verifier le code"}
+                  {loading ? "Vérification..." : "Vérifier le code"}
                 </button>
               </form>
 
               <div className="mt-4 text-center d-grid gap-2">
-                <Link to="/forgot-password" className="text-decoration-none">Renvoyer / changer l email</Link>
+                <Link to="/forgot-password" className="text-decoration-none">Renvoyer / changer l'email</Link>
               </div>
             </div>
           </div>

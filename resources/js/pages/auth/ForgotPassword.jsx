@@ -38,7 +38,7 @@ export default function ForgotPassword() {
               <div className="mb-4 text-center">
                 <h1 className="h3 mb-2">Mot de passe oublie</h1>
                 <p className="text-muted mb-0">
-                  Saisis ton email pour recevoir un code de verification.
+                  Saisis ton email pour recevoir un code de vérification.
                 </p>
               </div>
 
@@ -64,7 +64,7 @@ export default function ForgotPassword() {
               </form>
 
               <div className="mt-4 text-center d-grid gap-2">
-                <Link to="/login" className="text-decoration-none">Retour a la connexion</Link>
+                <Link to="/login" className="text-decoration-none">Retour à la connexion</Link>
               </div>
             </div>
           </div>

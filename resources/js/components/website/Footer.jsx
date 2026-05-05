@@ -21,7 +21,7 @@ const contactLinks = [
   {
     href: "https://wa.me/261327563770",
     icon: "bi-telephone",
-    title: "Telephone",
+    title: "Téléphone",
     value: "+261 32 75 637 70",
     iconColor: "#16a34a",
   },
@@ -71,17 +71,10 @@ export default function Footer() {
                         className="rounded-2 object-fit-cover border border-light-subtle shadow-sm"
                         style={{ width: 62, height: 62 }}
                       />
-                      <div>
-                        <div className="text-uppercase small fw-semibold public-footer-kicker">Association et reseau</div>
-                        <div className="fw-bold text-white fs-5" style={{ letterSpacing: "0.08em" }}>
-                          AEUTNA
-                        </div>
-                      </div>
-                    </div>
+                                   </div>
 
                     <p className="public-footer-copy mb-4">
-                      Association des Etudiants d Universite de Tananarive natifs d Antalaha. Le site valorise les
-                      actualites, la memoire associative et les solidarites entre membres.
+                     Association des Étudiants d’Université de Tananarive natifs d’Antalaha. Le site valorise les actualités, la mémoire associative et les solidarités entre membres.
                     </p>
                   </div>
 
@@ -91,7 +84,7 @@ export default function Footer() {
                         Devenir membre
                       </Link>
                       <Link to="/activities" className="btn btn-outline-light btn-sm rounded-2 px-3">
-                        Explorer les actualites
+                        Explorer les actualités
                       </Link>
                     </div>
                   </div>
