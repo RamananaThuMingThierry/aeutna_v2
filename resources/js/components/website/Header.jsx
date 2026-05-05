@@ -83,11 +83,6 @@ export default function Header() {
             className="rounded-2 object-fit-cover border"
             style={{ width: 52, height: 52 }}
           />
-          <div className="d-none d-sm-block">
-            <div className="fw-bold" style={{ letterSpacing: "0.08em" }}>
-              AEUTNA
-            </div>
-          </div>
         </Link>
 
         <nav className="d-none d-lg-flex align-items-center gap-2 flex-wrap justify-content-center">

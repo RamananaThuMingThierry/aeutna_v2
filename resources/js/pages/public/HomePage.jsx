@@ -81,7 +81,7 @@ function HeroCarousel({ slides = [] }) {
             data-bs-slide="prev"
         >
             <span className="carousel-control-prev-icon" aria-hidden="true" />
-            <span className="visually-hidden">PrÃ©cÃ©dent</span>
+            <span className="visually-hidden">Précédent</span>
         </button>
 
         <button
@@ -170,7 +170,7 @@ export default function HomePage() {
                   <div className="col-sm-6">
                     <div className="p-3 rounded-2 h-100" style={{ background: "var(--panel-strong)" }}>
                       <div className="fw-bold fs-4 mb-1">{activities.length}</div>
-                      <div className="text-secondary small">ActualitÃ©s recentes</div>
+                      <div className="text-secondary small">Actualités recentes</div>
                     </div>
                   </div>
                   <div className="col-sm-6">
@@ -183,7 +183,7 @@ export default function HomePage() {
                     <div className="p-3 rounded-2" style={{ background: "var(--panel-strong)" }}>
                       <div className="fw-semibold mb-2">Mission</div>
                       <div className="text-secondary">
-                        Renforcer les liens entre Ã©tudiants et universitaires, soutenir les initiatives locales et faire vivre la mÃ©moire de l'association.
+                        Renforcer les liens entre Etudiants et universitaires, soutenir les initiatives locales et faire vivre la mémoire de l'association.
                       </div>
                     </div>
                   </div>
@@ -197,9 +197,9 @@ export default function HomePage() {
       <section id="activities" className="py-5 py-lg-6">
         <div className="container">
           <SectionTitle
-            eyebrow="ActualitÃ©s"
-            title="DerniÃ¨res actualitÃ©s"
-            text="Les actions recentes, les annonces et les Ã©vÃ©nements mis en avant sur la page d'accueil."
+            eyebrow="Actualités"
+            title="Dernières actualités"
+            text="Les actions recentes, les annonces et les événements mis en avant sur la page d'accueil."
           />
           <div className="row g-4">
             {activities.map((activity) => (
@@ -212,7 +212,7 @@ export default function HomePage() {
                     style={{ height: 220 }}
                   />
                   <div className="card-body p-4">
-                    <div className="small text-uppercase fw-bold mb-2" style={{ color: "var(--accent-strong)", letterSpacing: "0.08em" }}>{activity.location || "Actualite"}</div>
+                    <div className="small text-uppercase fw-bold mb-2" style={{ color: "var(--accent-strong)", letterSpacing: "0.08em" }}>{activity.location || "Actualité"}</div>
                     <h3 className="h5 fw-bold">{activity.title}</h3>
                     <div className="small text-secondary mb-3">{formatDate(activity.starts_at)}</div>
                     <p className="text-secondary mb-0">{activity.description || "Aucune description disponible."}</p>
@@ -229,7 +229,7 @@ export default function HomePage() {
           <SectionTitle
             eyebrow="Galeries"
             title="Moments et souvenirs"
-            text="Une sÃ©lection d'images provenant des activitÃ©s publiÃ©es."
+            text="Une sélection d'images provenant des activités publiées."
           />
           <div className="row g-3">
             {gallery.map((image, index) => (

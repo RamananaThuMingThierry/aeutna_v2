@@ -20,66 +20,66 @@
     <meta property="og:image" content="{{ asset('images/logo_aeutna.jpg') }}">
 
     <link rel="canonical" href="{{ url()->current() }}">
-    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
+    <link rel="icon" href="{{ asset('images/logo_aeutna.jpg') }}" sizes="any">
     <link rel="apple-touch-icon" href="{{ asset('images/logo_aeutna.jpg') }}">
 
     <script type="application/ld+json">
-{!! json_encode([
-    '@context' => 'https://schema.org',
-    '@graph' => [
-        [
-            '@type' => 'Organization',
-            '@id' => url('/') . '/#organization',
-            'name' => "Association des Étudiants de l'Université de Tananarive Natifs d'Antalaha",
-            'alternateName' => 'AEUTNA',
-            'url' => url('/') . '/',
-            'logo' => [
-                '@type' => 'ImageObject',
-                'url' => asset('images/logo_aeutna.jpg'),
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@graph' => [
+                [
+                    '@type' => 'Organization',
+                    '@id' => url('/') . '/#organization',
+                    'name' => "Association des Étudiants de l'Université de Tananarive Natifs d'Antalaha",
+                    'alternateName' => 'AEUTNA',
+                    'url' => url('/') . '/',
+                    'logo' => [
+                        '@type' => 'ImageObject',
+                        'url' => asset('images/logo_aeutna.jpg'),
+                    ],
+                    'image' => asset('images/logo_aeutna.jpg'),
+                    'email' => 'ramananathumingthierry@gmail.com',
+                    'telephone' => '+261327563770',
+                    'address' => [
+                        '@type' => 'PostalAddress',
+                        'addressLocality' => 'Antalaha',
+                        'addressCountry' => 'MG',
+                    ],
+                    'sameAs' => [
+                        'https://facebook.com/aeutna',
+                    ],
+                ],
+                [
+                    '@type' => 'WebSite',
+                    '@id' => url('/') . '/#website',
+                    'url' => url('/') . '/',
+                    'name' => 'AEUTNA',
+                    'description' => "AEUTNA est une Association des Étudiants de l'Université de Tananarivo Natifs d'Antalaha.",
+                    'inLanguage' => 'fr',
+                    'publisher' => [
+                        '@id' => url('/') . '/#organization',
+                    ],
+                ],
+                [
+                    '@type' => 'WebPage',
+                    '@id' => url()->current() . '#webpage',
+                    'url' => url()->current(),
+                    'name' => config('app.name', 'AEUTNA'),
+                    'description' => "AEUTNA est une Association des Étudiants de l'Université de Tananarivo Natifs d'Antalaha.",
+                    'inLanguage' => 'fr',
+                    'isPartOf' => [
+                        '@id' => url('/') . '/#website',
+                    ],
+                    'about' => [
+                        '@id' => url('/') . '/#organization',
+                    ],
+                    'primaryImageOfPage' => [
+                        '@type' => 'ImageObject',
+                        'url' => asset('images/logo_aeutna.jpg'),
+                    ],
+                ],
             ],
-            'image' => asset('images/logo_aeutna.jpg'),
-            'email' => 'ramananathumingthierry@gmail.com',
-            'telephone' => '+261327563770',
-            'address' => [
-                '@type' => 'PostalAddress',
-                'addressLocality' => 'Antalaha',
-                'addressCountry' => 'MG',
-            ],
-            'sameAs' => [
-                'https://facebook.com/aeutna',
-            ],
-        ],
-        [
-            '@type' => 'WebSite',
-            '@id' => url('/') . '/#website',
-            'url' => url('/') . '/',
-            'name' => 'AEUTNA',
-            'description' => "AEUTNA est une Association des Étudiants de l'Université de Tananarivo Natifs d'Antalaha.",
-            'inLanguage' => 'fr',
-            'publisher' => [
-                '@id' => url('/') . '/#organization',
-            ],
-        ],
-        [
-            '@type' => 'WebPage',
-            '@id' => url()->current() . '#webpage',
-            'url' => url()->current(),
-            'name' => config('app.name', 'AEUTNA'),
-            'description' => "AEUTNA est une Association des Étudiants de l'Université de Tananarivo Natifs d'Antalaha.",
-            'inLanguage' => 'fr',
-            'isPartOf' => [
-                '@id' => url('/') . '/#website',
-            ],
-            'about' => [
-                '@id' => url('/') . '/#organization',
-            ],
-            'primaryImageOfPage' => [
-                '@type' => 'ImageObject',
-                'url' => asset('images/logo_aeutna.jpg'),
-            ],
-        ],
-    ],
-], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
     </script>
 
     <title>{{ config('app.name', 'AEUTNA') }}</title>

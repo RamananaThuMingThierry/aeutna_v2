@@ -3,6 +3,15 @@ import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 
 import SEO from "../components/seo/SEO";
 
+function resolveUserPhotoUrl(photo) {
+  if (!photo) return "/images/profil.png";
+  if (photo.startsWith("http://") || photo.startsWith("https://") || photo.startsWith("/")) {
+    return photo;
+  }
+
+  return `/${photo.replace(/^\/+/, "")}`;
+}
+
 const menuSections = [
   {
     title: "Suivi",
@@ -217,10 +226,17 @@ export default function AdminLayout() {
                 </div>
 
                 <div className="d-flex align-items-center gap-3 ms-lg-auto">
+
                   <div className="text-end d-none d-md-inline">
                     <div className="fw-semibold small">{currentUser?.name || "Utilisateur"}</div>
                     <div className="text-secondary small">{currentUser?.email || ""}</div>
                   </div>
+                                    <img
+                    src={resolveUserPhotoUrl(currentUser?.photo || currentUser?.avatar || "")}
+                    alt={currentUser?.name || "Utilisateur"}
+                    className="rounded-3 object-fit-cover"
+                    style={{ width: "50px", height: "50px" }}
+                  />
                 </div>
               </div>
             </nav>

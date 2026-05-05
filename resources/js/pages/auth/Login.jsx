@@ -92,7 +92,7 @@ export default function Login() {
             <div className="card border-0 shadow-sm">
               <div className="card-body p-5 text-center">
                 <div className="spinner-border text-dark mb-3" role="status" />
-                <div>Verification de la session...</div>
+                <div>Vérification de la session...</div>
               </div>
             </div>
           </div>
@@ -220,7 +220,7 @@ export default function Login() {
                   </div>
 
                   <Link to="/forgot-password" className="text-decoration-none small">
-                    Mot de passe oublie ?
+                    Mot de passe oublié ?
                   </Link>
                 </div>
 
@@ -232,7 +232,7 @@ export default function Login() {
               <div className="mt-4 text-center">
                 <span className="text-muted">Pas encore de compte ? </span>
                 <Link to="/register" className="text-decoration-none">
-                  Creer un compte
+                  Créer un compte
                 </Link>
               </div>
             </div>
