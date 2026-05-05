@@ -123,9 +123,9 @@ export default function Footer() {
                         <span className="public-footer-contact-icon" style={{ color: item.iconColor }}>
                           <i className={`bi ${item.icon}`} />
                         </span>
-                        <span>
+                        <span className="public-footer-contact-body">
                           <span className="d-block small text-uppercase public-footer-contact-label">{item.title}</span>
-                          <span className="d-block text-white fw-medium">{item.value}</span>
+                          <span className="d-block text-white fw-medium public-footer-contact-value" style={item.title === "Email" ? { wordBreak: "break-all", fontSize: "0.95rem" } : undefined}>{item.value}</span>
                         </span>
                       </a>
                     ))}
@@ -164,3 +164,6 @@ export default function Footer() {
     </>
   );
 }
+
+
+
