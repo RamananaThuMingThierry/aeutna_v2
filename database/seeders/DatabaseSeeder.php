@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             AxeSeeder::class,
             EducationLevelSeeder::class,
             FunctionsSeeder::class,
-            MemberSeeder::class,
+            // MemberSeeder::class,
             SuperAdminUserSeeder::class,
         ]);
     }
