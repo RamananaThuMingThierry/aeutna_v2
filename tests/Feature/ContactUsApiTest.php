@@ -20,7 +20,7 @@ class ContactUsApiTest extends TestCase
         ]);
 
         $response->assertCreated()
-            ->assertJsonPath('message', 'Votre message a ete envoye avec succes.')
+            ->assertJsonPath('message', 'Votre message a été envoye avec succes.')
             ->assertJsonPath('contact.email', 'jean@example.com')
             ->assertJsonPath('contact.subject', 'Demande d information');
 

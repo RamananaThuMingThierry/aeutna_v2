@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+﻿import React, { useEffect, useMemo, useState } from "react";
 
 import { websiteApi } from "../../api/website";
 
@@ -44,7 +44,10 @@ export default function GalleryPage() {
   }, []);
 
   const albums = useMemo(() => data?.albums || [], [data]);
-  const activeAlbum = useMemo(() => albums.find((album) => album.id === activeAlbumId) || albums[0] || null, [albums, activeAlbumId]);
+  const activeAlbum = useMemo(
+    () => albums.find((album) => album.id === activeAlbumId) || albums[0] || null,
+    [albums, activeAlbumId]
+  );
 
   if (loading) {
     return <div className="container py-5">Chargement...</div>;
@@ -79,9 +82,29 @@ export default function GalleryPage() {
             <div className="alert alert-secondary text-center">Aucun album public disponible pour le moment.</div>
           ) : (
             <>
-              <div className="d-flex flex-wrap gap-2 mb-4">
+              <div className="d-md-none mb-4">
+                <label className="form-label fw-semibold">Choisir un album</label>
+                <select
+                  className="form-select"
+                  value={activeAlbum?.id || ""}
+                  onChange={(event) => setActiveAlbumId(Number(event.target.value))}
+                >
+                  {albums.map((album) => (
+                    <option key={album.id} value={album.id}>
+                      {album.title} ({album.images_count})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="d-none d-md-flex flex-wrap gap-2 mb-4 overflow-visible">
                 {albums.map((album) => (
-                  <button key={album.id} type="button" className={`btn rounded-pill px-4 ${activeAlbum?.id === album.id ? "btn-dark" : "btn-outline-dark"}`} onClick={() => setActiveAlbumId(album.id)}>
+                  <button
+                    key={album.id}
+                    type="button"
+                    className={`btn rounded-pill px-4 text-nowrap ${activeAlbum?.id === album.id ? "btn-dark" : "btn-outline-dark"}`}
+                    onClick={() => setActiveAlbumId(album.id)}
+                  >
                     {album.title} ({album.images_count})
                   </button>
                 ))}
@@ -90,14 +113,11 @@ export default function GalleryPage() {
               {activeAlbum ? (
                 <section className="mb-5">
                   <div className="row g-4 align-items-center mb-4">
-                    <div className="col-lg-6">
-                      <div className="rounded-2 overflow-hidden shadow-sm h-100">
-                        <img src={resolveImageUrl(activeAlbum.cover_image?.image_url)} alt={activeAlbum.title} className="w-100 h-100 object-fit-cover" style={{ minHeight: 320 }} />
-                      </div>
-                    </div>
-                    <div className="col-lg-6">
+                       <div className="col-12">
                       <div className="p-4 p-lg-5 rounded-2 shadow-sm h-100" style={{ background: "var(--panel)" }}>
-                        <div className="text-uppercase small fw-bold mb-2" style={{ color: "var(--warm)", letterSpacing: "0.14em" }}>Album selectionne</div>
+                        <div className="text-uppercase small fw-bold mb-2" style={{ color: "var(--warm)", letterSpacing: "0.14em" }}>
+                          Album selectionne
+                        </div>
                         <h2 className="fw-bold mb-3">{activeAlbum.title}</h2>
                         <p className="text-secondary fs-5 mb-4">{activeAlbum.description || "Aucune description disponible pour cet album."}</p>
                         <div className="p-3 rounded-4 d-inline-block" style={{ background: "var(--panel-strong)" }}>
@@ -112,10 +132,23 @@ export default function GalleryPage() {
                     {activeAlbum.images.map((image, index) => (
                       <div key={image.id} className={index % 5 === 0 ? "col-md-6 col-lg-4" : "col-md-6 col-lg-3"}>
                         <div className="rounded-2 overflow-hidden shadow-sm h-100 position-relative">
-                          <img src={resolveImageUrl(image.image_url)} alt={image.name || activeAlbum.title} className="w-100 h-100 object-fit-cover" style={{ minHeight: 240 }} />
-                          <div className="position-absolute bottom-0 start-0 end-0 p-3 text-white" style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.7))" }}>
-                            <div className="fw-semibold">{image.name || activeAlbum.title}</div>
-                            {image.description ? <div className="small text-white-50">{image.description}</div> : null}
+                          <img
+                            src={resolveImageUrl(image.image_url)}
+                            alt={image.name || activeAlbum.title}
+                            className="w-100 h-100 object-fit-cover"
+                            style={{ minHeight: 240 }}
+                          />
+                          <div className="position-absolute top-0 end-0 p-3">
+                            <a
+                              href={resolveImageUrl(image.image_url)}
+                              className="btn btn-sm btn-light shadow-sm"
+                              download
+                              target="_blank"
+                              rel="noreferrer"
+                              aria-label={`Telecharger ${image.name || activeAlbum.title}`}
+                            >
+                              <i className="bi bi-download" />
+                            </a>
                           </div>
                         </div>
                       </div>

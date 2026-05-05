@@ -6,6 +6,11 @@ export const websiteApi = {
     return res.data;
   },
 
+  async about() {
+    const res = await api.get("/website/about");
+    return res.data;
+  },
+
   async gallery() {
     const res = await api.get("/website/gallery");
     return res.data;

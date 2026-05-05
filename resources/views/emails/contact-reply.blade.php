@@ -25,7 +25,7 @@
         </div>
 
         <div style="font-size:14px;color:#6c757d;">
-            Ce message vous a ete envoye par l administration AEUTNA.
+            Ce message vous a été envoye par l administration AEUTNA.
         </div>
     </div>
 </body>

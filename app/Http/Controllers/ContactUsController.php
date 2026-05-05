@@ -35,7 +35,7 @@ class ContactUsController extends Controller
             );
 
             return response()->json([
-                'message' => 'Votre message a ete envoye avec succes.',
+                'message' => 'Votre message a été envoye avec succes.',
                 'contact' => $contact,
             ], 201);
         } catch (ValidationException $exception) {

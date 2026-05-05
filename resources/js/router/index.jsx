@@ -15,6 +15,7 @@ import DashboardPage from "../pages/admin/DashboardPage";
 import DetailMemberPage from "../pages/admin/DetailMemberPage";
 import DetailReportPage from "../pages/admin/DetailReportPage";
 import DonationsPage from "../pages/admin/DonationsPage";
+import DocumentsPage from "../pages/admin/DocumentsPage";
 import EducationLevelsPage from "../pages/admin/EducationLevelsPage";
 import FeePaymentsPage from "../pages/admin/FeePaymentsPage";
 import FormActivityPage from "../pages/admin/FormActivityPage";
@@ -33,6 +34,7 @@ import ReportsPage from "../pages/admin/ReportsPage";
 import ReportScanPage from "../pages/admin/ReportScanPage";
 import SlidesPage from "../pages/admin/SlidesPage";
 import SuppliersPage from "../pages/admin/SuppliersPage";
+import StatutesPage from "../pages/admin/StatutesPage";
 import UsersPage from "../pages/admin/UsersPage";
 import RootLayout from "../layouts/RootLayout";
 
@@ -216,6 +218,14 @@ export const router = createBrowserRouter([
           {
             path: "activities",
             element: <ActivitiesPage />,
+          },
+          {
+            path: "statutes",
+            element: <StatutesPage />,
+          },
+          {
+            path: "documents",
+            element: <DocumentsPage />,
           },
           {
             path: "reports",

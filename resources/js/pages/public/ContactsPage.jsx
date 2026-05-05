@@ -119,7 +119,7 @@ export default function ContactsPage() {
 
       const response = await submitContactApi(payload);
 
-      setSubmitSuccess(response?.message || "Votre message a ete envoye avec succes.");
+      setSubmitSuccess(response?.message || "Votre message a été envoye avec succes.");
       setForm({
         name: "",
         email: "",

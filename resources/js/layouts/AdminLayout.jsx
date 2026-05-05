@@ -68,6 +68,8 @@ const menuSections = [
   {
     title: "Administration",
     items: [
+      { to: "/admin/statutes", label: "Statuts", icon: "bi-journal-bookmark-fill" },
+      { to: "/admin/documents", label: "Documents", icon: "bi-file-earmark-text-fill" },
       { to: "/admin/reports", label: "Rapports", icon: "bi-journal-text" },
       { to: "/admin/users", label: "Utilisateurs", icon: "bi-people-fill" },
       { to: "/admin/activity-logs", label: "Journaux d'activite", icon: "bi-clock-history" },

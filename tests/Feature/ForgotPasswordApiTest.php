@@ -28,7 +28,7 @@ class ForgotPasswordApiTest extends TestCase
         ]);
 
         $forgotResponse->assertOk()
-            ->assertJsonPath('message', 'Si un compte existe avec cette adresse email, un code a ete envoye.');
+            ->assertJsonPath('message', 'Si un compte existe avec cette adresse email, un code a été envoye.');
 
         $resetCode = PasswordResetCode::query()->where('email', $user->email)->first();
 

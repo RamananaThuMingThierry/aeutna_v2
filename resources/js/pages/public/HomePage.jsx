@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { websiteApi } from "../../api/website";
 
 function resolveImageUrl(imagePath) {
-  if (!imagePath) return "/images/avatar.png";
+  if (!imagePath) return "/images/slide.jpg";
   if (imagePath.startsWith("http://") || imagePath.startsWith("https://") || imagePath.startsWith("/")) {
     return imagePath;
   }

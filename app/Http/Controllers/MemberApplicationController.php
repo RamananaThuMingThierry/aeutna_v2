@@ -100,7 +100,7 @@ class MemberApplicationController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Votre demande d adhesion a ete envoyee. Elle sera verifiee par l administration.',
+            'message' => 'Votre demande d\'adhesion a été envoyée. Elle sera vérifiéee par l\'administration.',
             'application' => $application,
         ], 201);
     }
@@ -143,6 +143,7 @@ class MemberApplicationController extends Controller
                 'reviewed_by' => $request->user()?->id,
                 'reviewed_at' => now(),
             ]);
+
             $application->save();
 
             if ($validated['status'] === 'approved') {
@@ -206,19 +207,19 @@ class MemberApplicationController extends Controller
         if ($application->email) {
             Mail::raw(
                 $validated['status'] === 'approved'
-                    ? 'Votre demande d adhesion AEUTNA a ete validee.'
-                    : 'Votre demande d adhesion AEUTNA a ete mise a jour. Commentaire: ' . ($application->admin_comment ?: '-'),
+                    ? 'Votre demande d\'adhesion AEUTNA a été validée.'
+                    : 'Votre demande d\'adhesion AEUTNA a été mise à jour. Commentaire: ' . ($application->admin_comment ?: '-'),
                 function ($message) use ($application) {
                     $message->to($application->email)
-                        ->subject('AEUTNA - Suivi de votre demande d adhesion');
+                        ->subject('AEUTNA - Suivi de votre demande d\'adhésion');
                 }
             );
         }
 
         return response()->json([
             'message' => $validated['status'] === 'approved'
-                ? 'La candidature a ete approuvee et le membre a ete cree.'
-                : 'La candidature a ete mise a jour.',
+                ? 'La candidature a été approuvée et le membre a été crée.'
+                : 'La candidature a été mise à jour.',
             'application' => $application,
         ]);
     }

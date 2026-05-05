@@ -19,7 +19,7 @@ But du module rapports
 Le module rapports doit permettre de :
 
 - creer un rapport de reunion
-- decrire ce qui a ete dit ou decide
+- decrire ce qui a été dit ou decide
 - enregistrer les membres presents
 - garder une trace officielle des reunions internes
 

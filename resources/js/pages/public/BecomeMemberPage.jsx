@@ -92,7 +92,7 @@ export default function BecomeMemberPage() {
         }
       } catch (error) {
         if (!active) return;
-        setGlobalError(error?.response?.data?.message || "Impossible de charger le formulaire d adhesion.");
+        setGlobalError(error?.response?.data?.message || "Impossible de charger le formulaire d\'adhésion.");
       } finally {
         if (active) setLoading(false);
       }
@@ -155,7 +155,7 @@ export default function BecomeMemberPage() {
 
       const response = await memberApplicationsApi.create(payload);
 
-      setSuccessMessage(response?.message || "Votre demande a ete envoyee.");
+      setSuccessMessage(response?.message || "Votre demande a été envoyee.");
       setForm({
         first_name: "",
         last_name: "",
@@ -190,7 +190,7 @@ export default function BecomeMemberPage() {
         });
         setErrors(nextErrors);
       } else {
-        setGlobalError(data?.message || "Impossible d envoyer la demande d adhesion.");
+        setGlobalError(data?.message || "Impossible d envoyer la demande d\'adhésion.");
       }
     } finally {
       setSubmitting(false);

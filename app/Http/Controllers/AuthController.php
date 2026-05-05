@@ -217,7 +217,7 @@ class AuthController extends Controller
             }
 
             return response()->json([
-                'message' => 'Si un compte existe avec cette adresse email, un code a ete envoye.',
+                'message' => 'Si un compte existe avec cette adresse email, un code a été envoye.',
             ]);
         } catch (Throwable $exception) {
             $this->activityLogService->logError(

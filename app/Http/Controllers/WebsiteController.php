@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use App\Models\Album;
 use App\Models\AlbumImage;
+use App\Models\Statute;
 use App\Models\MemberFunction;
 use App\Models\Slide;
 use Illuminate\Http\JsonResponse;
@@ -151,6 +152,90 @@ class WebsiteController extends Controller
 
         return response()->json([
             'activities' => $activities,
+        ]);
+    }
+
+    public function aboutData(): JsonResponse
+    {
+        $statute = Statute::query()
+            ->with([
+                'document' => function ($query) {
+                    $query->select([
+                        'id',
+                        'title',
+                        'file_name',
+                        'file_path',
+                        'document_type',
+                        'visibility',
+                        'publication_status',
+                    ]);
+                },
+                'titles' => function ($query) {
+                    $query->orderBy('sort_order')->orderBy('id');
+                },
+                'titles.articles' => function ($query) {
+                    $query->orderBy('sort_order')->orderBy('id');
+                },
+            ])
+            ->where('visibility', 'public')
+            ->where('publication_status', 'published')
+            ->where('is_current', true)
+            ->first();
+
+        if (!$statute) {
+            $statute = Statute::query()
+                ->with([
+                    'document:id,title,file_name,file_path,document_type,visibility,publication_status',
+                    'titles' => fn ($query) => $query->orderBy('sort_order')->orderBy('id'),
+                    'titles.articles' => fn ($query) => $query->orderBy('sort_order')->orderBy('id'),
+                ])
+                ->where('visibility', 'public')
+                ->where('publication_status', 'published')
+                ->orderByDesc('effective_at')
+                ->orderByDesc('id')
+                ->first();
+        }
+
+        return response()->json([
+            'about' => [
+                'title' => "Association des Etudiants d'Universite de Tananarive Natifs d'Antalaha",
+                'summary' => "L'AEUTNA rassemble les membres autour de l'entraide, de la transmission et de la valorisation de la communaute.",
+                'mission' => "Renforcer les liens, soutenir les parcours et encourager la participation associative.",
+                'vision' => "Construire une communaute unie, active et fiere de son histoire.",
+                'values' => "Solidarite, responsabilite, memoire institutionnelle, engagement communautaire et valorisation de chaque generation.",
+            ],
+            'statute' => $statute ? [
+                'id' => $statute->id,
+                'encrypted_id' => $statute->encrypted_id,
+                'title' => $statute->title,
+                'version' => $statute->version,
+                'validated_at' => optional($statute->validated_at)->toDateString(),
+                'effective_at' => optional($statute->effective_at)->toDateString(),
+                'document' => $statute->document
+                    && $statute->document->visibility === 'public'
+                    && $statute->document->publication_status === 'published'
+                    ? [
+                        'title' => $statute->document->title,
+                        'file_name' => $statute->document->file_name,
+                        'file_url' => $statute->document->file_url,
+                    ]
+                    : null,
+                'titles' => $statute->titles->map(function ($title) {
+                    return [
+                        'id' => $title->id,
+                        'number' => $title->number,
+                        'heading' => $title->heading,
+                        'articles' => $title->articles->map(function ($article) {
+                            return [
+                                'id' => $article->id,
+                                'article_number' => $article->article_number,
+                                'title' => $article->title,
+                                'content' => $article->content,
+                            ];
+                        })->values(),
+                    ];
+                })->values(),
+            ] : null,
         ]);
     }
 }
