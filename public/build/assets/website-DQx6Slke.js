@@ -1,0 +1,1 @@
+import{t as e}from"./axios-CeSM2qcJ.js";var t={async home(){return(await e.get(`/website/home`)).data},async about(){return(await e.get(`/website/about`)).data},async gallery(){return(await e.get(`/website/gallery`)).data},async activities(){return(await e.get(`/website/activities`)).data}};export{t};
