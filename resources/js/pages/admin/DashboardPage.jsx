@@ -528,7 +528,7 @@ export default function DashboardPage() {
           <div className="card border-0 shadow-sm h-100">
             <div className="card-body">
               <div className="d-flex align-items-center justify-content-between mb-3">
-                <h4 className="h5 mb-0">Candidatures recentes</h4>
+                <h4 className="h5 mb-0">Candidatures récentes</h4>
                 <Link to="/admin/member-applications" className="small text-decoration-none">Tout voir</Link>
               </div>
               <div className="d-grid gap-3">
