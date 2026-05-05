@@ -35,6 +35,10 @@ class UpdateMaterialRequest extends FormRequest
             'acquired_at' => ['nullable', 'date'],
             'acquisition_cost' => ['nullable', 'numeric', 'min:0'],
             'notes' => ['nullable', 'string'],
+            'images' => ['nullable', 'array'],
+            'images.*' => ['image', 'max:4096'],
+            'deleted_image_ids' => ['nullable', 'array'],
+            'deleted_image_ids.*' => ['integer'],
         ];
     }
 
@@ -61,3 +65,5 @@ class UpdateMaterialRequest extends FormRequest
         });
     }
 }
+
+

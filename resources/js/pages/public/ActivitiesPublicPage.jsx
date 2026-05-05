@@ -23,8 +23,8 @@ function formatDate(value) {
 }
 
 function formatStatus(status) {
-  if (status === "published") return "Publiée";
-  if (status === "completed") return "Terminée";
+  if (status === "published") return "PubliÃ©e";
+  if (status === "completed") return "TerminÃ©e";
   return status || "-";
 }
 
@@ -38,6 +38,8 @@ function ActivityCard({ activity, onOpen }) {
         src={resolveImageUrl(coverImage)}
         alt={activity.title}
         className="w-100 object-fit-cover"
+        loading="lazy"
+        decoding="async"
         style={{ height: 240 }}
       />
       <div className="card-body p-4 d-flex flex-column">
@@ -175,13 +177,13 @@ export default function ActivitiesPublicPage() {
       <section className="py-5 py-lg-6">
         <div className="container">
            <div className="text-center">
-            <p className="h3">Les actualites publiques de l'association</p>
+            <h1 className="h3">Les actualites publiques de l'association</h1>
             <p className="">
                 Consultez ce que l'association fait, a fait ou prevoit de faire a travers ses publications et annonces.
             </p>
         </div>
           {activities.length === 0 ? (
-            <div className="alert alert-secondary">Aucune actualite ne correspond au filtre actuel.</div>
+            <div className="alert alert-secondary text-center">Aucune actualité ne correspond au filtre actuel.</div>
           ) : (
             <div className="row g-4">
               {activities.map((activity) => (
@@ -249,3 +251,5 @@ export default function ActivitiesPublicPage() {
     </div>
   );
 }
+
+

@@ -6,14 +6,13 @@ export async function registerApi(payload) {
 }
 
 export async function loginApi(payload) {
-  // payload: { email, password }
   const { data } = await api.post("/auth/login", payload);
-  return data; // attendu: { token, user }
+  return data;
 }
 
 export async function meApi() {
   const { data } = await api.get("/auth/me");
-  return data; // attendu: { user }
+  return data;
 }
 
 export async function updateProfileApi(payload) {
@@ -31,16 +30,16 @@ export async function logoutApi() {
 }
 
 export async function forgotPasswordApi(payload) {
-  const { data } = await api.post("/forgot-password", payload);
+  const { data } = await api.post("/auth/forgot-password", payload);
   return data;
 }
 
 export async function verifyResetCodeApi(payload) {
-  const { data } = await api.post("/forgot-password/verify-code", payload);
+  const { data } = await api.post("/auth/forgot-password/verify-code", payload);
   return data;
 }
 
 export async function resetPasswordApi(payload) {
-  const { data } = await api.post("/reset-password", payload);
+  const { data } = await api.post("/auth/reset-password", payload);
   return data;
 }

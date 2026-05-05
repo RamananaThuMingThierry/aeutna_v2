@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Http\Requests\Auth\VerifyResetCodeRequest;
 use App\Http\Requests\Users\UpdateProfileRequest;
+use App\Mail\PasswordResetCodeMail;
+use App\Models\PasswordResetCode;
 use App\Models\User;
 use App\Services\ActivityLogService;
 use App\Services\UserService;
@@ -13,6 +18,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -107,7 +113,7 @@ class AuthController extends Controller
                 ->where('email', $credentials['email'])
                 ->first();
 
-            if ($user === null || ! Hash::check($credentials['password'], $user->password)) {
+            if ($user === null || !Hash::check($credentials['password'], $user->password)) {
                 $this->activityLogService->logWarning(
                     $request,
                     'login_failed',
@@ -148,7 +154,7 @@ class AuthController extends Controller
                 'message' => 'Connexion reussie.',
                 'user' => $user,
                 'roles' => $user->roles->pluck('code')->all(),
-                'token' => $token
+                'token' => $token,
             ]);
         } catch (ValidationException $exception) {
             $this->activityLogService->logWarning(
@@ -179,6 +185,145 @@ class AuthController extends Controller
                 [
                     'email' => $request->input('email'),
                 ]
+            );
+
+            throw $exception;
+        }
+    }
+
+    public function forgotPassword(ForgotPasswordRequest $request): JsonResponse
+    {
+        $email = $request->validated('email');
+        $user = null;
+
+        try {
+            $user = User::query()->where('email', $email)->first();
+
+            if ($user) {
+                $plainCode = (string) random_int(100000, 999999);
+
+                PasswordResetCode::query()->updateOrCreate(
+                    ['email' => $email],
+                    [
+                        'code' => Hash::make($plainCode),
+                        'expires_at' => now()->addMinutes(15),
+                        'verified_at' => null,
+                        'reset_token' => null,
+                        'reset_token_expires_at' => null,
+                    ]
+                );
+
+                Mail::to($email)->send(new PasswordResetCodeMail($plainCode, $user->name));
+            }
+
+            return response()->json([
+                'message' => 'Si un compte existe avec cette adresse email, un code a ete envoye.',
+            ]);
+        } catch (Throwable $exception) {
+            $this->activityLogService->logError(
+                $request,
+                'forgot_password_error',
+                'Erreur lors de la demande de reinitialisation du mot de passe.',
+                $exception,
+                $user,
+                User::class,
+                $user?->id,
+                500,
+                ['email' => $email]
+            );
+
+            throw $exception;
+        }
+    }
+
+    public function verifyResetCode(VerifyResetCodeRequest $request): JsonResponse
+    {
+        try {
+            $validated = $request->validated();
+
+            $reset = PasswordResetCode::query()
+                ->where('email', $validated['email'])
+                ->first();
+
+            if (!$reset || !$reset->expires_at || now()->greaterThan($reset->expires_at) || !Hash::check($validated['code'], $reset->code)) {
+                return response()->json([
+                    'message' => 'Code de verification invalide ou expire.',
+                ], 422);
+            }
+
+            $plainToken = Str::random(64);
+
+            $reset->update([
+                'verified_at' => now(),
+                'reset_token' => Hash::make($plainToken),
+                'reset_token_expires_at' => now()->addMinutes(20),
+            ]);
+
+            return response()->json([
+                'message' => 'Code verifie avec succes.',
+                'reset_token' => $plainToken,
+            ]);
+        } catch (Throwable $exception) {
+            $this->activityLogService->logError(
+                $request,
+                'verify_reset_code_error',
+                'Erreur lors de la verification du code de reinitialisation.',
+                $exception,
+                null,
+                User::class,
+                null,
+                500,
+                ['email' => $request->input('email')]
+            );
+
+            throw $exception;
+        }
+    }
+
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
+    {
+        try {
+            $validated = $request->validated();
+
+            $reset = PasswordResetCode::query()
+                ->where('email', $validated['email'])
+                ->first();
+
+            if (!$reset || !$reset->verified_at || !$reset->reset_token || !$reset->reset_token_expires_at || now()->greaterThan($reset->reset_token_expires_at) || !Hash::check($validated['token'], $reset->reset_token)) {
+                return response()->json([
+                    'message' => 'Lien ou session de reinitialisation invalide ou expire.',
+                ], 422);
+            }
+
+            $user = User::query()->where('email', $validated['email'])->first();
+
+            if (!$user) {
+                return response()->json([
+                    'message' => 'Utilisateur introuvable.',
+                ], 404);
+            }
+
+            $user->update([
+                'password' => $validated['password'],
+            ]);
+
+            $user->tokens()->delete();
+            $reset->delete();
+
+            return response()->json([
+                'message' => 'Mot de passe reinitialise avec succes.',
+            ]);
+        } catch (Throwable $exception) {
+            $this->activityLogService->logError(
+                $request,
+                'reset_password_error',
+                'Erreur lors de la reinitialisation du mot de passe.',
+                $exception,
+                null,
+                User::class,
+                null,
+                500,
+                ['email' => $request->input('email')]
             );
 
             throw $exception;
@@ -232,10 +377,10 @@ class AuthController extends Controller
                 }
 
                 $avatarFile = $request->file('avatar');
-                $avatarName = Str::uuid()->toString().'.'.$avatarFile->getClientOriginalExtension();
+                $avatarName = Str::uuid()->toString() . '.' . $avatarFile->getClientOriginalExtension();
                 $avatarFile->move($avatarDirectory, $avatarName);
 
-                $validated['avatar'] = 'uploads/avatars/'.$avatarName;
+                $validated['avatar'] = 'uploads/avatars/' . $avatarName;
             }
 
             if (empty($validated['password'])) {

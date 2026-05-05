@@ -33,6 +33,9 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('auth.forgot_password');
+    Route::post('/forgot-password/verify-code', [AuthController::class, 'verifyResetCode'])->name('auth.forgot_password.verify_code');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('auth.reset_password');
 });
 
 Route::get('/website/home', [WebsiteController::class, 'homeData'])->name('website.home');
@@ -171,4 +174,3 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/fee-payments/{encryptedId}/cancel', [FeePaymentController::class, 'cancel'])->name('fee_payments.cancel');
     Route::delete('/fee-payments/{encryptedId}', [FeePaymentController::class, 'destroy'])->name('fee_payments.destroy');
 });
-

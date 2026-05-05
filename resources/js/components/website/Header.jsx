@@ -80,7 +80,7 @@ export default function Header() {
           <img
             src="/images/logo_aeutna.jpg"
             alt="AEUTNA"
-            className="rounded-pill object-fit-cover border"
+            className="rounded-2 object-fit-cover border"
             style={{ width: 52, height: 52 }}
           />
           <div className="d-none d-sm-block">
@@ -104,7 +104,7 @@ export default function Header() {
         </div>
 
         <button
-          className={`btn btn-outline-dark d-lg-none rounded-circle public-nav-toggle ${mobileMenuOpen ? "is-open" : ""}`}
+          className={`btn btn-outline-dark d-lg-none rounded-2 public-nav-toggle ${mobileMenuOpen ? "is-open" : ""}`}
           type="button"
           aria-label={mobileMenuOpen ? "Fermer la navigation" : "Ouvrir la navigation"}
           aria-expanded={mobileMenuOpen}
@@ -119,7 +119,7 @@ export default function Header() {
         <>
           <div className="container d-lg-none pb-3 public-mobile-menu-wrap">
             <div
-              className={`rounded-5 shadow-sm p-3 d-grid gap-2 public-mobile-menu ${mobileMenuOpen ? "is-open" : "is-closing"}`}
+              className={`rounded-2 shadow-sm p-3 d-grid gap-2 public-mobile-menu ${mobileMenuOpen ? "is-open" : "is-closing"}`}
               style={{
                 background: "rgba(255,255,255,0.98)",
                 border: "1px solid rgba(29,26,22,0.08)",

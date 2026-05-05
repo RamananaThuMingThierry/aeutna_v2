@@ -147,15 +147,9 @@ export default function Register() {
           <div className="card border-0 shadow-sm">
             <div className="card-body p-4 p-lg-5">
               <div className="mb-4 text-center">
-                <img
-                  src="/images/logo_aeutna.jpg"
-                  alt="Logo AEUTNA"
-                  className="mb-3 rounded-circle object-fit-cover d-inline-block"
-                  style={{ width: "88px", height: "88px" }}
-                />
                 <h1 className="h3 mb-2">Inscription</h1>
                 <p className="text-muted mb-0">
-                  Cree ton compte pour acceder a l&apos;espace membre.
+                  Crée ton compte pour accéder à l'espace membre.
                 </p>
               </div>
 
@@ -291,7 +285,7 @@ export default function Register() {
               </form>
 
               <div className="mt-4 text-center">
-                <span className="text-muted">Tu as deja un compte ? </span>
+                <span className="text-muted">Tu as déjà un compte ? </span>
                 <Link to="/login" className="text-decoration-none">
                   Se connecter
                 </Link>

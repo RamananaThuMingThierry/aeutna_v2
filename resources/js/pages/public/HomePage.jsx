@@ -45,15 +45,14 @@ function HeroCarousel({ slides = [] }) {
                 }}
             />
 
-            {/* CONTENU CENTRÉ */}
+            {/* CONTENU CENTRÃ‰ */}
             <div className="position-absolute w-100 h-100 d-flex align-items-center justify-content-center text-center">
                 <div className="container py-5 py-lg-6">
                 <div className="row justify-content-center">
                     <div className="col-lg-7 col-xl-6">
 
 
-                    <p className="lead text-white-50 mb-4">
-                        Association des Étudiants de l'Université de Tananarive Natifs d'Antalaha</p>
+                    <h1 className="text-white mb-4 fw-bold" style={{ fontSize: "2rem" }}>Association des Etudiants de l'Universite de Tananarive Natifs d'Antalaha</h1>
 
                     <div className="d-flex flex-wrap gap-2 justify-content-center">
                         <Link
@@ -82,7 +81,7 @@ function HeroCarousel({ slides = [] }) {
             data-bs-slide="prev"
         >
             <span className="carousel-control-prev-icon" aria-hidden="true" />
-            <span className="visually-hidden">Précédent</span>
+            <span className="visually-hidden">PrÃ©cÃ©dent</span>
         </button>
 
         <button
@@ -104,7 +103,7 @@ function SectionTitle({ eyebrow, title, text }) {
   return (
     <div className="mb-4 mb-lg-5">
       {eyebrow ? <div className="text-uppercase small fw-bold mb-2" style={{ letterSpacing: "0.14em", color: "var(--warm)" }}>{eyebrow}</div> : null}
-      <h2 className="display-6 fw-bold mb-3">{title}</h2>
+      <h2 className="fw-bold mb-3">{title}</h2>
       {text ? <p className="text-secondary fs-5 mb-0">{text}</p> : null}
     </div>
   );
@@ -160,31 +159,31 @@ export default function HomePage() {
           <div className="row g-4 align-items-center">
             <div className="col-lg-6">
               <SectionTitle
-                eyebrow="A propos"
+                eyebrow="A PROPOS"
                 title={data?.about?.title || "AEUTNA"}
-                text={data?.about?.summary || "Association estudiantine et universitaire."}
+                text={data?.about?.summary || "Association des Etudiants d'Universite de Tananarive natifs d'Antalaha."}
               />
             </div>
             <div className="col-lg-6">
-              <div className="p-4 p-lg-5 rounded-5 shadow-sm h-100" style={{ background: "var(--panel)" }}>
+              <div className="p-4 p-lg-5 rounded-2 shadow-sm h-100" style={{ background: "var(--panel)" }}>
                 <div className="row g-3">
                   <div className="col-sm-6">
-                    <div className="p-3 rounded-4 h-100" style={{ background: "var(--panel-strong)" }}>
+                    <div className="p-3 rounded-2 h-100" style={{ background: "var(--panel-strong)" }}>
                       <div className="fw-bold fs-4 mb-1">{activities.length}</div>
-                      <div className="text-secondary small">Actualites recentes</div>
+                      <div className="text-secondary small">ActualitÃ©s recentes</div>
                     </div>
                   </div>
                   <div className="col-sm-6">
-                    <div className="p-3 rounded-4 h-100" style={{ background: "var(--panel-strong)" }}>
+                    <div className="p-3 rounded-2 h-100" style={{ background: "var(--panel-strong)" }}>
                       <div className="fw-bold fs-4 mb-1">{gallery.length}</div>
                       <div className="text-secondary small">Images en galerie</div>
                     </div>
                   </div>
                   <div className="col-12">
-                    <div className="p-3 rounded-4" style={{ background: "var(--panel-strong)" }}>
+                    <div className="p-3 rounded-2" style={{ background: "var(--panel-strong)" }}>
                       <div className="fw-semibold mb-2">Mission</div>
                       <div className="text-secondary">
-                        Renforcer les liens entre etudiants et universitaires, soutenir les initiatives locales et faire vivre la memoire de l association.
+                        Renforcer les liens entre Ã©tudiants et universitaires, soutenir les initiatives locales et faire vivre la mÃ©moire de l'association.
                       </div>
                     </div>
                   </div>
@@ -198,9 +197,9 @@ export default function HomePage() {
       <section id="activities" className="py-5 py-lg-6">
         <div className="container">
           <SectionTitle
-            eyebrow="Actualites"
-            title="Dernieres actualites"
-            text="Les actions recentes, les annonces et les evenements mis en avant sur la page d accueil."
+            eyebrow="ActualitÃ©s"
+            title="DerniÃ¨res actualitÃ©s"
+            text="Les actions recentes, les annonces et les Ã©vÃ©nements mis en avant sur la page d'accueil."
           />
           <div className="row g-4">
             {activities.map((activity) => (
@@ -228,9 +227,9 @@ export default function HomePage() {
       <section id="gallery" className="py-5 py-lg-6">
         <div className="container">
           <SectionTitle
-            eyebrow="Galerie"
+            eyebrow="Galeries"
             title="Moments et souvenirs"
-            text="Une selection d images provenant des activites publiees."
+            text="Une sÃ©lection d'images provenant des activitÃ©s publiÃ©es."
           />
           <div className="row g-3">
             {gallery.map((image, index) => (
@@ -254,3 +253,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+

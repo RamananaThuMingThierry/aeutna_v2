@@ -145,12 +145,6 @@ export default function Login() {
           <div className="card border-0 shadow-sm">
             <div className="card-body p-4 p-lg-5">
               <div className="mb-4 text-center">
-                <img
-                  src="/images/logo_aeutna.jpg"
-                  alt="Logo AEUTNA"
-                  className="mb-3 rounded-circle object-fit-cover d-inline-block"
-                  style={{ width: "88px", height: "88px" }}
-                />
                 <h1 className="h3 mb-2">Connexion</h1>
                 <p className="text-muted mb-0">
                   Connecte-toi avec ton email et ton mot de passe.

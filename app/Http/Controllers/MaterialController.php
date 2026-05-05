@@ -9,6 +9,9 @@ use App\Services\ActivityLogService;
 use App\Services\MaterialService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 
@@ -32,6 +35,59 @@ class MaterialController extends Controller
         return $id;
     }
 
+    private function uploadImage($file): string
+    {
+        $directory = public_path('uploads/materials');
+
+        if (!File::exists($directory)) {
+            File::makeDirectory($directory, 0755, true);
+        }
+
+        $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+        $file->move($directory, $filename);
+
+        return 'uploads/materials/' . $filename;
+    }
+
+    private function deleteImageFile(?string $imageUrl): void
+    {
+        if (!$imageUrl || !str_starts_with($imageUrl, 'uploads/materials/')) {
+            return;
+        }
+
+        $path = public_path($imageUrl);
+
+        if (File::exists($path)) {
+            File::delete($path);
+        }
+    }
+
+    private function syncMaterialImages(Material $material, Request $request, array $validated): void
+    {
+        $deletedIds = collect($validated['deleted_image_ids'] ?? [])
+            ->map(fn ($id) => (int) $id)
+            ->all();
+
+        if (!empty($deletedIds)) {
+            $imagesToDelete = $material->images()->whereIn('id', $deletedIds)->get();
+
+            foreach ($imagesToDelete as $image) {
+                $this->deleteImageFile($image->image_url);
+                $image->delete();
+            }
+        }
+
+        $currentMaxPosition = (int) ($material->images()->max('position') ?? -1);
+
+        foreach ($request->file('images', []) as $index => $file) {
+            $material->images()->create([
+                'image_url' => $this->uploadImage($file),
+                'name' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
+                'position' => $currentMaxPosition + $index + 1,
+            ]);
+        }
+    }
+
     public function index(Request $request): JsonResponse
     {
         try {
@@ -51,7 +107,7 @@ class MaterialController extends Controller
             $materials = $this->materialService->getAllMaterials(
                 keys: !empty($keys) ? $keys : null,
                 values: !empty($values) ? $values : null,
-                relations: ['creator'],
+                relations: ['creator', 'images'],
                 paginate: $request->integer('per_page')
             );
 
@@ -78,7 +134,7 @@ class MaterialController extends Controller
 
         try {
             $id = $this->resolveEncryptedMaterialId($encryptedId);
-            $material = $this->materialService->getByIdMaterial($id, ['*'], ['creator']);
+            $material = $this->materialService->getByIdMaterial($id, ['*'], ['creator', 'images']);
 
             return response()->json([
                 'material' => $material,
@@ -122,7 +178,12 @@ class MaterialController extends Controller
             $validated = $request->validated();
             $validated['created_by'] = $request->user()?->id;
 
-            $material = $this->materialService->createMaterial($validated);
+            $material = DB::transaction(function () use ($request, $validated) {
+                $material = $this->materialService->createMaterial($validated);
+                $this->syncMaterialImages($material, $request, $validated);
+
+                return $material->fresh(['creator', 'images']);
+            });
 
             $this->activityLogService->logSuccess(
                 $request,
@@ -135,12 +196,13 @@ class MaterialController extends Controller
                 [
                     'target_name' => $material->name,
                     'target_reference' => $material->reference,
+                    'images_count' => $material->images->count(),
                 ]
             );
 
             return response()->json([
                 'message' => 'Material cree avec succes.',
-                'material' => $material->fresh(['creator']),
+                'material' => $material,
             ], 201);
         } catch (ValidationException $exception) {
             $this->activityLogService->logWarning(
@@ -185,10 +247,15 @@ class MaterialController extends Controller
 
         try {
             $id = $this->resolveEncryptedMaterialId($encryptedId);
-            $material = $this->materialService->getByIdMaterial($id);
+            $material = $this->materialService->getByIdMaterial($id, ['*'], ['images']);
             $validated = $request->validated();
 
-            $material = $this->materialService->updateMaterial($material, $validated);
+            $material = DB::transaction(function () use ($material, $request, $validated) {
+                $material = $this->materialService->updateMaterial($material, $validated);
+                $this->syncMaterialImages($material, $request, $validated);
+
+                return $material->fresh(['creator', 'images']);
+            });
 
             $this->activityLogService->logSuccess(
                 $request,
@@ -202,12 +269,13 @@ class MaterialController extends Controller
                     'target_name' => $material->name,
                     'target_reference' => $material->reference,
                     'updated_fields' => array_keys($validated),
+                    'images_count' => $material->images->count(),
                 ]
             );
 
             return response()->json([
                 'message' => 'Material mis a jour avec succes.',
-                'material' => $material->fresh(['creator']),
+                'material' => $material,
             ]);
         } catch (ValidationException $exception) {
             $this->activityLogService->logWarning(
@@ -248,12 +316,18 @@ class MaterialController extends Controller
 
         try {
             $id = $this->resolveEncryptedMaterialId($encryptedId);
-            $material = $this->materialService->getByIdMaterial($id);
+            $material = $this->materialService->getByIdMaterial($id, ['*'], ['images']);
 
             $targetName = $material->name;
             $targetReference = $material->reference;
 
-            $this->materialService->deleteMaterial($material);
+            DB::transaction(function () use ($material) {
+                foreach ($material->images as $image) {
+                    $this->deleteImageFile($image->image_url);
+                }
+
+                $this->materialService->deleteMaterial($material);
+            });
 
             $this->activityLogService->logInfo(
                 $request,
@@ -305,3 +379,4 @@ class MaterialController extends Controller
         }
     }
 }
+

@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 
+import SEO from "../components/seo/SEO";
+
 const menuSections = [
   {
     title: "Suivi",
@@ -14,9 +16,9 @@ const menuSections = [
       { to: "/admin/axes", label: "Axes", icon: "bi-diagram-3-fill" },
       { to: "/admin/functions", label: "Fonctions", icon: "bi-briefcase-fill" },
       { to: "/admin/education-levels", label: "Niveaux", icon: "bi-mortarboard-fill" },
-    { to: "/admin/gallery", label: "Galeries", icon: "bi-images" },
-    { to: "/admin/sliders", label: "Sliders", icon: "bi-aspect-ratio-fill" },
-          { to: "/admin/activities", label: "Actualités", icon: "bi-calendar2-event-fill" },
+      { to: "/admin/gallery", label: "Galeries", icon: "bi-images" },
+      { to: "/admin/sliders", label: "Sliders", icon: "bi-aspect-ratio-fill" },
+      { to: "/admin/activities", label: "Actualites", icon: "bi-calendar2-event-fill" },
     ],
   },
   {
@@ -25,7 +27,6 @@ const menuSections = [
       { to: "/admin/members", label: "Membres", icon: "bi-person-vcard-fill" },
       { to: "/admin/member-applications", label: "Candidatures", icon: "bi-person-plus-fill" },
       { to: "/admin/membership-cards", label: "Cartes membres", icon: "bi-person-badge-fill" },
-
     ],
   },
   {
@@ -59,10 +60,8 @@ const menuSections = [
     title: "Administration",
     items: [
       { to: "/admin/reports", label: "Rapports", icon: "bi-journal-text" },
-
-        { to: "/admin/users", label: "Utilisateurs", icon: "bi-people-fill" },
-      { to: "/admin/activity-logs", label: "Journaux d'activité", icon: "bi-clock-history" },
-
+      { to: "/admin/users", label: "Utilisateurs", icon: "bi-people-fill" },
+      { to: "/admin/activity-logs", label: "Journaux d'activite", icon: "bi-clock-history" },
     ],
   },
 ];
@@ -113,13 +112,13 @@ function SidebarContent({ currentUser, currentRoles, onLogout }) {
       <div className="border-top p-3">
         <div className="d-grid gap-2">
           <Link to="/admin/account/profile" className="btn btn-outline-dark d-flex justify-content-center align-items-center">
-            <i className="bi bi-person-circle me-2"></i> Mon compte
+            <i className="bi bi-person-circle me-2" /> Mon compte
           </Link>
           <Link to="/" className="btn btn-light border d-flex justify-content-center align-items-center" target="_blank">
-            <i className="bi bi-arrow-left me-2"></i> Retour au site
+            <i className="bi bi-arrow-left me-2" /> Retour au site
           </Link>
           <button type="button" className="btn btn-dark d-flex justify-content-center align-items-center" onClick={onLogout}>
-            <i className="bi bi-box-arrow-right fs-5 me-2"></i> Se deconnecter
+            <i className="bi bi-box-arrow-right fs-5 me-2" /> Se deconnecter
           </button>
         </div>
       </div>
@@ -156,62 +155,50 @@ export default function AdminLayout() {
     navigate("/login", { replace: true });
   }
 
-  function openLogoutModal() {
-    setLogoutModalOpen(true);
-  }
-
-  function closeLogoutModal() {
-    setLogoutModalOpen(false);
-  }
-
   return (
-    <div className="bg-body-tertiary min-vh-100">
-      <div className="d-lg-none border-bottom bg-white sticky-top">
-        <div className="container-fluid py-3 d-flex align-items-center justify-content-between">
-          <div className="d-flex align-items-center gap-2">
-            <img
-              src="/images/logo_aeutna.jpg"
-              alt="Logo AEUTNA"
-              className="rounded-circle object-fit-cover"
-              style={{ width: "38px", height: "38px" }}
-            />
-            <div>
-              <div className="fw-semibold">AEUTNA Admin</div>
-              <div className="small text-secondary">Dashboard</div>
+    <>
+      <SEO page="admin" />
+      <div className="bg-body-tertiary min-vh-100">
+        <div className="d-lg-none border-bottom bg-white sticky-top">
+          <div className="container-fluid py-3 d-flex align-items-center justify-content-between">
+            <div className="d-flex align-items-center gap-2">
+              <img
+                src="/images/logo_aeutna.jpg"
+                alt="Logo AEUTNA"
+                className="rounded-circle object-fit-cover"
+                style={{ width: "38px", height: "38px" }}
+              />
+              <div>
+                <div className="fw-semibold">AEUTNA Admin</div>
+                <div className="small text-secondary">Dashboard</div>
+              </div>
             </div>
+
+            <button
+              className="btn btn-outline-dark"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#adminSidebar"
+              aria-controls="adminSidebar"
+            >
+              <i className="bi bi-list fs-5" />
+            </button>
           </div>
-
-          <button
-            className="btn btn-outline-dark"
-            type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#adminSidebar"
-            aria-controls="adminSidebar"
-          >
-            <i className="bi bi-list fs-5" />
-          </button>
         </div>
-      </div>
 
-      <div className="offcanvas offcanvas-start d-lg-none" tabIndex="-1" id="adminSidebar" aria-labelledby="adminSidebarLabel">
-        <div className="offcanvas-header border-bottom">
-          <h5 className="offcanvas-title" id="adminSidebarLabel">
-            Navigation admin
-          </h5>
-          <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" />
+        <div className="offcanvas offcanvas-start d-lg-none" tabIndex="-1" id="adminSidebar" aria-labelledby="adminSidebarLabel">
+          <div className="offcanvas-header border-bottom">
+            <h5 className="offcanvas-title" id="adminSidebarLabel">Navigation admin</h5>
+            <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" />
+          </div>
+          <div className="offcanvas-body p-0">
+            <SidebarContent currentUser={currentUser} currentRoles={currentRoles} onLogout={() => setLogoutModalOpen(true)} />
+          </div>
         </div>
-        <div className="offcanvas-body p-0">
-          <SidebarContent currentUser={currentUser} currentRoles={currentRoles} onLogout={openLogoutModal} />
-        </div>
-      </div>
 
-      <div className="admin-shell">
-          <aside
-            className={`admin-sidebar-desktop d-none d-lg-block border-end bg-white ${
-              sidebarCollapsed ? "is-collapsed" : ""
-            }`}
-          >
-            <SidebarContent currentUser={currentUser} currentRoles={currentRoles} onLogout={openLogoutModal} />
+        <div className="admin-shell">
+          <aside className={`admin-sidebar-desktop d-none d-lg-block border-end bg-white ${sidebarCollapsed ? "is-collapsed" : ""}`}>
+            <SidebarContent currentUser={currentUser} currentRoles={currentRoles} onLogout={() => setLogoutModalOpen(true)} />
           </aside>
 
           <div className={`admin-content ${sidebarCollapsed ? "is-expanded" : ""}`}>
@@ -230,7 +217,6 @@ export default function AdminLayout() {
                 </div>
 
                 <div className="d-flex align-items-center gap-3 ms-lg-auto">
-
                   <div className="text-end d-none d-md-inline">
                     <div className="fw-semibold small">{currentUser?.name || "Utilisateur"}</div>
                     <div className="text-secondary small">{currentUser?.email || ""}</div>
@@ -249,44 +235,45 @@ export default function AdminLayout() {
               </div>
             </main>
           </div>
-      </div>
+        </div>
 
-      {logoutModalOpen ? (
-        <>
-          <div className="modal fade show" style={{ display: "block" }} role="dialog" aria-modal="true">
-            <div className="modal-dialog modal-dialog-centered">
-              <div className="modal-content border-0 shadow">
-                <div className="modal-header">
-                  <h5 className="modal-title">Confirmation</h5>
-                  <button type="button" className="btn-close" onClick={closeLogoutModal} />
-                </div>
+        {logoutModalOpen ? (
+          <>
+            <div className="modal fade show" style={{ display: "block" }} role="dialog" aria-modal="true">
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content border-0 shadow">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Confirmation</h5>
+                    <button type="button" className="btn-close" onClick={() => setLogoutModalOpen(false)} />
+                  </div>
 
-                <div className="modal-body">
-                  <p className="mb-0">Voulez-vous vraiment vous deconnecter de l&apos;espace admin ?</p>
-                </div>
+                  <div className="modal-body">
+                    <p className="mb-0">Voulez-vous vraiment vous deconnecter de l'espace admin ?</p>
+                  </div>
 
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-outline-secondary" onClick={closeLogoutModal}>
-                    Annuler
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-dark"
-                    onClick={() => {
-                      closeLogoutModal();
-                      handleLogout();
-                    }}
-                  >
-                    Se deconnecter
-                  </button>
+                  <div className="modal-footer">
+                    <button type="button" className="btn btn-outline-secondary" onClick={() => setLogoutModalOpen(false)}>
+                      Annuler
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-dark"
+                      onClick={() => {
+                        setLogoutModalOpen(false);
+                        handleLogout();
+                      }}
+                    >
+                      Se deconnecter
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="modal-backdrop fade show" onClick={closeLogoutModal} />
-        </>
-      ) : null}
-    </div>
+            <div className="modal-backdrop fade show" onClick={() => setLogoutModalOpen(false)} />
+          </>
+        ) : null}
+      </div>
+    </>
   );
 }

@@ -85,7 +85,7 @@ function SectionTitle({ eyebrow, title, text }) {
 
 function RolePersonCard({ icon, label, person, accent }) {
   return (
-    <div className="p-3 rounded-4 h-100" style={{ background: "rgba(255,255,255,0.58)", border: "1px solid var(--line)" }}>
+    <div className="p-3 rounded-2 h-100" style={{ background: "rgba(255,255,255,0.58)", border: "1px solid var(--line)" }}>
       <div className="d-flex align-items-center gap-3 mb-3">
         <img
           src={person.photo || DEFAULT_PHOTO}
@@ -148,45 +148,29 @@ function MandateCard({ mandate, isCurrent }) {
 export default function AboutPage() {
   return (
     <div>
-      <section className="py-5 py-lg-6">
-        <div className="container">
-          <div className="rounded-5 overflow-hidden shadow-lg p-4 p-lg-5" style={{ background: "linear-gradient(135deg, rgba(17,94,89,0.96), rgba(194,65,12,0.86))" }}>
-            <div className="row g-4 align-items-center">
-              <div className="col text-white">
-                <div className="text-uppercase small fw-bold mb-3" style={{ letterSpacing: "0.14em" }}>A propos</div>
-                <h1 className="display-4 fw-bold mb-3">Présentation et memoire de l AEUTNA</h1>
-                <p className="lead text-white-50 mb-0">
-                  Cette page présente l'association, sa mission et un historique statique classe du plus recent vers l'ancien.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="pb-5 pb-lg-6">
+      <section className="py-4">
         <div className="container">
           <div className="row g-4 align-items-center">
             <div className="col-lg-6">
-              <SectionTitle
-                eyebrow="Association"
-                title="Qui sommes-nous ?"
-                text="L AEUTNA, Association des Etudiants d'Université de Tananarive Natifs d'Antalaha, rassemble les membres autour de l entraide, de la transmission et de la valorisation de la communaute."
-              />
+              <div className="mb-4 mb-lg-5">
+                <div className="text-uppercase small fw-bold mb-2" style={{ letterSpacing: "0.14em", color: "var(--warm)" }}>Association</div>
+                <h1 className="display-6 fw-bold mb-3">Qui sommes-nous ?</h1>
+                <p className="text-secondary fs-5 mb-0">L'AEUTNA, Association des Etudiants d'Universite de Tananarive Natifs d'Antalaha, rassemble les membres autour de l'entraide, de la transmission et de la valorisation de la communaute.</p>
+              </div>
             </div>
             <div className="col-lg-6">
-              <div className="p-4 p-lg-5 rounded-5 shadow-sm h-100" style={{ background: "var(--panel)" }}>
+              <div className="p-4 p-lg-5 rounded-2 shadow-sm h-100" style={{ background: "var(--panel)" }}>
                 <div className="row g-3">
                   <div className="col-sm-6">
-                    <div className="p-3 rounded-4 h-100" style={{ background: "var(--panel-strong)" }}>
+                    <div className="p-3 rounded-2 h-100" style={{ background: "var(--panel-strong)" }}>
                       <div className="fw-semibold mb-2">Mission</div>
                       <div className="text-secondary small">Renforcer les liens, soutenir les parcours et encourager la participation associative.</div>
                     </div>
                   </div>
                   <div className="col-sm-6">
-                    <div className="p-3 rounded-4 h-100" style={{ background: "var(--panel-strong)" }}>
+                    <div className="p-3 rounded-2 h-100" style={{ background: "var(--panel-strong)" }}>
                       <div className="fw-semibold mb-2">Vision</div>
-                      <div className="text-secondary small">Construire une communaute unie, active et fiere de son histoire.</div>
+                      <div className="text-secondary small">Construire une communaute unie, active et fiÃ¨re de son histoire.</div>
                     </div>
                   </div>
                   <div className="col-12">
@@ -209,7 +193,7 @@ export default function AboutPage() {
           <SectionTitle
             eyebrow="Historique"
             title="Responsables classes du plus recent au plus ancien"
-            text="Chaque mandat presente le president, le commissaire aux comptes et le tresorier, avec leurs photos."
+            text="Chaque mandat prÃ©sente le prÃ©sident, le commissaire aux comptes et le trÃ©sorier, avec leurs photos."
           />
           <div className="row g-4">
             {MANDATES.map((mandate, index) => (
@@ -223,3 +207,6 @@ export default function AboutPage() {
     </div>
   );
 }
+
+
+

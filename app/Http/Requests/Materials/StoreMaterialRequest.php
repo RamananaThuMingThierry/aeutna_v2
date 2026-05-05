@@ -32,6 +32,8 @@ class StoreMaterialRequest extends FormRequest
             'acquired_at' => ['nullable', 'date'],
             'acquisition_cost' => ['nullable', 'numeric', 'min:0'],
             'notes' => ['nullable', 'string'],
+            'images' => ['nullable', 'array'],
+            'images.*' => ['image', 'max:4096'],
         ];
     }
 
@@ -50,3 +52,5 @@ class StoreMaterialRequest extends FormRequest
         });
     }
 }
+
+

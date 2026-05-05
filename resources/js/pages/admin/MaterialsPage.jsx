@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { materialsApi } from "../../api/material";
 
@@ -10,6 +10,12 @@ function normalizeCollection(payload) {
 
 function humanize(value) {
   return value ? String(value).replaceAll("_", " ") : "-";
+}
+
+function resolveImageUrl(imageUrl) {
+  if (!imageUrl) return "/images/avatar.png";
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://") || imageUrl.startsWith("/")) return imageUrl;
+  return `/${imageUrl.replace(/^\/+/, "")}`;
 }
 
 const defaultForm = {
@@ -39,6 +45,8 @@ export default function MaterialsPage() {
   const [errors, setErrors] = useState({});
   const [globalError, setGlobalError] = useState("");
   const [toast, setToast] = useState("");
+  const [imageFiles, setImageFiles] = useState([]);
+  const [deletedImageIds, setDeletedImageIds] = useState([]);
 
   const filteredItems = useMemo(() => {
     const term = query.trim().toLowerCase();
@@ -79,11 +87,15 @@ export default function MaterialsPage() {
     setEditing(null);
     setForm(defaultForm);
     setErrors({});
+    setImageFiles([]);
+    setDeletedImageIds([]);
   }
 
   function startEdit(item) {
     setEditing(item);
     setErrors({});
+    setImageFiles([]);
+    setDeletedImageIds([]);
     setForm({
       name: item?.name ?? "",
       reference: item?.reference ?? "",
@@ -118,6 +130,8 @@ export default function MaterialsPage() {
         acquisition_cost: form.acquisition_cost === "" ? null : Number(form.acquisition_cost),
         description: form.description.trim() || null,
         notes: form.notes.trim() || null,
+        images: imageFiles,
+        deleted_image_ids: deletedImageIds,
       };
 
       if (editing) await materialsApi.update(getRowId(editing), payload);
@@ -177,12 +191,22 @@ export default function MaterialsPage() {
                 {filteredItems.map((item) => (
                   <div key={getRowId(item)} className="border rounded-4 p-3">
                     <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
-                      <div>
-                        <div className="fw-semibold">{item.name}</div>
-                        <div className="small text-muted">{item.reference || "Sans reference"} · {item.category || "Sans categorie"}</div>
-                        <div className="small mt-2">Stock: {item.quantity_available} / {item.quantity_total}</div>
-                        <div className="small">Etat: {humanize(item.condition_status)} · Statut: {humanize(item.status)}</div>
-                        <div className="small">Emplacement: {item.storage_location || "-"}</div>
+                      <div className="d-flex gap-3">
+                        <div className="flex-shrink-0">
+                          <img
+                            src={resolveImageUrl(item?.images?.[0]?.image_url)}
+                            alt={item.name}
+                            style={{ width: 84, height: 84, objectFit: "cover", borderRadius: 16, border: "1px solid rgba(0,0,0,.08)" }}
+                          />
+                        </div>
+                        <div>
+                          <div className="fw-semibold">{item.name}</div>
+                          <div className="small text-muted">{item.reference || "Sans reference"} · {item.category || "Sans categorie"}</div>
+                          <div className="small mt-2">Stock: {item.quantity_available} / {item.quantity_total}</div>
+                          <div className="small">Etat: {humanize(item.condition_status)} · Statut: {humanize(item.status)}</div>
+                          <div className="small">Emplacement: {item.storage_location || "-"}</div>
+                          <div className="small">Images: {item?.images?.length || 0}</div>
+                        </div>
                       </div>
                       <div className="d-flex gap-2 align-self-start">
                         <button className="btn btn-sm btn-outline-dark" onClick={() => startEdit(item)}>Modifier</button>
@@ -255,6 +279,51 @@ export default function MaterialsPage() {
                   <label className="form-label">Cout acquisition</label>
                   <input type="number" step="0.01" min="0" className="form-control" value={form.acquisition_cost} onChange={(e) => setForm((x) => ({ ...x, acquisition_cost: e.target.value }))} />
                 </div>
+                <div className="col-12">
+                  <label className="form-label">Images</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="form-control"
+                    onChange={(e) => setImageFiles(Array.from(e.target.files || []))}
+                  />
+                  {imageFiles.length > 0 ? <div className="form-text">{imageFiles.length} image(s) selectionnee(s).</div> : null}
+                  {errors.images ? <div className="text-danger small">{errors.images[0]}</div> : null}
+                  {errors["images.0"] ? <div className="text-danger small">{errors["images.0"][0]}</div> : null}
+                </div>
+                {editing?.images?.length ? (
+                  <div className="col-12">
+                    <label className="form-label">Images existantes</label>
+                    <div className="d-flex flex-wrap gap-3">
+                      {editing.images.map((image) => {
+                        const marked = deletedImageIds.includes(image.id);
+
+                        return (
+                          <div key={image.id} className={`border rounded-4 p-2 ${marked ? "border-danger bg-danger-subtle" : ""}`} style={{ width: 132 }}>
+                            <img
+                              src={resolveImageUrl(image.image_url)}
+                              alt={image.name || editing.name}
+                              className="w-100"
+                              style={{ height: 90, objectFit: "cover", borderRadius: 12 }}
+                            />
+                            <button
+                              type="button"
+                              className={`btn btn-sm mt-2 w-100 ${marked ? "btn-outline-secondary" : "btn-outline-danger"}`}
+                              onClick={() => setDeletedImageIds((current) => (
+                                current.includes(image.id)
+                                  ? current.filter((id) => id !== image.id)
+                                  : [...current, image.id]
+                              ))}
+                            >
+                              {marked ? "Annuler" : "Supprimer"}
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : null}
                 <div className="col-12">
                   <label className="form-label">Description</label>
                   <textarea className="form-control" rows={3} value={form.description} onChange={(e) => setForm((x) => ({ ...x, description: e.target.value }))} />

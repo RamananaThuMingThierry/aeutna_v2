@@ -1,50 +1,55 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 
 import AdminLayout from "../layouts/AdminLayout";
 import PublicLayout from "../layouts/PublicLayout";
 import ActivitiesPage from "../pages/admin/ActivitiesPage";
+import ActivityLogPage from "../pages/admin/ActivityLogPage";
 import AnnualFeesPage from "../pages/admin/AnnualFeesPage";
 import AxesPage from "../pages/admin/AxesPage";
 import BulkMessagesPage from "../pages/admin/BulkMessagesPage";
-import ContactsAdminPage from "../pages/admin/ContactsAdminPage";
 import CashCategoriesPage from "../pages/admin/CashCategoriesPage";
 import CashTransactionsPage from "../pages/admin/CashTransactionsPage";
+import ContactsAdminPage from "../pages/admin/ContactsAdminPage";
+import DashboardPage from "../pages/admin/DashboardPage";
 import DetailMemberPage from "../pages/admin/DetailMemberPage";
-import DonationsPage from "../pages/admin/DonationsPage";
 import DetailReportPage from "../pages/admin/DetailReportPage";
+import DonationsPage from "../pages/admin/DonationsPage";
 import EducationLevelsPage from "../pages/admin/EducationLevelsPage";
 import FeePaymentsPage from "../pages/admin/FeePaymentsPage";
 import FormActivityPage from "../pages/admin/FormActivityPage";
 import FormMemberPage from "../pages/admin/FormMemberPage";
-import FunctionsPage from "../pages/admin/FunctionsPage";
 import FormReportPage from "../pages/admin/FormReportPage";
+import FunctionsPage from "../pages/admin/FunctionsPage";
 import GalleryAdminPage from "../pages/admin/GalleryAdminPage";
-import MembersPage from "../pages/admin/MembersPage";
 import MaterialLoansPage from "../pages/admin/MaterialLoansPage";
-import MaterialsPage from "../pages/admin/MaterialsPage";
 import MaterialMaintenancesPage from "../pages/admin/MaterialMaintenancesPage";
 import MaterialMovementsPage from "../pages/admin/MaterialMovementsPage";
-import SuppliersPage from "../pages/admin/SuppliersPage";
-import MembershipCardsPage from "../pages/admin/MembershipCardsPage";
-import ReportScanPage from "../pages/admin/ReportScanPage";
-import RootLayout from "../layouts/RootLayout";
-import SlidesPage from "../pages/admin/SlidesPage";
-import ActivityLogPage from "../pages/admin/ActivityLogPage";
-import DashboardPage from "../pages/admin/DashboardPage";
-import UsersPage from "../pages/admin/UsersPage";
-import ProfilePage from "../pages/account/ProfilePage";
-import Login from "../pages/auth/Login";
-import Register from "../pages/auth/Register";
-import ActivitiesPublicPage from "../pages/public/ActivitiesPublicPage";
-import AboutPage from "../pages/public/AboutPage";
-import BecomeMemberPage from "../pages/public/BecomeMemberPage";
-import BureauPage from "../pages/public/BureauPage";
-import ContactsPage from "../pages/public/ContactsPage";
-import GalleryPage from "../pages/public/GalleryPage";
-import HomePage from "../pages/public/HomePage";
+import MaterialsPage from "../pages/admin/MaterialsPage";
 import MemberApplicationsPage from "../pages/admin/MemberApplicationsPage";
+import MembersPage from "../pages/admin/MembersPage";
+import MembershipCardsPage from "../pages/admin/MembershipCardsPage";
 import ReportsPage from "../pages/admin/ReportsPage";
+import ReportScanPage from "../pages/admin/ReportScanPage";
+import SlidesPage from "../pages/admin/SlidesPage";
+import SuppliersPage from "../pages/admin/SuppliersPage";
+import UsersPage from "../pages/admin/UsersPage";
+import RootLayout from "../layouts/RootLayout";
+
+import ProfilePage from "../pages/account/ProfilePage";
+
+const ForgotPassword = lazy(() => import("../pages/auth/ForgotPassword"));
+const Login = lazy(() => import("../pages/auth/Login"));
+const Register = lazy(() => import("../pages/auth/Register"));
+const ResetPassword = lazy(() => import("../pages/auth/ResetPassword"));
+const VerifyCode = lazy(() => import("../pages/auth/VerifyCode"));
+const AboutPage = lazy(() => import("../pages/public/AboutPage"));
+const ActivitiesPublicPage = lazy(() => import("../pages/public/ActivitiesPublicPage"));
+const BecomeMemberPage = lazy(() => import("../pages/public/BecomeMemberPage"));
+const BureauPage = lazy(() => import("../pages/public/BureauPage"));
+const ContactsPage = lazy(() => import("../pages/public/ContactsPage"));
+const GalleryPage = lazy(() => import("../pages/public/GalleryPage"));
+const HomePage = lazy(() => import("../pages/public/HomePage"));
 
 function PlaceholderPage({ title, description }) {
   return (
@@ -60,6 +65,14 @@ function MemberShell() {
     <div>
       <Outlet />
     </div>
+  );
+}
+
+function withSuspense(element) {
+  return (
+    <Suspense fallback={<div className="container py-5">Chargement...</div>}>
+      {element}
+    </Suspense>
   );
 }
 
@@ -106,66 +119,51 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <HomePage />,
+            element: withSuspense(<HomePage />),
           },
           {
             path: "about",
-            element: <AboutPage />,
+            element: withSuspense(<AboutPage />),
           },
           {
             path: "gallery",
-            element: <GalleryPage />,
+            element: withSuspense(<GalleryPage />),
           },
           {
             path: "bureau",
-            element: <BureauPage />,
+            element: withSuspense(<BureauPage />),
           },
           {
             path: "devenir-membre",
-            element: <BecomeMemberPage />,
+            element: withSuspense(<BecomeMemberPage />),
           },
           {
             path: "activities",
-            element: <ActivitiesPublicPage />,
+            element: withSuspense(<ActivitiesPublicPage />),
           },
           {
             path: "contacts",
-            element: <ContactsPage />,
+            element: withSuspense(<ContactsPage />),
           },
           {
             path: "login",
-            element: <Login />,
+            element: withSuspense(<Login />),
           },
           {
             path: "register",
-            element: <Register />,
+            element: withSuspense(<Register />),
           },
           {
             path: "forgot-password",
-            element: (
-              <PlaceholderPage
-                title="Mot de passe oublie"
-                description="Flux a implementer cote API et frontend."
-              />
-            ),
+            element: withSuspense(<ForgotPassword />),
           },
           {
             path: "verify-code",
-            element: (
-              <PlaceholderPage
-                title="Verification code"
-                description="Flux a implementer cote API et frontend."
-              />
-            ),
+            element: withSuspense(<VerifyCode />),
           },
           {
             path: "reset-password",
-            element: (
-              <PlaceholderPage
-                title="Reinitialisation mot de passe"
-                description="Flux a implementer cote API et frontend."
-              />
-            ),
+            element: withSuspense(<ResetPassword />),
           },
         ],
       },

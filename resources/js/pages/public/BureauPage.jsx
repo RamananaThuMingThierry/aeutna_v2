@@ -45,7 +45,7 @@ function SectionTitle({ eyebrow, title, text }) {
       <div className="text-uppercase small fw-bold mb-2" style={{ letterSpacing: "0.14em", color: "var(--warm)" }}>
         {eyebrow}
       </div>
-      <h2 className="display-6 fw-bold mb-3">{title}</h2>
+      <h2 className="fw-bold mb-3">{title}</h2>
       <p className="text-secondary fs-5 mb-0">{text}</p>
     </div>
   );
@@ -60,6 +60,8 @@ function LeaderCard({ leader }) {
             src={leader.photo || DEFAULT_PHOTO}
             alt={leader.name}
             className="rounded-circle object-fit-cover border shadow-sm"
+            loading="lazy"
+            decoding="async"
             style={{ width: 96, height: 96 }}
           />
         </div>
@@ -85,6 +87,8 @@ function OfficeMemberCard({ member }) {
             src={member.photo || DEFAULT_PHOTO}
             alt={member.name}
             className="rounded-circle object-fit-cover border"
+            loading="lazy"
+            decoding="async"
             style={{ width: 64, height: 64 }}
           />
           <div>
@@ -102,25 +106,13 @@ export default function BureauPage() {
     <div>
       <section className="py-5 py-lg-6">
         <div className="container">
-          <div className="rounded-5 overflow-hidden shadow-lg p-4 p-lg-5" style={{ background: "linear-gradient(135deg, rgba(17,94,89,0.96), rgba(194,65,12,0.86))" }}>
+          <div className="rounded-2 overflow-hidden shadow-lg p-4 p-lg-5" style={{ background: "linear-gradient(135deg, rgba(17,94,89,0.96), rgba(194,65,12,0.86))" }}>
             <div className="row g-4 align-items-center">
-              <div className="col-lg-8 text-white">
-                <div className="text-uppercase small fw-bold mb-3" style={{ letterSpacing: "0.14em" }}>
-                  Bureau actif
-                </div>
-                <h1 className="display-4 fw-bold mb-3">Les membres de bureau actifs</h1>
+              <div className="col-12 text-white">
+                <h1 className="fw-bold mb-3">Les membres de bureau actifs</h1>
                 <p className="lead text-white-50 mb-0">
                   Presentation statique des responsables actuels et des autres membres du bureau de l AEUTNA.
                 </p>
-              </div>
-              <div className="col-lg-4">
-                <div className="rounded-5 p-4" style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.18)" }}>
-                  <div className="small text-uppercase text-white-50 fw-semibold mb-2">Association</div>
-                  <div className="h3 fw-bold text-white mb-2">AEUTNA</div>
-                  <div className="text-white-50">
-                    Association des Etudiants d'Université de Tananarive Natifs d'Antalaha.
-                  </div>
-                </div>
               </div>
             </div>
           </div>

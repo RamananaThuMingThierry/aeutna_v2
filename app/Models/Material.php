@@ -63,4 +63,9 @@ class Material extends Model
     {
         return $this->hasMany(MaterialMaintenance::class);
     }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(MaterialImage::class)->orderBy('position');
+    }
 }

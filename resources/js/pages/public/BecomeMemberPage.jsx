@@ -206,24 +206,21 @@ export default function BecomeMemberPage() {
       <section className="py-5 py-lg-6">
         <div className="container">
           <div
-            className="rounded-5 overflow-hidden shadow-lg p-4 p-lg-5"
+            className="rounded-2 overflow-hidden shadow-lg p-4 p-lg-5"
             style={{ background: "linear-gradient(135deg, rgba(17,94,89,0.96), rgba(194,65,12,0.88))" }}
           >
             <div className="row g-4 align-items-center">
               <div className="col-lg-8 text-white">
-                <div className="text-uppercase small fw-bold mb-3" style={{ letterSpacing: "0.14em" }}>
-                  Adhesion
-                </div>
-                <h1 className="display-5 fw-bold mb-3">Devenir membre de l AEUTNA</h1>
+                <h1 className="fw-bold mb-3">Devenir membre de l'AEUTNA</h1>
                 <p className="lead text-white-50 mb-0">
-                  Remplissez votre dossier, envoyez votre reference de paiement et laissez l administration verifier
+                  Remplissez votre dossier, envoyez votre reference de paiement et laissez l'administration vérifier
                   votre demande avant validation finale.
                 </p>
               </div>
               <div className="col-lg-4">
-                <div className="rounded-4 p-4 h-100" style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.14)" }}>
+                <div className="rounded-2 p-4 h-100" style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.14)" }}>
                   <div className="small text-uppercase fw-semibold text-white-50 mb-2">Cotisation active</div>
-                  <div className="text-white fw-bold display-6 mb-1">
+                  <div className="text-white fw-bold mb-1">
                     {activeAnnualFee ? formatCurrency(activeAnnualFee.amount) : "-"}
                   </div>
                   <div className="text-white-50 small">
@@ -241,13 +238,13 @@ export default function BecomeMemberPage() {
           <div className="row g-4 align-items-start">
             <div className="col-lg-4">
               <div className="d-grid gap-3 position-sticky" style={{ top: "6rem" }}>
-                <div className="p-4 rounded-5 shadow-sm" style={{ background: "var(--panel)" }}>
+                <div className="p-4 rounded-2 shadow-sm" style={{ background: "var(--panel)" }}>
                   <div className="text-uppercase small fw-bold mb-2" style={{ letterSpacing: "0.12em", color: "var(--warm)" }}>
                     Comment ca marche
                   </div>
                   <div className="d-grid gap-3">
                     <div className="d-flex gap-3 align-items-start">
-                      <div className="rounded-circle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style={{ width: 36, height: 36, background: "rgba(194,65,12,0.14)", color: "var(--warm)" }}>
+                      <div className="rounded-2ircle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style={{ width: 36, height: 36, background: "rgba(194,65,12,0.14)", color: "var(--warm)" }}>
                         1
                       </div>
                       <div>
@@ -257,7 +254,7 @@ export default function BecomeMemberPage() {
                     </div>
 
                     <div className="d-flex gap-3 align-items-start">
-                      <div className="rounded-circle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style={{ width: 36, height: 36, background: "rgba(15,118,110,0.14)", color: "var(--accent-strong)" }}>
+                      <div className="rounded-2ircle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style={{ width: 36, height: 36, background: "rgba(15,118,110,0.14)", color: "var(--accent-strong)" }}>
                         2
                       </div>
                       <div>
@@ -267,7 +264,7 @@ export default function BecomeMemberPage() {
                     </div>
 
                     <div className="d-flex gap-3 align-items-start">
-                      <div className="rounded-circle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style={{ width: 36, height: 36, background: "rgba(37,99,235,0.14)", color: "#2563eb" }}>
+                      <div className="rounded-2ircle d-inline-flex align-items-center justify-content-center fw-bold flex-shrink-0" style={{ width: 36, height: 36, background: "rgba(37,99,235,0.14)", color: "#2563eb" }}>
                         3
                       </div>
                       <div>
@@ -278,16 +275,16 @@ export default function BecomeMemberPage() {
                   </div>
                 </div>
 
-                <div className="p-4 rounded-5 shadow-sm" style={{ background: "var(--panel)" }}>
+                <div className="p-4 rounded-2 shadow-sm" style={{ background: "var(--panel)" }}>
                   <div className="fw-semibold mb-3">Numeros de paiement</div>
                   <div className="d-grid gap-2">
                     {paymentContactItems.map((item) => (
                       <div
                         key={item.label}
-                        className="d-flex align-items-center gap-3 p-3 rounded-4"
+                        className="d-flex align-items-center gap-3 p-3 rounded-2"
                         style={{ background: "var(--panel-strong)" }}
                       >
-                        <div className={`rounded-circle d-inline-flex align-items-center justify-content-center text-${item.tone} bg-white flex-shrink-0`} style={{ width: 42, height: 42 }}>
+                        <div className={`rounded-2ircle d-inline-flex align-items-center justify-content-center text-${item.tone} bg-white flex-shrink-0`} style={{ width: 42, height: 42 }}>
                           <i className={`bi ${item.icon}`} />
                         </div>
                         <div>
@@ -299,9 +296,9 @@ export default function BecomeMemberPage() {
                   </div>
                 </div>
 
-                <div className="p-4 rounded-5 shadow-sm" style={{ background: "var(--panel)" }}>
+                <div className="p-4 rounded-2 shadow-sm bg-success">
                   <div className="fw-semibold mb-2">Important</div>
-                  <p className="text-secondary small mb-0">
+                  <p className="text-white small mb-0">
                     La demande reste en attente tant que le paiement n est pas verifie. Veillez a joindre une photo nette
                     et a saisir la bonne reference.
                   </p>
@@ -310,7 +307,7 @@ export default function BecomeMemberPage() {
             </div>
 
             <div className="col-lg-8">
-              <div className="p-4 p-lg-5 rounded-5 shadow-sm" style={{ background: "var(--panel)" }}>
+              <div className="p-4 p-lg-5 rounded-2 shadow-sm" style={{ background: "var(--panel)" }}>
                 {globalError ? <div className="alert alert-danger py-2">{globalError}</div> : null}
                 {successMessage ? <div className="alert alert-success py-2">{successMessage}</div> : null}
 
@@ -321,7 +318,7 @@ export default function BecomeMemberPage() {
                         <div className="row g-3 align-items-center">
                           <div className="col-md-4 col-lg-3">
                             <div
-                              className="rounded-4 overflow-hidden d-flex align-items-center justify-content-center h-100"
+                              className="rounded-2 overflow-hidden d-flex align-items-center justify-content-center h-100"
                               style={{
                                 minHeight: 180,
                                 background: photoPreview
@@ -333,7 +330,7 @@ export default function BecomeMemberPage() {
                               {!photoPreview ? (
                                 <div className="text-center px-3">
                                   <div
-                                    className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
+                                    className="d-inline-flex align-items-center justify-content-center rounded-2ircle mb-3"
                                     style={{ width: 56, height: 56, background: "rgba(255,255,255,0.74)" }}
                                   >
                                     <i className="bi bi-camera fs-4" style={{ color: "var(--accent-strong)" }} />
@@ -352,7 +349,7 @@ export default function BecomeMemberPage() {
                             <p className="text-secondary mb-3">
                               Cette photo sera utilisee pour identifier rapidement votre candidature pendant la verification.
                             </p>
-                            <label className="btn btn-outline-dark rounded-pill px-4 mb-2">
+                            <label className="btn btn-outline-dark rounded-2ill px-4 mb-2">
                               <i className="bi bi-upload me-2" />
                               Choisir une image
                               <input
@@ -409,7 +406,7 @@ export default function BecomeMemberPage() {
                     <FieldError error={errors.last_name} />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label">Prenom</label>
+                    <label className="form-label">Prénom</label>
                     <input className={`form-control ${errors.first_name ? "is-invalid" : ""}`} value={form.first_name} onChange={(event) => updateField("first_name", event.target.value)} />
                     <FieldError error={errors.first_name} />
                   </div>
@@ -452,12 +449,12 @@ export default function BecomeMemberPage() {
                   <SectionBlockTitle title="Contact et adresse" text="Les canaux permettant de vous joindre rapidement." />
 
                   <div className="col-md-6">
-                    <label className="form-label">Telephone</label>
+                    <label className="form-label">Téléphone</label>
                     <input className={`form-control ${errors.phone ? "is-invalid" : ""}`} value={form.phone} onChange={(event) => updateField("phone", event.target.value)} />
                     <FieldError error={errors.phone} />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label">Telephone alternatif</label>
+                    <label className="form-label">Téléphone alternatif</label>
                     <input className={`form-control ${errors.alternative_phone ? "is-invalid" : ""}`} value={form.alternative_phone} onChange={(event) => updateField("alternative_phone", event.target.value)} />
                     <FieldError error={errors.alternative_phone} />
                   </div>
@@ -476,7 +473,7 @@ export default function BecomeMemberPage() {
                     <input className={`form-control ${errors.facebook ? "is-invalid" : ""}`} value={form.facebook} onChange={(event) => updateField("facebook", event.target.value)} />
                     <FieldError error={errors.facebook} />
                   </div>
-                  <SectionBlockTitle title="Parcours universitaire" text="Les informations utiles pour le suivi et le classement de votre adhesion." />
+                  <SectionBlockTitle title="Parcours universitaire" text="Les informations utiles pour le suivi et le classement de votre adhésion." />
 
                   <div className="col-md-6">
                     <label className="form-label">Etablissement</label>
@@ -484,13 +481,13 @@ export default function BecomeMemberPage() {
                     <FieldError error={errors.institution_name} />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label">Filiere</label>
+                    <label className="form-label">Filière</label>
                     <input className={`form-control ${errors.field_of_study ? "is-invalid" : ""}`} value={form.field_of_study} onChange={(event) => updateField("field_of_study", event.target.value)} />
                     <FieldError error={errors.field_of_study} />
                   </div>
 
                   <div className="col-12">
-                    <label className="form-label">Niveau d etude</label>
+                    <label className="form-label">Niveau d'étude</label>
                     <select className={`form-select ${errors.education_level_id ? "is-invalid" : ""}`} value={form.education_level_id} onChange={(event) => updateField("education_level_id", event.target.value)}>
                       <option value="">Selectionner</option>
                       {educationLevels.map((item) => (
@@ -505,7 +502,7 @@ export default function BecomeMemberPage() {
                     <div className="row g-3">
                       <div className="col-md-6">
                         <label
-                          className="d-flex align-items-start gap-3 p-3 rounded-4 h-100"
+                          className="d-flex align-items-start gap-3 p-3 rounded-2 h-100"
                           style={{ background: "var(--panel-strong)", border: "1px solid var(--line)", cursor: "pointer" }}
                         >
                           <input
@@ -517,7 +514,7 @@ export default function BecomeMemberPage() {
                           <span>
                             <span className="d-block fw-semibold">Je suis etudiant(e)</span>
                             <span className="d-block text-secondary small">
-                              Cochez cette case si vous etes actuellement en etudes.
+                              Cochez cette case si vous êtes actuellement en etudes.
                             </span>
                           </span>
                         </label>
@@ -525,7 +522,7 @@ export default function BecomeMemberPage() {
                       </div>
                       <div className="col-md-6">
                         <label
-                          className="d-flex align-items-start gap-3 p-3 rounded-4 h-100"
+                          className="d-flex align-items-start gap-3 p-3 rounded-2 h-100"
                           style={{ background: "var(--panel-strong)", border: "1px solid var(--line)", cursor: "pointer" }}
                         >
                           <input
@@ -537,7 +534,7 @@ export default function BecomeMemberPage() {
                           <span>
                             <span className="d-block fw-semibold">Je suis sympathisant(e)</span>
                             <span className="d-block text-secondary small">
-                              Cochez cette case si vous soutenez l association sans etre etudiant(e).
+                              Cochez cette case si vous soutenez l'association sans etre etudiant(e).
                             </span>
                           </span>
                         </label>
@@ -547,7 +544,7 @@ export default function BecomeMemberPage() {
                   </div>
 
                   <div className="col-12 pt-2">
-                    <button className="btn btn-dark rounded-pill px-4" disabled={submitting}>
+                    <button className="btn btn-dark rounded-2ill px-4" disabled={submitting}>
                       {submitting ? (
                         <>
                           <span className="spinner-border spinner-border-sm me-2" />
