@@ -140,7 +140,7 @@ function AnalyticsCard({
                 Par mois
               </button>
               <button type="button" className={`btn btn-sm ${mode === "year" ? "btn-dark" : "btn-outline-secondary"}`} onClick={() => onModeChange("year")}>
-                Par annee
+                Par année
               </button>
             </div>
 
@@ -240,7 +240,7 @@ export default function DashboardPage() {
       { to: "/admin/member-applications", icon: "bi-person-plus-fill", label: "Traiter les candidatures", note: `${stats.applications_submitted || 0} en attente` },
       { to: "/admin/contacts", icon: "bi-envelope-fill", label: "Repondre aux contacts", note: `${stats.contacts_pending || 0} messages a traiter` },
       { to: "/admin/members", icon: "bi-people-fill", label: "Gerer les membres", note: `${stats.members_total || 0} membres en base` },
-      { to: "/admin/activities", icon: "bi-calendar2-event-fill", label: "Publier une actualite", note: `${stats.activities_upcoming || 0} actualites a venir` },
+      { to: "/admin/activities", icon: "bi-calendar2-event-fill", label: "Publier une actualite", note: `${stats.activities_upcoming || 0} actualités a venir` },
     ],
     [stats]
   );
@@ -355,7 +355,7 @@ export default function DashboardPage() {
             value={stats.applications_submitted || 0}
             icon="bi-person-plus-fill"
             tone="warning"
-            subtitle={`${stats.applications_approved || 0} approuvees`}
+            subtitle={`${stats.applications_approved || 0} approuvées`}
           />
         </div>
         <div className="col-12 col-md-6 col-xl-3">
@@ -364,7 +364,7 @@ export default function DashboardPage() {
             value={stats.contacts_pending || 0}
             icon="bi-envelope-open-fill"
             tone="primary"
-            subtitle={`${stats.contacts_answered || 0} deja repondus`}
+            subtitle={`${stats.contacts_answered || 0} déjà repondus`}
           />
         </div>
         <div className="col-12 col-md-6 col-xl-3">
@@ -382,7 +382,7 @@ export default function DashboardPage() {
         <div className="col-12 col-xl-6">
           <AnalyticsCard
             title="Membres inscrits"
-            description="Suivi des inscriptions de membres par mois ou par annee."
+            description="Suivi des inscriptions de membres par mois ou par année."
             icon="bi-people-fill"
             tone="success"
             mode={membersMode}
@@ -393,14 +393,14 @@ export default function DashboardPage() {
             data={visibleMembersData}
             valueKey="total"
             summaryValue={membersSummary}
-            summaryLabel={membersMode === "month" ? `Total des inscriptions sur ${membersYear}` : "Total des inscriptions par annee"}
+            summaryLabel={membersMode === "month" ? `Total des inscriptions sur ${membersYear}` : "Total des inscriptions par année"}
             formatValue={(value) => value}
           />
         </div>
         <div className="col-12 col-xl-6">
           <AnalyticsCard
             title="Montants des cotisations"
-            description="Montants valides encaisses, consultables par mois ou par annee."
+            description="Montants valides encaisses, consultables par mois ou par année."
             icon="bi-cash-coin"
             tone="warning"
             mode={paymentsMode}
@@ -411,7 +411,7 @@ export default function DashboardPage() {
             data={visiblePaymentsData}
             valueKey="total_amount"
             summaryValue={formatCurrency(paymentsSummary)}
-            summaryLabel={paymentsMode === "month" ? `Montant valide cumule sur ${paymentsYear}` : "Montant valide cumule par annee"}
+            summaryLabel={paymentsMode === "month" ? `Montant valide cumule sur ${paymentsYear}` : "Montant valide cumule par année"}
             formatValue={(value) => (Number(value || 0) > 0 ? formatCurrency(value) : "0")}
           />
         </div>
@@ -423,7 +423,7 @@ export default function DashboardPage() {
             <div className="card-body">
               <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-3">
                 <div>
-                  <h4 className="h5 mb-1">Synthese rapide</h4>
+                  <h4 className="h5 mb-1">Synthèse rapide</h4>
                   <p className="text-secondary small mb-0">
                     Situation courante des modules les plus utilises.
                   </p>
@@ -452,7 +452,7 @@ export default function DashboardPage() {
 
                 <div className="col-md-6">
                   <div className="rounded-4 p-3 h-100" style={{ background: "rgba(15,23,42,0.04)" }}>
-                    <div className="small text-uppercase fw-semibold text-secondary mb-2">Actualites</div>
+                    <div className="small text-uppercase fw-semibold text-secondary mb-2">Actualités</div>
                     <div className="d-flex justify-content-between mb-2">
                       <span>Total</span>
                       <strong>{stats.activities_total || 0}</strong>
@@ -488,7 +488,7 @@ export default function DashboardPage() {
                     {data?.active_annual_fee ? (
                       <>
                         <div className="fw-bold fs-5 mb-1">{formatCurrency(data.active_annual_fee.amount)}</div>
-                        <div className="small text-secondary">Annee {data.active_annual_fee.year}</div>
+                        <div className="small text-secondary">Année {data.active_annual_fee.year}</div>
                         <div className="small text-secondary">Echeance: {formatShortDate(data.active_annual_fee.due_date)}</div>
                       </>
                     ) : (
@@ -543,7 +543,7 @@ export default function DashboardPage() {
                     <div className="small text-secondary mt-2">{formatDate(item.created_at)}</div>
                   </div>
                 ))}
-                {!data?.recent_applications?.length ? <div className="text-secondary small">Aucune candidature recente.</div> : null}
+                {!data?.recent_applications?.length ? <div className="text-secondary small">Aucune candidature récente.</div> : null}
               </div>
             </div>
           </div>
@@ -553,7 +553,7 @@ export default function DashboardPage() {
           <div className="card border-0 shadow-sm h-100">
             <div className="card-body">
               <div className="d-flex align-items-center justify-content-between mb-3">
-                <h4 className="h5 mb-0">Messages recents</h4>
+                <h4 className="h5 mb-0">Messages récents</h4>
                 <Link to="/admin/contacts" className="small text-decoration-none">Tout voir</Link>
               </div>
               <div className="d-grid gap-3">
@@ -570,7 +570,7 @@ export default function DashboardPage() {
                     <div className="small text-secondary mt-2">{formatDate(item.created_at)}</div>
                   </div>
                 ))}
-                {!data?.recent_contacts?.length ? <div className="text-secondary small">Aucun message recent.</div> : null}
+                {!data?.recent_contacts?.length ? <div className="text-secondary small">Aucun message récent.</div> : null}
               </div>
             </div>
           </div>
@@ -580,12 +580,12 @@ export default function DashboardPage() {
           <div className="card border-0 shadow-sm h-100">
             <div className="card-body">
               <div className="d-flex align-items-center justify-content-between mb-3">
-                <h4 className="h5 mb-0">Actualites et journal</h4>
+                <h4 className="h5 mb-0">Actualités et journal</h4>
                 <Link to="/admin/activity-logs" className="small text-decoration-none">Voir les logs</Link>
               </div>
 
               <div className="mb-4">
-                <div className="small text-uppercase text-secondary fw-semibold mb-2">Actualites a venir</div>
+                <div className="small text-uppercase text-secondary fw-semibold mb-2">Actualités a venir</div>
                 <div className="d-grid gap-2">
                   {(data?.upcoming_activities || []).map((item) => (
                     <div key={item.encrypted_id || item.id} className="border rounded-4 p-3">
@@ -594,7 +594,7 @@ export default function DashboardPage() {
                       <div className="small text-secondary">{formatDate(item.starts_at)}</div>
                     </div>
                   ))}
-                  {!data?.upcoming_activities?.length ? <div className="text-secondary small">Aucune actualite planifiee.</div> : null}
+                  {!data?.upcoming_activities?.length ? <div className="text-secondary small">Aucune actualité planifiée.</div> : null}
                 </div>
               </div>
 
