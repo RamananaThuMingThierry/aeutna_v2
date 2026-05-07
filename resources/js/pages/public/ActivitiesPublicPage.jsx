@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import { websiteApi } from "../../api/website";
 
+const ACTIVITY_DESCRIPTION_PREVIEW_LENGTH = 140;
+
 function resolveImageUrl(imagePath) {
   if (!imagePath) return "/images/avatar.png";
   if (imagePath.startsWith("http://") || imagePath.startsWith("https://") || imagePath.startsWith("/")) {
@@ -23,14 +25,19 @@ function formatDate(value) {
 }
 
 function formatStatus(status) {
-  if (status === "published") return "PubliÃ©e";
-  if (status === "completed") return "TerminÃ©e";
+  if (status === "published") return "Publiée";
+  if (status === "completed") return "Terminée";
   return status || "-";
 }
 
-function ActivityCard({ activity, onOpen }) {
+function ActivityCard({ activity, isExpanded, onToggleDescription, onOpen }) {
   const coverImage =
     activity.images?.find((image) => image.is_cover)?.image_path || activity.images?.[0]?.image_path || "";
+  const description = activity.description || "Aucune description disponible.";
+  const isLongDescription = description.length > ACTIVITY_DESCRIPTION_PREVIEW_LENGTH;
+  const displayedDescription = isLongDescription && !isExpanded
+    ? `${description.slice(0, ACTIVITY_DESCRIPTION_PREVIEW_LENGTH).trimEnd()}...`
+    : description;
 
   return (
     <article className="card border-0 shadow-sm h-100 overflow-hidden" style={{ background: "var(--panel)" }}>
@@ -53,9 +60,18 @@ function ActivityCard({ activity, onOpen }) {
         <div className="small text-uppercase fw-semibold mb-3" style={{ color: "var(--accent-strong)", letterSpacing: "0.08em" }}>
           {activity.location || "Lieu non renseigne"}
         </div>
-        <p className="text-secondary flex-grow-1 mb-4">
-          {activity.description?.length > 140 ? `${activity.description.slice(0, 140)}...` : (activity.description || "Aucune description disponible.")}
-        </p>
+        <div className="text-secondary flex-grow-1 mb-4">
+          <p className="mb-2">{displayedDescription}</p>
+          {isLongDescription ? (
+            <button
+              type="button"
+              className="btn btn-link btn-sm p-0 text-decoration-none"
+              onClick={() => onToggleDescription(activity.id)}
+            >
+              {isExpanded ? "Voir moins" : "Voir plus"}
+            </button>
+          ) : null}
+        </div>
         <button type="button" className="btn btn-dark d-block w-100 px-4" onClick={() => onOpen(activity)}>
           Voir le detail
         </button>
@@ -135,6 +151,7 @@ export default function ActivitiesPublicPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedActivity, setSelectedActivity] = useState(null);
+  const [expandedActivities, setExpandedActivities] = useState({});
 
   useEffect(() => {
     let active = true;
@@ -164,6 +181,13 @@ export default function ActivitiesPublicPage() {
 
   const activities = useMemo(() => data?.activities || [], [data]);
 
+  function toggleActivityDescription(activityId) {
+    setExpandedActivities((current) => ({
+      ...current,
+      [activityId]: !current[activityId],
+    }));
+  }
+
   if (loading) {
     return <div className="container py-5">Chargement...</div>;
   }
@@ -186,8 +210,25 @@ export default function ActivitiesPublicPage() {
               </div>
             </div>
           </div>
+
+          <div className="row g-4">
+            {activities.length ? activities.map((activity) => (
+              <div key={activity.id} className="col-md-6 col-xl-4">
+                <ActivityCard
+                  activity={activity}
+                  isExpanded={Boolean(expandedActivities[activity.id])}
+                  onToggleDescription={toggleActivityDescription}
+                  onOpen={setSelectedActivity}
+                />
+              </div>
+            )) : (
+              <div className="col-12">
+                <div className="alert alert-light border mb-0">Aucune actualite publique disponible pour le moment.</div>
+              </div>
+            )}
           </div>
-     </section>
+        </div>
+      </section>
 
       {selectedActivity ? (
         <>
@@ -215,7 +256,7 @@ export default function ActivitiesPublicPage() {
                           <div className="fw-semibold text-warning">{selectedActivity.location || "-"}</div>
                         </div>
                         <div className="mb-3">
-                          <div className="text-muted small">Date de debut</div>
+                          <div className="text-muted small">Date de début</div>
                           <div className="fw-semibold">{formatDate(selectedActivity.starts_at)}</div>
                         </div>
                         <div className="mb-3">
@@ -244,5 +285,3 @@ export default function ActivitiesPublicPage() {
     </div>
   );
 }
-
-

@@ -195,7 +195,7 @@ export default function MemberApplicationsPage() {
         <div>
           <h4 className="mb-1">Candidatures membres</h4>
           <div className="text-muted small">
-            Les nouvelles inscriptions restent dans <code>member_applications</code> jusqu&apos;a validation par un administrateur.
+            Les nouvelles inscriptions restent dans <code class="text-danger">içi</code> jusqu&apos;a validation par un administrateur.
           </div>
         </div>
 
@@ -203,17 +203,17 @@ export default function MemberApplicationsPage() {
           <button type="button" className={`btn ${selectedStatus === "all" ? "btn-dark" : "btn-outline-dark"}`} onClick={() => setSelectedStatus("all")}>
             Toutes
           </button>
-          <button type="button" className={`btn ${selectedStatus === "submitted" ? "btn-dark" : "btn-outline-dark"}`} onClick={() => setSelectedStatus("submitted")}>
+          <button type="button" className={`btn ${selectedStatus === "submitted" ? "btn-warning" : "btn-outline-warning"}`} onClick={() => setSelectedStatus("submitted")}>
             Soumises
           </button>
-          <button type="button" className={`btn ${selectedStatus === "approved" ? "btn-dark" : "btn-outline-dark"}`} onClick={() => setSelectedStatus("approved")}>
-            Approuvees
+          <button type="button" className={`btn ${selectedStatus === "approved" ? "btn-success" : "btn-outline-success"}`} onClick={() => setSelectedStatus("approved")}>
+            Approuvées
           </button>
-          <button type="button" className={`btn ${selectedStatus === "needs_correction" ? "btn-dark" : "btn-outline-dark"}`} onClick={() => setSelectedStatus("needs_correction")}>
+          <button type="button" className={`btn ${selectedStatus === "needs_correction" ? "btn-info" : "btn-outline-info"}`} onClick={() => setSelectedStatus("needs_correction")}>
             A corriger
           </button>
-          <button type="button" className={`btn ${selectedStatus === "rejected" ? "btn-dark" : "btn-outline-dark"}`} onClick={() => setSelectedStatus("rejected")}>
-            Rejetees
+          <button type="button" className={`btn ${selectedStatus === "rejected" ? "btn-danger" : "btn-outline-danger"}`} onClick={() => setSelectedStatus("rejected")}>
+            Rejetées
           </button>
           <button type="button" className="btn btn-outline-secondary" onClick={() => void load("refresh")} disabled={loading || refreshing}>
             {refreshing ? "Rafraichissement..." : "Rafraichir"}
@@ -236,13 +236,13 @@ export default function MemberApplicationsPage() {
         </div>
         <div className="col-md-3">
           <div className="border rounded-4 p-3 bg-light-subtle h-100">
-            <div className="small text-uppercase text-secondary fw-semibold mb-2">Approuvees</div>
+            <div className="small text-uppercase text-secondary fw-semibold mb-2">Approuvées</div>
             <div className="display-6 fw-bold mb-0">{stats.approved}</div>
           </div>
         </div>
         <div className="col-md-3">
           <div className="border rounded-4 p-3 bg-light-subtle h-100">
-            <div className="small text-uppercase text-secondary fw-semibold mb-2">Rejetees</div>
+            <div className="small text-uppercase text-secondary fw-semibold mb-2">Rejetées</div>
             <div className="display-6 fw-bold mb-0">{stats.rejected}</div>
           </div>
         </div>

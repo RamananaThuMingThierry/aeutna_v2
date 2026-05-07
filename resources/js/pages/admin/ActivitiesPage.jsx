@@ -150,7 +150,7 @@ export default function ActivitiesPage() {
       const list = await activitiesApi.list();
       setItems(normalizeCollection(list));
     } catch (error) {
-      const message = error?.response?.data?.message || "Impossible de charger les actualites.";
+      const message = error?.response?.data?.message || "Impossible de charger les actualités.";
       if (mode === "initial") setGlobalError(message);
       else showToast("danger", message);
     } finally {
@@ -193,13 +193,13 @@ export default function ActivitiesPage() {
     <div className="container-fluid">
       <div className="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-4">
         <div>
-          <h4 className="mb-1">Actualites</h4>
-          <div className="text-muted small">Gestion des actualites et de leurs images</div>
+          <h4 className="mb-1">Actualités</h4>
+          <div className="text-muted small">Gestion des actualités et de leurs images</div>
         </div>
         <div className="d-flex flex-column flex-md-row gap-2">
           <input
             className="form-control"
-            placeholder="Rechercher une actualite"
+            placeholder="Rechercher une actualité"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
@@ -207,7 +207,7 @@ export default function ActivitiesPage() {
             {initialLoading || refreshing ? "Rafraichissement..." : "Rafraichir"}
           </button>
           <button className="btn btn-sm btn-dark" onClick={() => navigate("/admin/activities/new")} disabled={initialLoading}>
-            Nouvelle actualite
+            Nouvelle actualité
           </button>
         </div>
       </div>
@@ -227,7 +227,7 @@ export default function ActivitiesPage() {
             const rowId = getRowId(item);
 
             return (
-              <div key={rowId} className="col-lg-6">
+              <div key={rowId} className="col-12">
                 <div className="card border-0 shadow-sm h-100 overflow-hidden">
                   <div className="row g-0 h-100">
                     <div className="col-md-4 bg-body-tertiary">
@@ -280,27 +280,36 @@ export default function ActivitiesPage() {
             <div className="modal-dialog modal-xl modal-dialog-scrollable">
               <div className="modal-content border-0 shadow">
                 <div className="modal-header">
-                  <h5 className="modal-title">Detail actualite</h5>
+                  <h5 className="modal-title align-items-center d-flex">Detail actualite <span className="ms-2 badge text-bg-secondary rounded-pill" style={{ fontSize: "10px" }}>{statusMeta(showing.status)[1]}</span></h5>
                   <button type="button" className="btn-close" onClick={() => setShowOpen(false)} />
                 </div>
                 <div className="modal-body">
                   {showing ? (
                     <div className="row g-4">
-                      <div className="col-lg-5">
-                        <div className="border rounded-4 overflow-hidden" style={{ minHeight: 320 }}>
-                          <img src={resolveImageUrl(getCoverImage(showing)?.image_path)} alt="Cover" className="w-100 h-100 object-fit-cover" />
+                      <div className="col-12">
+
+                        <div className="row mb-3">
+                            <div class="col-md-6">
+                                <div className="text-muted small">Titre</div><div className="fw-semibold">{showing.title || "-"}</div>
+                            </div>
+                            <div class="col-md-6">
+                                <div className="text-muted small">Lieu</div><div>{showing.location || "-"}</div>
+                            </div>
                         </div>
-                      </div>
-                      <div className="col-lg-7">
-                        <div className="mb-3"><div className="text-muted small">Titre</div><div className="fw-semibold">{showing.title || "-"}</div></div>
-                        <div className="mb-3"><div className="text-muted small">Lieu</div><div>{showing.location || "-"}</div></div>
-                        <div className="mb-3"><div className="text-muted small">Debut</div><div>{formatDateTime(showing.starts_at)}</div></div>
-                        <div className="mb-3"><div className="text-muted small">Fin</div><div>{formatDateTime(showing.ends_at)}</div></div>
-                        <div className="mb-3"><div className="text-muted small">Statut</div><div>{statusMeta(showing.status)[1]}</div></div>
-                        <div><div className="text-muted small">Description</div><div style={{ whiteSpace: "pre-wrap" }}>{showing.description || "-"}</div></div>
+
+
+                        <div className="row mb-3">
+                            <div class="col-md-6">
+                                <div className="text-muted small">Début</div><div>{formatDateTime(showing.starts_at)}</div>
+                            </div>
+                            <div class="col-md-6">
+                                <div className="text-muted small">Fin</div><div>{formatDateTime(showing.ends_at)}</div>
+                            </div>
+                        </div>
+                        <div className="row"><div className="small">Description</div><div style={{ whiteSpace: "pre-wrap" }} className="text-muted">{showing.description || "-"}</div></div>
                       </div>
                       <div className="col-12">
-                        <div className="fw-semibold mb-3">Galerie</div>
+                        <div className="fw-semibold mb-3">Galerie(s)</div>
                         <div className="row g-3">
                           {(showing.images || []).map((image) => (
                             <div key={image.id} className="col-md-4 col-xl-3">

@@ -3,28 +3,33 @@ import { Link } from "react-router-dom";
 
 const DEFAULT_PHOTO = "/images/avatar.png";
 
+const A2026_PHOTO_PRESIDENT = "/mandat/2026/president.jpeg";
+const A2026_PHOTO_TREASURER = "/mandat/2026/treasurer.jpeg";
+const A2026_PHOTO_COMMISSIONER = "/mandat/2026/commissioner.jpeg";
+
+
 const LEADERS = [
   {
     id: 1,
     role: "Président",
-    name: "À renseigner",
-    photo: DEFAULT_PHOTO,
+    name: "RIZIKY Jeremie Luckaël",
+    photo: A2026_PHOTO_PRESIDENT,
     accent: "rgba(194,65,12,0.14)",
     icon: "bi-person-badge-fill",
   },
   {
     id: 2,
     role: "Commissaire aux comptes",
-    name: "À renseigner",
-    photo: DEFAULT_PHOTO,
+    name: "BEZAFY DANIELLA",
+    photo: A2026_PHOTO_COMMISSIONER,
     accent: "rgba(37,99,235,0.14)",
     icon: "bi-shield-check",
   },
   {
     id: 3,
     role: "Trésorier",
-    name: "À renseigner",
-    photo: DEFAULT_PHOTO,
+    name: "KARL MAX RAKOTOSIHANAKA Stany",
+    photo: A2026_PHOTO_TREASURER,
     accent: "rgba(22,163,74,0.14)",
     icon: "bi-cash-coin",
   },

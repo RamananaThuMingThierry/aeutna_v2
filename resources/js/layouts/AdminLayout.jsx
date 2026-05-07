@@ -27,7 +27,7 @@ const menuSections = [
       { to: "/admin/education-levels", label: "Niveaux", icon: "bi-mortarboard-fill" },
       { to: "/admin/gallery", label: "Galeries", icon: "bi-images" },
       { to: "/admin/sliders", label: "Sliders", icon: "bi-aspect-ratio-fill" },
-      { to: "/admin/activities", label: "Actualites", icon: "bi-calendar2-event-fill" },
+      { to: "/admin/activities", label: "Actualités", icon: "bi-calendar2-event-fill" },
     ],
   },
   {
@@ -44,15 +44,15 @@ const menuSections = [
       { to: "/admin/annual-fees", label: "Cotisations annuelles", icon: "bi-calendar-event-fill" },
       { to: "/admin/fee-payments", label: "Paiements de cotisation", icon: "bi-cash-coin" },
       { to: "/admin/donations", label: "Donations", icon: "bi-gift-fill" },
-      { to: "/admin/cash-categories", label: "Categories de caisse", icon: "bi-tags-fill" },
+      { to: "/admin/cash-categories", label: "Catégories de caisse", icon: "bi-tags-fill" },
       { to: "/admin/cash-transactions", label: "Transactions de caisse", icon: "bi-wallet2" },
     ],
   },
   {
     title: "Logistique",
     items: [
-      { to: "/admin/materials", label: "Materiels", icon: "bi-box-seam-fill" },
-      { to: "/admin/material-loans", label: "Prets de materiels", icon: "bi-arrow-left-right" },
+      { to: "/admin/materials", label: "Matériaux", icon: "bi-box-seam-fill" },
+      { to: "/admin/material-loans", label: "Prêts de matériel", icon: "bi-arrow-left-right" },
       { to: "/admin/material-maintenances", label: "Maintenances", icon: "bi-tools" },
       { to: "/admin/material-movements", label: "Mouvements", icon: "bi-arrow-repeat" },
       { to: "/admin/suppliers", label: "Fournisseurs", icon: "bi-truck" },
@@ -72,7 +72,7 @@ const menuSections = [
       { to: "/admin/documents", label: "Documents", icon: "bi-file-earmark-text-fill" },
       { to: "/admin/reports", label: "Rapports", icon: "bi-journal-text" },
       { to: "/admin/users", label: "Utilisateurs", icon: "bi-people-fill" },
-      { to: "/admin/activity-logs", label: "Journaux d'activite", icon: "bi-clock-history" },
+      { to: "/admin/activity-logs", label: "Journaux d'activité", icon: "bi-clock-history" },
     ],
   },
 ];
@@ -169,7 +169,7 @@ export default function AdminLayout() {
   return (
     <>
       <SEO page="admin" />
-      <div className="bg-body-tertiary min-vh-100">
+      <div className="min-vh-100" style={{ backgroundColor: "rgb(222 222 222) !important" }}>
         <div className="d-lg-none border-bottom bg-white sticky-top">
           <div className="container-fluid py-3 d-flex align-items-center justify-content-between">
             <div className="d-flex align-items-center gap-2">

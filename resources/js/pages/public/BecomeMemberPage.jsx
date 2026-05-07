@@ -240,7 +240,7 @@ export default function BecomeMemberPage() {
               <div className="d-grid gap-3 position-sticky" style={{ top: "6rem" }}>
                 <div className="p-4 rounded-2 shadow-sm" style={{ background: "var(--panel)" }}>
                   <div className="text-uppercase small fw-bold mb-2" style={{ letterSpacing: "0.12em", color: "var(--warm)" }}>
-                    Comment ca marche
+                    Comment ça marche
                   </div>
                   <div className="d-grid gap-3">
                     <div className="d-flex gap-3 align-items-start">
@@ -259,7 +259,7 @@ export default function BecomeMemberPage() {
                       </div>
                       <div>
                         <div className="fw-semibold">Payer la cotisation</div>
-                        <div className="text-secondary small">Utilisez un des numeros ci-dessous puis renseignez la reference du transfert.</div>
+                        <div className="text-secondary small">Utilisez un des numeros ci-dessous puis renseignez la référence du transfert.</div>
                       </div>
                     </div>
 
@@ -268,8 +268,8 @@ export default function BecomeMemberPage() {
                         3
                       </div>
                       <div>
-                        <div className="fw-semibold">Attendre la verification</div>
-                        <div className="text-secondary small">L equipe administrative confirme votre paiement et valide votre adhesion.</div>
+                        <div className="fw-semibold">Attendre la vérification</div>
+                        <div className="text-secondary small">L'equipe administrative confirme votre paiement et valide votre adhésion.</div>
                       </div>
                     </div>
                   </div>
@@ -297,7 +297,7 @@ export default function BecomeMemberPage() {
                 </div>
 
                 <div className="p-4 rounded-2 shadow-sm bg-success">
-                  <div className="fw-semibold mb-2">Important</div>
+                  <div className="fw-semibold text-warning mb-2"><i className="bi bi-exclamation-triangle me-2"></i>Important</div>
                   <p className="text-white small mb-0">
                     La demande reste en attente tant que le paiement n est pas verifie. Veillez a joindre une photo nette
                     et a saisir la bonne reference.
@@ -336,7 +336,7 @@ export default function BecomeMemberPage() {
                                     <i className="bi bi-camera fs-4" style={{ color: "var(--accent-strong)" }} />
                                   </div>
                                   <div className="fw-semibold">Photo du demandeur</div>
-                                  <div className="small text-secondary">Ajoutez une image nette et recente.</div>
+                                  <div className="small text-secondary">Ajoutez une image nette et récente.</div>
                                 </div>
                               ) : null}
                             </div>
@@ -345,9 +345,9 @@ export default function BecomeMemberPage() {
                             <div className="text-uppercase small fw-bold mb-2" style={{ letterSpacing: "0.12em", color: "var(--warm)" }}>
                               Photo de profil
                             </div>
-                            <h3 className="h5 fw-bold mb-2">Importez votre image au debut du dossier</h3>
+                            <h3 className="h5 fw-bold mb-2">Importez votre image au début du dossier</h3>
                             <p className="text-secondary mb-3">
-                              Cette photo sera utilisee pour identifier rapidement votre candidature pendant la verification.
+                              Cette photo sera utilisée pour identifier rapidement votre candidature pendant la vérification.
                             </p>
                             <label className="btn btn-outline-dark rounded-2ill px-4 mb-2">
                               <i className="bi bi-upload me-2" />
@@ -360,7 +360,7 @@ export default function BecomeMemberPage() {
                               />
                             </label>
                             <div className="small text-secondary">
-                              {form.photo ? `Fichier selectionne : ${form.photo.name}` : "Aucun fichier selectionne pour le moment."}
+                              {form.photo ? `Fichier selectionne : ${form.photo.name}` : "Aucun fichier seléctionne pour le moment."}
                             </div>
                             <FieldError error={errors.photo} />
                           </div>
@@ -383,7 +383,7 @@ export default function BecomeMemberPage() {
                     <FieldError error={errors.payment_method} />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label">Reference de paiement</label>
+                    <label className="form-label">Référence de paiement</label>
                     <input className={`form-control ${errors.payment_reference ? "is-invalid" : ""}`} value={form.payment_reference} onChange={(event) => updateField("payment_reference", event.target.value)} />
                     <FieldError error={errors.payment_reference} />
                   </div>
@@ -454,7 +454,7 @@ export default function BecomeMemberPage() {
                     <FieldError error={errors.phone} />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label">Téléphone alternatif</label>
+                    <label className="form-label">Téléphone en cas d'urgence</label>
                     <input className={`form-control ${errors.alternative_phone ? "is-invalid" : ""}`} value={form.alternative_phone} onChange={(event) => updateField("alternative_phone", event.target.value)} />
                     <FieldError error={errors.alternative_phone} />
                   </div>
