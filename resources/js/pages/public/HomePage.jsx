@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 import { websiteApi } from "../../api/website";
 
+const ACTIVITY_DESCRIPTION_PREVIEW_LENGTH = 180;
+
 function resolveImageUrl(imagePath) {
   if (!imagePath) return "/images/slide.jpg";
   if (imagePath.startsWith("http://") || imagePath.startsWith("https://") || imagePath.startsWith("/")) {
@@ -113,6 +115,7 @@ export default function HomePage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [expandedActivities, setExpandedActivities] = useState({});
 
   useEffect(() => {
     let active = true;
@@ -141,6 +144,13 @@ export default function HomePage() {
 
   const activities = useMemo(() => data?.activities || [], [data]);
   const gallery = useMemo(() => data?.gallery || [], [data]);
+
+  function toggleActivityDescription(activityId) {
+    setExpandedActivities((current) => ({
+      ...current,
+      [activityId]: !current[activityId],
+    }));
+  }
 
   if (loading) {
     return <div className="container py-5">Chargement...</div>;
@@ -202,24 +212,42 @@ export default function HomePage() {
             text="Les actions recentes, les annonces et les événements mis en avant sur la page d'accueil."
           />
           <div className="row g-4">
-            {activities.map((activity) => (
-              <div key={activity.id} className="col-lg-4">
-                <article className="card border-0 shadow-sm h-100 overflow-hidden" style={{ background: "var(--panel)" }}>
-                  <img
-                    src={resolveImageUrl(activity.images?.find((image) => image.is_cover)?.image_path || activity.images?.[0]?.image_path)}
-                    alt={activity.title}
-                    className="w-100 object-fit-cover"
-                    style={{ height: 220 }}
-                  />
-                  <div className="card-body p-4">
-                    <div className="small text-uppercase fw-bold mb-2" style={{ color: "var(--accent-strong)", letterSpacing: "0.08em" }}>{activity.location || "Actualité"}</div>
-                    <h3 className="h5 fw-bold">{activity.title}</h3>
-                    <div className="small text-secondary mb-3">{formatDate(activity.starts_at)}</div>
-                    <p className="text-secondary mb-0">{activity.description || "Aucune description disponible."}</p>
-                  </div>
-                </article>
-              </div>
-            ))}
+            {activities.map((activity) => {
+              const description = activity.description || "Aucune description disponible.";
+              const isLongDescription = description.length > ACTIVITY_DESCRIPTION_PREVIEW_LENGTH;
+              const isExpanded = Boolean(expandedActivities[activity.id]);
+              const displayedDescription = isLongDescription && !isExpanded
+                ? `${description.slice(0, ACTIVITY_DESCRIPTION_PREVIEW_LENGTH).trimEnd()}...`
+                : description;
+
+              return (
+                <div key={activity.id} className="col-lg-4">
+                  <article className="card border-0 shadow-sm h-100 overflow-hidden" style={{ background: "var(--panel)" }}>
+                    <img
+                      src={resolveImageUrl(activity.images?.find((image) => image.is_cover)?.image_path || activity.images?.[0]?.image_path)}
+                      alt={activity.title}
+                      className="w-100 object-fit-cover"
+                      style={{ height: 220 }}
+                    />
+                    <div className="card-body p-4">
+                      <div className="small text-uppercase fw-bold mb-2" style={{ color: "var(--accent-strong)", letterSpacing: "0.08em" }}>{activity.location || "Actualité"}</div>
+                      <h3 className="h5 fw-bold">{activity.title}</h3>
+                      <div className="small text-secondary mb-3">{formatDate(activity.starts_at)}</div>
+                      <p className="text-secondary mb-2">{displayedDescription}</p>
+                      {isLongDescription ? (
+                        <button
+                          type="button"
+                          className="btn btn-link btn-sm p-0 text-decoration-none"
+                          onClick={() => toggleActivityDescription(activity.id)}
+                        >
+                          {isExpanded ? "Voir moins" : "Voir plus"}
+                        </button>
+                      ) : null}
+                    </div>
+                  </article>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

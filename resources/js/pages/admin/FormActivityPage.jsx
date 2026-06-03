@@ -112,7 +112,7 @@ export default function FormActivityPage() {
         setCoverSelection(currentCover ? `existing:${currentCover.id}` : "");
       } catch (error) {
         if (!active) return;
-        setGlobalError(error?.response?.data?.message || "Impossible de charger l'actualite.");
+        setGlobalError(error?.response?.data?.message || "Impossible de charger l'actualité.");
       } finally {
         if (active) setLoading(false);
       }
@@ -272,8 +272,8 @@ export default function FormActivityPage() {
     <div>
       <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
         <div>
-          <h3 className="h4 mb-1">{isEdit ? "Modifier actualite" : "Nouvelle actualite"}</h3>
-          <p className="text-secondary mb-0">Formulaire de creation et de mise a jour d&apos;une actualite.</p>
+          <h3 className="h4 mb-1">{isEdit ? "Modifier actualité" : "Nouvelle actualité"}</h3>
+          <p className="text-secondary mb-0">Formulaire de creation et de mise a jour d&apos;une actualité.</p>
         </div>
         <div className="d-flex gap-2">
           <Link to="/admin/activities" className="btn btn-outline-secondary">
@@ -299,7 +299,7 @@ export default function FormActivityPage() {
           <div className="row g-4">
             <div className="col-xl-7">
               <div className="d-flex flex-column gap-4">
-                <SectionCard title="Informations" subtitle="Contenu principal de l'actualite">
+                <SectionCard title="Informations" subtitle="Contenu principal de l'actualité">
                   <div className="row g-3">
                     <div className="col-md-6">
                       <label className="form-label">Titre</label>
@@ -312,7 +312,7 @@ export default function FormActivityPage() {
                       <FieldError error={errors.location} />
                     </div>
                     <div className="col-md-6">
-                      <label className="form-label">Debut</label>
+                      <label className="form-label">Début</label>
                       <input type="datetime-local" className={`form-control ${errors.starts_at ? "is-invalid" : ""}`} name="starts_at" value={form.starts_at} onChange={handleChange} />
                       <FieldError error={errors.starts_at} />
                     </div>
@@ -325,9 +325,9 @@ export default function FormActivityPage() {
                       <label className="form-label">Statut</label>
                       <select className={`form-select ${errors.status ? "is-invalid" : ""}`} name="status" value={form.status} onChange={handleChange}>
                         <option value="draft">Brouillon</option>
-                        <option value="published">Publiee</option>
-                        <option value="cancelled">Annulee</option>
-                        <option value="completed">Terminee</option>
+                        <option value="published">Publiée</option>
+                        <option value="cancelled">Annulée</option>
+                        <option value="completed">Terminée</option>
                       </select>
                       <FieldError error={errors.status} />
                     </div>
@@ -396,7 +396,7 @@ export default function FormActivityPage() {
                           </div>
                         </div>
                       ))}
-                      {!newImages.length ? <div className="col-12 text-muted small">Aucune nouvelle image ajoutee.</div> : null}
+                      {!newImages.length ? <div className="col-12 text-muted small">Aucune nouvelle image ajoutée.</div> : null}
                     </div>
                   </div>
                 </SectionCard>

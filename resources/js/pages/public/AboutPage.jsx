@@ -3,40 +3,27 @@
 import { websiteApi } from "../../api/website";
 
 const DEFAULT_PHOTO = "/images/avatar.png";
+const A2026_PHOTO_PRESIDENT = "/mandat/2026/president.jpeg";
+const A2026_PHOTO_TREASURER = "/mandat/2026/treasurer.jpeg";
+const A2026_PHOTO_COMMISSIONER = "/mandat/2026/commissioner.jpeg";
 
 const MANDATES = [
   {
     id: 1,
-    period: "2024 - Aujourd'hui",
+    period: "2026 - Aujourd'hui",
     note: "Mandat actuel ou le plus récent.",
-    president: { name: "À renseigner", photo: DEFAULT_PHOTO },
-    treasurer: { name: "À renseigner", photo: DEFAULT_PHOTO },
-    commissioner: { name: "À renseigner", photo: DEFAULT_PHOTO },
+    president: { name: "RIZIKY Jeremie Luckaël", photo: A2026_PHOTO_PRESIDENT },
+    treasurer: { name: "KARL MAX RAKOTOSIHANAKA Stany", photo: A2026_PHOTO_TREASURER },
+    commissioner: { name: "BEZAFY DANIELLA", photo: A2026_PHOTO_COMMISSIONER },
   },
   {
     id: 2,
-    period: "2022 - 2024",
+    period: "2024 - 2026",
     note: "Mandat précédent de l'association.",
     president: { name: "À renseigner", photo: DEFAULT_PHOTO },
     treasurer: { name: "À renseigner", photo: DEFAULT_PHOTO },
     commissioner: { name: "À renseigner", photo: DEFAULT_PHOTO },
-  },
-  {
-    id: 3,
-    period: "2020 - 2022",
-    note: "Mandat précédent de l'association.",
-    president: { name: "À renseigner", photo: DEFAULT_PHOTO },
-    treasurer: { name: "À renseigner", photo: DEFAULT_PHOTO },
-    commissioner: { name: "À renseigner", photo: DEFAULT_PHOTO },
-  },
-  {
-    id: 4,
-    period: "2018 - 2020",
-    note: "Mandat précédent de l'association.",
-    president: { name: "À renseigner", photo: DEFAULT_PHOTO },
-    treasurer: { name: "À renseigner", photo: DEFAULT_PHOTO },
-    commissioner: { name: "À renseigner", photo: DEFAULT_PHOTO },
-  },
+  }
 ];
 
 function SectionTitle({ eyebrow, title, text }) {
@@ -93,11 +80,11 @@ function MandateCard({ mandate, isCurrent }) {
           <div className="col-md-4">
             <RoleCard label="President" person={mandate.president} icon="bi-person-badge-fill" accent="rgba(194,65,12,0.14)" />
           </div>
-          <div className="col-md-4">
-            <RoleCard label="Tresorier" person={mandate.treasurer} icon="bi-cash-coin" accent="rgba(22,163,74,0.14)" />
+        <div className="col-md-4">
+            <RoleCard label="Commissaire aux comptes" person={mandate.commissioner} icon="bi-shield-check" accent="rgba(37,99,235,0.14)" />
           </div>
           <div className="col-md-4">
-            <RoleCard label="Commissaire aux comptes" person={mandate.commissioner} icon="bi-shield-check" accent="rgba(37,99,235,0.14)" />
+            <RoleCard label="Tresorier" person={mandate.treasurer} icon="bi-cash-coin" accent="rgba(22,163,74,0.14)" />
           </div>
         </div>
 
