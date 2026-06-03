@@ -6,6 +6,7 @@ const navItems = [
   { to: "/about", label: "À propos" },
   { to: "/activities", label: "Actualités" },
   { to: "/gallery", label: "Galeries" },
+  { to: "/cotisations", label: "Cotisations" },
   { to: "/bureau", label: "Les membres du bureau actifs" },
   { to: "/contacts", label: "Contacts" }
 ];

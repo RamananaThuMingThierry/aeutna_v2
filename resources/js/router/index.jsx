@@ -47,6 +47,7 @@ const ResetPassword = lazy(() => import("../pages/auth/ResetPassword"));
 const VerifyCode = lazy(() => import("../pages/auth/VerifyCode"));
 const AboutPage = lazy(() => import("../pages/public/AboutPage"));
 const ActivitiesPublicPage = lazy(() => import("../pages/public/ActivitiesPublicPage"));
+const AnnualFeePaymentPage = lazy(() => import("../pages/public/AnnualFeePaymentPage"));
 const BecomeMemberPage = lazy(() => import("../pages/public/BecomeMemberPage"));
 const BureauPage = lazy(() => import("../pages/public/BureauPage"));
 const ContactsPage = lazy(() => import("../pages/public/ContactsPage"));
@@ -138,6 +139,10 @@ export const router = createBrowserRouter([
           {
             path: "devenir-membre",
             element: withSuspense(<BecomeMemberPage />),
+          },
+          {
+            path: "cotisations",
+            element: withSuspense(<AnnualFeePaymentPage />),
           },
           {
             path: "activities",

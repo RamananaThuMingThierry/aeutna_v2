@@ -7,7 +7,7 @@ const LEADERS = [
   {
     id: 1,
     role: "Président",
-    name: "À renseigner",
+    name: "RIZIKY Jeremie Luckaël",
     photo: DEFAULT_PHOTO,
     accent: "rgba(194,65,12,0.14)",
     icon: "bi-person-badge-fill",
@@ -15,7 +15,7 @@ const LEADERS = [
   {
     id: 2,
     role: "Commissaire aux comptes",
-    name: "À renseigner",
+    name: "BEZAFY DANELLA",
     photo: DEFAULT_PHOTO,
     accent: "rgba(37,99,235,0.14)",
     icon: "bi-shield-check",
@@ -23,7 +23,7 @@ const LEADERS = [
   {
     id: 3,
     role: "Trésorier",
-    name: "À renseigner",
+    name: "KARL MAX RAKOTOSIHANAKA Stanys",
     photo: DEFAULT_PHOTO,
     accent: "rgba(22,163,74,0.14)",
     icon: "bi-cash-coin",

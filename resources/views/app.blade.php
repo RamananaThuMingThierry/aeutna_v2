@@ -15,7 +15,7 @@
     <meta property="og:site_name" content="AEUTNA">
     <meta property="og:locale" content="fr_FR">
     <meta property="og:title" content="{{ config('app.name', 'AEUTNA') }}">
-    <meta property="og:description" content="AEUTNA est une Association des Étudiants de l'Université de Tananarivo Natifs d'Antalaha.">
+    <meta property="og:description" content="AEUTNA est une Association des Etudiants de l'Universite de Tananarive Natifs d'Antalaha.">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:image" content="{{ asset('images/logo_aeutna.jpg') }}">
 
@@ -30,7 +30,7 @@
                 [
                     '@type' => 'Organization',
                     '@id' => url('/') . '/#organization',
-                    'name' => "Association des Étudiants de l'Université de Tananarive Natifs d'Antalaha",
+                    'name' => "Association des Etudiants de l'Universite de Tananarive Natifs d'Antalaha",
                     'alternateName' => 'AEUTNA',
                     'url' => url('/') . '/',
                     'logo' => [
@@ -54,7 +54,7 @@
                     '@id' => url('/') . '/#website',
                     'url' => url('/') . '/',
                     'name' => 'AEUTNA',
-                    'description' => "AEUTNA est une Association des Étudiants de l'Université de Tananarivo Natifs d'Antalaha.",
+                    'description' => "AEUTNA est une Association des Etudiants de l'Universite de Tananarive Natifs d'Antalaha.",
                     'inLanguage' => 'fr',
                     'publisher' => [
                         '@id' => url('/') . '/#organization',
@@ -65,7 +65,7 @@
                     '@id' => url()->current() . '#webpage',
                     'url' => url()->current(),
                     'name' => config('app.name', 'AEUTNA'),
-                    'description' => "AEUTNA est une Association des Étudiants de l'Université de Tananarivo Natifs d'Antalaha.",
+                    'description' => "AEUTNA est une Association des Etudiants de l'Universite de Tananarive Natifs d'Antalaha.",
                     'inLanguage' => 'fr',
                     'isPartOf' => [
                         '@id' => url('/') . '/#website',

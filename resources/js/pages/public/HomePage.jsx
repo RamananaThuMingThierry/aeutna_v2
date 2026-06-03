@@ -161,7 +161,7 @@ export default function HomePage() {
               <SectionTitle
                 eyebrow="A PROPOS"
                 title={data?.about?.title || "AEUTNA"}
-                text={data?.about?.summary || "Association des Etudiants d'Universite de Tananarive natifs d'Antalaha."}
+                text={data?.about?.summary || "Association des Etudiants de l'Universite de Tananarive Natifs d'Antalaha."}
               />
             </div>
             <div className="col-lg-6">

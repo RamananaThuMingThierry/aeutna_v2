@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import SEO from "../components/seo/SEO";
 
@@ -139,8 +139,17 @@ function SidebarContent({ currentUser, currentRoles, onLogout }) {
 
 export default function AdminLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
+
+  useEffect(() => {
+    // Fermer le sidebar mobile lors du changement de route
+    const closeBtn = document.querySelector('#adminSidebar .btn-close');
+    if (closeBtn) {
+      closeBtn.click();
+    }
+  }, [location]);
 
   const currentUser = useMemo(() => {
     try {
@@ -213,7 +222,7 @@ export default function AdminLayout() {
           </aside>
 
           <div className={`admin-content ${sidebarCollapsed ? "is-expanded" : ""}`}>
-            <nav className="navbar navbar-expand bg-white border-bottom px-3 px-lg-4 sticky-top">
+            <nav className="navbar navbar-expand bg-white border-bottom px-3 px-lg-4 sticky-top d-none d-lg-flex">
               <div className="w-100 d-flex align-items-start align-items-lg-center justify-content-between gap-3 flex-wrap">
                 <div className="d-flex align-items-center gap-3 flex-grow-1">
                   <button

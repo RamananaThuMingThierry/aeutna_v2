@@ -84,7 +84,7 @@ class WebsiteController extends Controller
         return response()->json([
             'slides' => $slides,
             'about' => [
-                'title' => 'Association des Etudiants d\'Université de Tananarive Natifs d\'Antalaha',
+                'title' => "Association des Etudiants de l'Universite de Tananarive Natifs d'Antalaha",
                 'summary' => 'AEUTNA rassemble, accompagne et valorise les membres autour de la solidarite, de l entraide et du developpement communautaire.',
             ],
             'contacts' => [
@@ -198,7 +198,7 @@ class WebsiteController extends Controller
 
         return response()->json([
             'about' => [
-                'title' => "Association des Etudiants d'Universite de Tananarive Natifs d'Antalaha",
+                'title' => "Association des Etudiants de l'Universite de Tananarive Natifs d'Antalaha",
                 'summary' => "L'AEUTNA rassemble les membres autour de l'entraide, de la transmission et de la valorisation de la communaute.",
                 'mission' => "Renforcer les liens, soutenir les parcours et encourager la participation associative.",
                 'vision' => "Construire une communaute unie, active et fiere de son histoire.",

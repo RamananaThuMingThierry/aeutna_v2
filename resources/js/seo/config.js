@@ -89,6 +89,15 @@ export const SEO_PAGES = {
     breadcrumb: "Devenir membre",
     schemaType: "WebPage",
   },
+  annualFeePayment: {
+    title: "Cotisation annuelle",
+    description:
+      "Espace de paiement des cotisations annuelles pour les membres actifs de l'AEUTNA.",
+    keywords: "cotisation AEUTNA, paiement annuel, membre AEUTNA, regularisation",
+    path: "/cotisations",
+    breadcrumb: "Cotisation",
+    schemaType: "WebPage",
+  },
   login: {
     title: "Connexion",
     description: "Connexion a l'espace membre et administration AEUTNA.",
@@ -144,6 +153,7 @@ export const PATH_TO_SEO_PAGE = {
   "/bureau": "bureau",
   "/contacts": "contacts",
   "/devenir-membre": "becomeMember",
+  "/cotisations": "annualFeePayment",
   "/login": "login",
   "/register": "register",
   "/forgot-password": "forgotPassword",

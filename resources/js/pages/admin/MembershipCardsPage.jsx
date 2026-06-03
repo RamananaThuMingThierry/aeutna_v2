@@ -210,7 +210,7 @@ export default function MembershipCardsPage() {
 
                 <div class="main">
                   <h2>${fullName}</h2>
-                  <p class="subtitle">Association des Etudiants de l'univeersité de Tananarive Natifs d'Antalaha</p>
+                  <p class="subtitle">Association des Etudiants de l'Universite de Tananarive Natifs d'Antalaha</p>
                   <div class="grid">
                     <div class="item">
                       <div class="label">Numero membre</div>

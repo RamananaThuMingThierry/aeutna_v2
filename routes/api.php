@@ -30,6 +30,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\StatuteArticleController;
 use App\Http\Controllers\StatuteController;
 use App\Http\Controllers\StatuteTitleController;
+use App\Http\Controllers\PublicFeePaymentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
@@ -49,6 +50,10 @@ Route::get('/website/activities', [WebsiteController::class, 'activitiesData'])-
 Route::get('/website/member-application-meta', [MemberApplicationController::class, 'publicMeta'])->name('website.member_application_meta');
 Route::post('/member-applications', [MemberApplicationController::class, 'store'])->name('member_applications.store');
 Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact_us.store');
+
+Route::get('/public-fee-payments/meta', [PublicFeePaymentController::class, 'getMeta']);
+Route::post('/public-fee-payments/search-member', [PublicFeePaymentController::class, 'searchMember']);
+Route::post('/public-fee-payments', [PublicFeePaymentController::class, 'store']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('auth')->group(function () {
