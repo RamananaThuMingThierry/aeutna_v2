@@ -105,13 +105,13 @@ export default function DetailMemberPage() {
     <div>
       <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
         <div>
-          <h3 className="h4 mb-1">Detail membre</h3>
-          <p className="text-secondary mb-0">Fiche detaillee du membre et historique futur de ses operations.</p>
+          <h3 className="h4 mb-1">Détail membre</h3>
+          <p className="text-secondary mb-0">Fiche detaillée du membre et historique futur de ses opérations.</p>
         </div>
         <div className="d-flex gap-2">
           <Link to="/admin/members" className="btn btn-outline-secondary">
             <i className="bi bi-arrow-left me-2" />
-            Retour a la liste
+            Retour à la liste
           </Link>
           <Link to={`/admin/members/${encryptedId}/edit`} className="btn btn-dark">
             <i className="bi bi-pencil-square me-2" />
@@ -164,7 +164,7 @@ export default function DetailMemberPage() {
                   <h2 className="h3 mb-1">{[member.first_name, member.last_name].filter(Boolean).join(" ") || "-"}</h2>
                   <div className="text-secondary mb-2">{member.email || member.phone || "-"}</div>
                   <div className="small text-muted">
-                    Adhesion: {formatDate(member.joined_at)} | Axe: {member.axe?.name || "-"} | Niveau: {member.educationLevel?.name || member.education_level?.name || "-"}
+                    Adhésion: {formatDate(member.joined_at)} | Axe: {member.axe?.name || "-"} | Niveau: {member.educationLevel?.name || member.education_level?.name || "-"}
                   </div>
                 </div>
               </div>
@@ -174,7 +174,7 @@ export default function DetailMemberPage() {
           <div className="row g-4">
             <div className="col-xl-6">
               <DetailCard title="Identification">
-                <DetailItem label="Prenom" value={member.first_name || "-"} />
+                <DetailItem label="Péenom" value={member.first_name || "-"} />
                 <DetailItem label="Nom" value={member.last_name || "-"} />
                 <DetailItem label="Genre" value={member.gender || "-"} />
                 <DetailItem label="Date naissance" value={formatDate(member.birth_date)} />
@@ -185,17 +185,17 @@ export default function DetailMemberPage() {
             <div className="col-xl-6">
               <DetailCard title="Contact">
                 <DetailItem label="Email" value={member.email || "-"} />
-                <DetailItem label="Telephone" value={member.phone || "-"} />
-                <DetailItem label="Telephone alternatif" value={member.alternative_phone || "-"} />
+                <DetailItem label="Téléphone" value={member.phone || "-"} />
+                <DetailItem label="Téléphone alternatif" value={member.alternative_phone || "-"} />
                 <DetailItem label="Adresse" value={member.address || "-"} />
-                <DetailItem label="Ville / Region" value={[member.city, member.region].filter(Boolean).join(" / ") || "-"} />
+                <DetailItem label="Section" value={member.section || "-"} />
               </DetailCard>
             </div>
 
             <div className="col-xl-6">
               <DetailCard title="Parcours">
                 <DetailItem label="Institution" value={member.institution_name || "-"} />
-                <DetailItem label="Filiere" value={member.field_of_study || "-"} />
+                <DetailItem label="Filière" value={member.field_of_study || "-"} />
                 <DetailItem label="Etudiant" value={member.is_student ? "Oui" : "Non"} />
                 <DetailItem label="Sympathisant" value={member.is_sympathizer ? "Oui" : "Non"} />
                 <DetailItem label="Originaire d'Antalaha" value={member.is_from_antalaha ? "Oui" : "Non"} />
@@ -204,12 +204,12 @@ export default function DetailMemberPage() {
 
             <div className="col-xl-6">
               <DetailCard title="Adhesion">
-                <DetailItem label="Numero membre" value={member.member_number || "-"} />
+                <DetailItem label="Numéro membre" value={member.member_number || "-"} />
                 <DetailItem label="Type de membre" value={member.member_type || "-"} />
                 <DetailItem label="Fonctions actuelles" value={currentFunctionNames(member) || "-"} />
-                <DetailItem label="Date adhesion" value={formatDate(member.joined_at)} />
+                <DetailItem label="Date d'inscription" value={formatDate(member.joined_at)} />
                 <DetailItem label="Axe" value={member.axe?.name || "-"} />
-                <DetailItem label="Niveau d'education" value={member.educationLevel?.name || member.education_level?.name || "-"} />
+                <DetailItem label="Niveau d'éducation" value={member.educationLevel?.name || member.education_level?.name || "-"} />
               </DetailCard>
             </div>
 
@@ -228,12 +228,12 @@ export default function DetailMemberPage() {
                     <table className="table table-sm align-middle mb-0">
                       <thead>
                         <tr className="text-muted small">
-                          <th>Annee</th>
+                          <th>Année</th>
                           <th>Montant du</th>
                           <th>Montant paye</th>
                           <th>Paiement</th>
                           <th>Validation</th>
-                          <th>Details</th>
+                          <th>Détails</th>
                           <th>Suivi</th>
                         </tr>
                       </thead>
@@ -281,7 +281,7 @@ export default function DetailMemberPage() {
                     </table>
                   </div>
                 ) : (
-                  <div className="text-secondary">Aucune cotisation enregistree pour ce membre.</div>
+                  <div className="text-secondary">Aucune cotisation enregistrée pour ce membre.</div>
                 )}
               </DetailCard>
             </div>

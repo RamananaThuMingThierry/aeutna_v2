@@ -16,7 +16,7 @@ const menuSections = [
   {
     title: "Suivi",
     items: [
-      { to: "/admin/dashboard", label: "Dashboard", icon: "bi-grid-1x2-fill" },
+      { to: "/admin/dashboard", label: "Tableau de board", icon: "bi-grid-1x2-fill" },
     ],
   },
   {

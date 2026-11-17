@@ -7,6 +7,10 @@ const A2026_PHOTO_PRESIDENT = "/mandat/2026/president.jpeg";
 const A2026_PHOTO_TREASURER = "/mandat/2026/treasurer.jpeg";
 const A2026_PHOTO_COMMISSIONER = "/mandat/2026/commissioner.jpeg";
 
+// const A2024_PHOTO_PRESIDENT = "/mandat/2024/president.jpeg";
+// const A2024_PHOTO_TREASURER = "/mandat/2024/treasurer.jpeg";
+// const A2024_PHOTO_COMMISSIONER = "/mandat/2024/commissioner.jpeg";
+
 const MANDATES = [
   {
     id: 1,

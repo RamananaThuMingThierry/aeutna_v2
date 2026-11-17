@@ -35,6 +35,7 @@ class Member extends Model
         'phone',
         'alternative_phone',
         'address',
+        'section',
         'institution_name',
         'field_of_study',
         'is_student',

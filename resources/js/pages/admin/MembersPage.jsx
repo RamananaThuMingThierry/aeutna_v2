@@ -155,7 +155,7 @@ export default function MembersPage() {
           `,
         },
         { data: "member_number", defaultContent: "", render: (value) => value || `<span class="text-muted small">-</span>` },
-        { data: "axe", defaultContent: "", render: (value) => value?.name || `<span class="text-muted small">-</span>` },
+        { data: "section", defaultContent: "", render: (value) => value || `<span class="text-muted small">-</span>` },
         {
           data: null,
           defaultContent: "",
@@ -241,17 +241,17 @@ export default function MembersPage() {
 
   return (
     <div className="container-fluid">
-      <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 mb-3">
+      <div className="d-flex align-items-center justify-content-between gap-2 mb-3">
         <div>
           <h4 className="mb-1">{t("members.title", "Membres")}</h4>
           <div className="text-muted small">{t("members.subtitle", "Gestion des membres")}</div>
         </div>
         <div className="d-flex gap-2">
-          <button className="btn btn-outline-secondary" onClick={() => void load({ mode: "refresh" })} disabled={initialLoading || refreshing}>
-            {initialLoading || refreshing ? <><span className="spinner-border spinner-border-sm me-2" />{t("members.refreshing", "Rafraichissement...")}</> : <><i className="bi bi-arrow-clockwise me-2" />{t("members.refresh", "Rafraichir")}</>}
+          <button className="btn btn-outline-secondary" onClick={() => void load({ mode: "refresh" })} disabled={initialLoading || refreshing} aria-label={t("members.refresh", "Rafraichir")} title={t("members.refresh", "Rafraichir")}>
+            {initialLoading || refreshing ? <><span className="spinner-border spinner-border-sm me-0 me-sm-2" /><span className="d-none d-sm-inline">{t("members.refreshing", "Rafraichissement...")}</span></> : <><i className="bi bi-arrow-clockwise me-0 me-sm-2" /><span className="d-none d-sm-inline">{t("members.refresh", "Rafraichir")}</span></>}
           </button>
           <button className="btn btn-dark" onClick={() => navigate("/admin/members/new")} disabled={initialLoading}>
-            <i className="bi bi-plus-lg me-2" />{t("members.new", "Nouveau membre")}
+            <i className="bi bi-plus-lg me-0 me-sm-2" /><span className="d-none d-sm-inline">{t("members.new", "Nouveau membre")}</span>
           </button>
         </div>
       </div>
@@ -266,11 +266,11 @@ export default function MembersPage() {
                 <tr className="text-muted small">
                     <th>{t("members.table.photo", "Photo")}</th>
                     <th>{t("members.table.name", "Nom complet")}</th>
-                    <th>{t("members.table.number", "Numero")}</th>
-                    <th>{t("members.table.axe", "Axe")}</th>
-                    <th>{t("members.table.institution", "Institution / Filiere")}</th>
+                    <th>{t("members.table.number", "Numéro")}</th>
+                    <th>{t("members.table.section", "Section")}</th>
+                    <th>{t("members.table.institution", "Institution / Filière")}</th>
                     <th>{t("members.table.educationLevel", "Niveau")}</th>
-                    <th>{t("members.table.joinedAt", "Date adhesion")}</th>
+                    <th>{t("members.table.joinedAt", "Date d'inscription")}</th>
                     <th>{t("members.table.status", "Statut")}</th>
                     <th className="text-end" style={{ width: 180 }}>{t("members.table.actions", "Actions")}</th>
                 </tr>

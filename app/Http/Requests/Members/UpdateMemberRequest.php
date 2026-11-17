@@ -36,6 +36,7 @@ class UpdateMemberRequest extends FormRequest
             'phone' => ['nullable', 'string', 'max:30'],
             'alternative_phone' => ['nullable', 'string', 'max:30'],
             'address' => ['nullable', 'string', 'max:255'],
+            'section' => ['nullable', 'string', 'max:255'],
             'city' => ['nullable', 'string', 'max:255'],
             'region' => ['nullable', 'string', 'max:255'],
             'institution_name' => ['nullable', 'string', 'max:255'],

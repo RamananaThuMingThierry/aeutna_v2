@@ -8,6 +8,18 @@ import { membersApi } from "../../api/member";
 import { useI18n } from "../../hooks/website/I18nContext";
 
 const STATUS_OPTIONS = ["pending", "active", "inactive", "suspended", "archived"];
+
+const SECTION_OPTIONS = [
+  "AMBOHIPO",
+  "AMBOLINKANDRINA",
+  "ANKATSO I",
+  "ANKATSO II",
+  "CENTRE VILLE",
+  "ITAOSY",
+  "IVATO",
+  "RAVITOTO",
+];
+
 const MEMBER_TYPE_OPTIONS = [
   { value: "member", label: "Membre" },
   { value: "bureau", label: "Bureau" },
@@ -42,7 +54,7 @@ function emptyForm() {
   return {
     member_type: "member", axis_id: "", education_level_id: "", member_number: "",
     first_name: "", last_name: "", gender: "", birth_date: "", birth_place: "", photo: "",
-    email: "", phone: "", alternative_phone: "", address: "", city: "", cin: "", facebook: "",
+    email: "", phone: "", alternative_phone: "", address: "", section: "", cin: "", facebook: "",
     institution_name: "", field_of_study: "", is_student: false, is_sympathizer: false,
     is_from_antalaha: true, status: "pending", joined_at: todayIsoDate(), notes: "",
     function_ids: [], function_start_date: todayIsoDate(), function_end_date: "", function_notes: "",
@@ -134,7 +146,7 @@ export default function FormMemberPage() {
             phone: member?.phone ?? "",
             alternative_phone: member?.alternative_phone ?? "",
             address: member?.address ?? "",
-            city: member?.city ?? "",
+            section: member?.section ?? "",
             institution_name: member?.institution_name ?? "",
             field_of_study: member?.field_of_study ?? "",
             is_student: !!member?.is_student,
@@ -226,7 +238,7 @@ export default function FormMemberPage() {
       facebook: form.facebook.trim(),
       alternative_phone: form.alternative_phone.trim(),
       address: form.address.trim(),
-      city: form.city.trim(),
+      section: form.section,
       institution_name: form.institution_name.trim(),
       field_of_study: form.field_of_study.trim(),
       status: form.status,
@@ -286,7 +298,7 @@ export default function FormMemberPage() {
 
       navigate("/admin/members", {
         replace: true,
-        state: { flashMessage: isEdit ? "Membre mis a jour." : "Membre cree." },
+        state: { flashMessage: isEdit ? "Membre mis à jour." : "Membre crée." },
       });
     } catch (error) {
       const data = error?.response?.data;
@@ -305,12 +317,11 @@ export default function FormMemberPage() {
       <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
         <div>
           <h3 className="h4 mb-1">{isEdit ? "Modifier membre" : "Nouveau membre"}</h3>
-          <p className="text-secondary mb-0">Formulaire de creation et de mise a jour d&apos;un membre.</p>
         </div>
         <div className="d-flex gap-2">
           <Link to="/admin/members" className="btn btn-outline-secondary">
             <i className="bi bi-arrow-left me-2" />
-            Retour a la liste
+            Retour à la liste
           </Link>
         </div>
       </div>
@@ -348,6 +359,7 @@ export default function FormMemberPage() {
                       type="file"
                       accept="image/*"
                       className={`form-control ${errors.photo ? "is-invalid" : ""}`}
+                      capture="environment"
                       onChange={(event) => {
                         const file = event.target.files?.[0] ?? null;
                         setPhotoFile(file);
@@ -357,20 +369,20 @@ export default function FormMemberPage() {
                       }}
                     />
                     <div className="form-text">
-                      Image par defaut affichee tant qu&apos;aucune photo n&apos;est selectionnee.
+                      Image par defaut affichée tant qu&apos;aucune photo n&apos;est selectionnée.
                     </div>
-                    {form.photo && !photoFile ? <div className="small text-muted mt-2">Image actuelle conservee.</div> : null}
+                    {form.photo && !photoFile ? <div className="small text-muted mt-2">Image actuelle conservée.</div> : null}
                     {photoFile ? (
                       <button
                         type="button"
-                        className="btn btn-sm btn-outline-secondary mt-3"
+                        className="btn btn-sm btn-outline-danger mt-3"
                         onClick={() => {
                           setPhotoFile(null);
                           if (photoPreview) URL.revokeObjectURL(photoPreview);
                           setPhotoPreview("");
                         }}
                       >
-                        Retirer l&apos;image
+                        Retirer l'image
                       </button>
                     ) : null}
                     <FieldError error={errors.photo} />
@@ -392,7 +404,7 @@ export default function FormMemberPage() {
                       </select>
                     </div>
                     <div className="col-12">
-                      <label className="form-label">Numero membre</label>
+                      <label className="form-label">Numéro membre</label>
                       <input className="form-control" name="member_number" value={form.member_number} onChange={handleFormChange} />
                     </div>
                     <div className="col-12">
@@ -410,7 +422,7 @@ export default function FormMemberPage() {
                       </select>
                     </div>
                     <div className="col-12">
-                      <label className="form-label">Date adhesion</label>
+                      <label className="form-label">Date d'inscription</label>
                       <input type="date" className="form-control" name="joined_at" value={form.joined_at} onChange={handleFormChange} />
                     </div>
                     {form.member_type === "bureau" ? (
@@ -420,7 +432,7 @@ export default function FormMemberPage() {
                           <select className={`form-select ${errors.function_ids ? "is-invalid" : ""}`} name="function_ids" value={form.function_ids} onChange={handleFormChange} multiple size={Math.min(6, Math.max(3, executiveFunctions.length || 3))}>
                             {executiveFunctions.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
                           </select>
-                          <div className="form-text">Maintiens `Ctrl` ou `Cmd` pour selectionner plusieurs fonctions.</div>
+                          <div className="form-text">Maintiens `Ctrl` ou `Cmd` pour sélectionner plusieurs fonctions.</div>
                           <FieldError error={errors.function_ids} />
                           {!executiveFunctions.length ? <div className="small text-muted mt-2">Aucune fonction de bureau active n&apos;est disponible.</div> : null}
                         </div>
@@ -448,7 +460,7 @@ export default function FormMemberPage() {
                 <SectionCard title="Identite" subtitle="Informations personnelles du membre">
                   <div className="row g-3">
                     <div className="col-md-6">
-                      <label className="form-label">Prenom</label>
+                      <label className="form-label">Prénom</label>
                       <input className={`form-control ${errors.first_name ? "is-invalid" : ""}`} name="first_name" value={form.first_name} onChange={handleFormChange} />
                       <FieldError error={errors.first_name} />
                     </div>
@@ -465,7 +477,7 @@ export default function FormMemberPage() {
                     <div className="col-md-6">
                       <label className="form-label">Genre</label>
                       <select className="form-select" name="gender" value={form.gender} onChange={handleFormChange}>
-                        <option value="">Selectionner</option>
+                        <option value="">Sélectionner</option>
                         <option value="Homme">Homme</option>
                         <option value="Femme">Femme</option>
                       </select>
@@ -504,8 +516,11 @@ export default function FormMemberPage() {
                       <input className="form-control" name="address" value={form.address} onChange={handleFormChange} />
                     </div>
                     <div className="col-md-6">
-                      <label className="form-label">Ville</label>
-                      <input className="form-control" name="city" value={form.city} onChange={handleFormChange} />
+                      <label className="form-label">Section</label>
+                      <select className="form-select" name="section" value={form.section} onChange={handleFormChange}>
+                        <option value="">Sélectionner une section</option>
+                        {SECTION_OPTIONS.map((section) => <option key={section} value={section}>{section}</option>)}
+                      </select>
                     </div>
                   </div>
                 </SectionCard>
