@@ -208,7 +208,7 @@ export default function DashboardPage() {
       const response = await dashboardApi.get();
       setData(response);
     } catch (loadError) {
-      const message = loadError?.response?.data?.message || "Impossible de charger le dashboard.";
+      const message = loadError?.response?.data?.message || "Impossible de charger le tableau de bord.";
 
       if (mode === "initial") {
         setError(message);
@@ -303,16 +303,16 @@ export default function DashboardPage() {
   const paymentsSummary = visiblePaymentsData.reduce((sum, item) => sum + Number(item.total_amount || 0), 0);
 
   if (loading) {
-    return <div className="text-muted">Chargement du dashboard...</div>;
+    return <div className="text-muted">Chargement du tableau de bord...</div>;
   }
 
   return (
     <div className="container-fluid">
       <div className="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-4">
         <div>
-          <h3 className="h4 mb-1">Dashboard</h3>
+          <h3 className="h4 mb-1">Tableau de board</h3>
           <p className="text-secondary mb-0">
-            Vue d&apos;ensemble de l&apos;administration AEUTNA.
+            Vue d'ensemble de l'administration AEUTNA.
           </p>
         </div>
 
@@ -326,7 +326,7 @@ export default function DashboardPage() {
             ) : (
               <>
                 <i className="bi bi-arrow-clockwise me-2" />
-                Rafraichir
+                Actualiser
               </>
             )}
           </button>
@@ -458,7 +458,7 @@ export default function DashboardPage() {
                       <strong>{stats.activities_total || 0}</strong>
                     </div>
                     <div className="d-flex justify-content-between mb-2">
-                      <span>Publiees</span>
+                      <span>Publiées</span>
                       <strong>{stats.activities_published || 0}</strong>
                     </div>
                     <div className="d-flex justify-content-between">

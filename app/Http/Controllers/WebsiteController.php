@@ -28,14 +28,20 @@ class WebsiteController extends Controller
             ->limit(6)
             ->get(['id', 'title', 'description', 'location', 'starts_at', 'ends_at', 'status']);
 
-        $gallery = $activities
-            ->flatMap(fn (Activity $activity) => $activity->images->map(function ($image) use ($activity) {
+        $gallery = Album::query()
+            ->where('status', 'active')
+            ->with(['images' => function ($query) {
+                $query->where('status', 'active')->orderBy('position')->orderBy('id');
+            }])
+            ->orderByDesc('id')
+            ->get()
+            ->flatMap(fn (Album $album) => $album->images->map(function (AlbumImage $image) use ($album) {
                 return [
                     'id' => $image->id,
-                    'image_path' => $image->image_path,
-                    'caption' => $image->caption,
-                    'is_cover' => $image->is_cover,
-                    'activity_title' => $activity->title,
+                    'image_path' => '/' . ltrim($image->image_url, '/'),
+                    'caption' => $image->description ?: $image->name,
+                    'is_cover' => $image->position === 1,
+                    'activity_title' => $album->title,
                 ];
             }))
             ->sortByDesc(fn (array $image) => $image['is_cover'])
@@ -81,6 +87,33 @@ class WebsiteController extends Controller
             })
             ->values();
 
+        $bureauMembers = MemberFunction::query()
+            ->with([
+                'member:id,first_name,last_name,photo,member_type,email,phone',
+                'function:id,name,code',
+            ])
+            ->where('is_current', true)
+            ->whereHas('member', fn ($query) => $query->where('member_type', 'bureau'))
+            ->orderBy('function_id')
+            ->orderBy('start_date')
+            ->orderBy('id')
+            ->get()
+            ->map(fn (MemberFunction $item) => [
+                'id' => $item->id,
+                'code' => $item->function?->code,
+                'role' => $item->function?->name,
+                'start_date' => optional($item->start_date)->toDateString(),
+                'notes' => $item->notes,
+                'member' => [
+                    'id' => $item->member?->id,
+                    'full_name' => trim(($item->member?->first_name ?? '') . ' ' . ($item->member?->last_name ?? '')),
+                    'photo' => $item->member?->photo,
+                    'email' => $item->member?->email,
+                    'phone' => $item->member?->phone,
+                ],
+            ])
+            ->values();
+
         return response()->json([
             'slides' => $slides,
             'about' => [
@@ -97,6 +130,7 @@ class WebsiteController extends Controller
             'activities' => $activities,
             'gallery' => $gallery,
             'role_history' => $roleHistory,
+            'bureau_members' => $bureauMembers,
         ]);
     }
 

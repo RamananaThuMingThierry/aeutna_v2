@@ -11,15 +11,16 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 export default function PublicLayout() {
   const location = useLocation();
   const seoPage = PATH_TO_SEO_PAGE[location.pathname] || "home";
+  const isLoginPage = location.pathname === "/login";
 
   return (
     <div className="d-flex flex-column min-vh-100">
       <SEO page={seoPage} />
-      <Header />
+      {!isLoginPage ? <Header /> : null}
       <main id="main-content" className="flex-grow-1 public-site-main">
         <Outlet />
       </main>
-      <Footer />
+      {!isLoginPage ? <Footer /> : null}
     </div>
   );
 }

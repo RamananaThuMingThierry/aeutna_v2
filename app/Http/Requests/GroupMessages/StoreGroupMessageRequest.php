@@ -17,6 +17,8 @@ class StoreGroupMessageRequest extends FormRequest
     {
         return [
             'audience_type' => ['required', Rule::in(['all', 'member', 'bureau'])],
+            'section' => ['nullable', 'string', 'max:100'],
+            'axis_id' => ['nullable', 'integer', 'exists:axes,id'],
             'title' => ['nullable', 'string', 'max:255'],
             'content' => ['required', 'string', 'max:5000'],
         ];

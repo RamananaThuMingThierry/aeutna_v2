@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 
 const navLinks = [
   { to: "/", label: "Accueil" },
-  { to: "/about", label: "A propos" },
+  { to: "/#apropos", label: "A propos" },
   { to: "/activities", label: "Actualites" },
   { to: "/gallery", label: "Galeries" },
   { to: "/bureau", label: "Bureau" },
-  { to: "/contacts", label: "Contacts" },
+  { to: "/#contact", label: "Contact" },
 ];
 
 const socialLinks = [
@@ -36,25 +36,33 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="public-footer mt-5">
+      <footer className="public-footer mt-0">
         <div className="container">
-          <div className="public-footer-bar">
+          <div className="public-footer-bar aeutna-footer-grid">
             <div className="public-footer-brand">
               <img src="/images/logo_aeutna.jpg" alt="AEUTNA" className="public-footer-logo" />
               <div>
                 <div className="fw-bold">AEUTNA</div>
-                <div className="public-footer-subtitle">Association des Etudiants de l'Universite de Tananarive Natifs d'Antalaha</div>
+                <div className="public-footer-subtitle">L’union fait notre force. Ensemble, cultivons la solidarité, l’ambition et l’engagement pour un avenir meilleur.</div>
               </div>
             </div>
 
             <nav className="public-footer-links" aria-label="Navigation secondaire">
-              {navLinks.map((item) => (
+              <strong className="footer-column-title">Navigation</strong>
+              {navLinks.slice(0, 4).map((item) => (
                 <Link key={item.to} to={item.to} className="public-footer-link">
                   {item.label}
                 </Link>
               ))}
             </nav>
 
+            <div className="public-footer-member-links">
+              <strong className="footer-column-title">Espace membre</strong>
+              <Link to="/devenir-membre" className="public-footer-link">Adhésion en ligne</Link>
+              <Link to="/cotisations" className="public-footer-link">Payer une cotisation</Link>
+              <Link to="/#contact" className="public-footer-link">Nous contacter</Link>
+              <Link to="/login" className="public-footer-link">Connexion</Link>
+            </div>
             <div className="public-footer-socials">
               {socialLinks.map((item) => (
                 <a
@@ -72,10 +80,7 @@ export default function Footer() {
           </div>
 
           <div className="public-footer-bottom">
-            <span>&copy; {currentYear} AEUTNA. Tous droits reserves.</span>
-            <Link to="/devenir-membre" className="public-footer-cta">
-              Devenir membre
-            </Link>
+            <span>&copy; {currentYear} AEUTNA. Tous droits réservés.</span>
           </div>
         </div>
       </footer>

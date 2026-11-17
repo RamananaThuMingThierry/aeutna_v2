@@ -1,162 +1,219 @@
-import React from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { websiteApi } from "../../api/website";
 
 const DEFAULT_PHOTO = "/images/avatar.png";
-
-const A2026_PHOTO_PRESIDENT = "/mandat/2026/president.jpeg";
-const A2026_PHOTO_TREASURER = "/mandat/2026/treasurer.jpeg";
-const A2026_PHOTO_COMMISSIONER = "/mandat/2026/commissioner.jpeg";
-
-
-const LEADERS = [
-  {
-    id: 1,
-    role: "Président",
-    name: "RIZIKY Jeremie Luckaël",
-    photo: A2026_PHOTO_PRESIDENT,
-    accent: "rgba(194,65,12,0.14)",
-    icon: "bi-person-badge-fill",
-  },
-  {
-    id: 2,
-    role: "Commissaire aux comptes",
-    name: "BEZAFY DANIELLA",
-    photo: A2026_PHOTO_COMMISSIONER,
-    accent: "rgba(37,99,235,0.14)",
-    icon: "bi-shield-check",
-  },
-  {
-    id: 3,
-    role: "Trésorier",
-    name: "KARL MAX RAKOTOSIHANAKA Stany",
-    photo: A2026_PHOTO_TREASURER,
-    accent: "rgba(22,163,74,0.14)",
-    icon: "bi-cash-coin",
-  },
+const EXECUTIVE_POSITIONS = [
+  { code: "PRESIDENT", acronym: "PR", title: "PrÃ©sident(e)", description: "Coordination gÃ©nÃ©rale" },
+  { code: "COMMISSAIRE_COMPTES", acronym: "CC", title: "Commissaire aux comptes", description: "ContrÃ´le et transparence financiÃ¨re" },
+  { code: "TRESORIER", acronym: "TR", title: "TrÃ©sorier(Ã¨re)", description: "Finances et cotisations" },
 ];
 
-const OFFICE_MEMBERS = [
-  { id: 1, name: "À renseigner", role: "Vice-président", photo: DEFAULT_PHOTO },
-  { id: 2, name: "À renseigner", role: "Sécretaire géneral", photo: DEFAULT_PHOTO },
-  { id: 3, name: "À renseigner", role: "Sécretaire adjoint", photo: DEFAULT_PHOTO },
-  { id: 4, name: "À renseigner", role: "Trésorier adjoint", photo: DEFAULT_PHOTO },
-  { id: 5, name: "À renseigner", role: "Charge de communication", photo: DEFAULT_PHOTO },
-  { id: 6, name: "À renseigner", role: "Charge d'organisation", photo: DEFAULT_PHOTO },
-];
+function imageUrl(value) {
+  if (!value) return DEFAULT_PHOTO;
+  if (/^(https?:)?\/\//i.test(value) || value.startsWith("/")) return value;
+  return `/${value.replace(/^\/+/, "")}`;
+}
 
-function SectionTitle({ eyebrow, title, text }) {
+function formatDate(value) {
+  if (!value) return "Date Ã  renseigner";
+  const date = new Date(`${value}T00:00:00`);
+  return Number.isNaN(date.getTime())
+    ? value
+    : date.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+}
+
+function SectionTitle({ id, eyebrow, title, text }) {
   return (
-    <div className="mb-4 mb-lg-5">
-      <div className="text-uppercase small fw-bold mb-2" style={{ letterSpacing: "0.14em", color: "var(--warm)" }}>
-        {eyebrow}
-      </div>
-      <h2 className="fw-bold mb-3">{title}</h2>
-      <p className="text-secondary fs-5 mb-0">{text}</p>
+    <div className="bureau-section-title">
+      <span>{eyebrow}</span>
+      <h2 id={id}>{title}</h2>
+      {text ? <p>{text}</p> : null}
     </div>
   );
 }
 
-function LeaderCard({ leader }) {
+function MemberCard({ assignment }) {
+  const name = assignment.member?.full_name || "Nom Ã  renseigner";
   return (
-    <article className="card border-0 shadow-sm h-100" style={{ background: "var(--panel)" }}>
-      <div className="card-body p-4 text-center">
-        <div className="d-flex justify-content-center mb-3">
-          <img
-            src={leader.photo || DEFAULT_PHOTO}
-            alt={leader.name}
-            className="rounded-circle object-fit-cover border shadow-sm"
-            loading="lazy"
-            decoding="async"
-            style={{ width: 96, height: 96 }}
-          />
-        </div>
-        <div
-          className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
-          style={{ width: 44, height: 44, background: leader.accent, color: "var(--accent-strong)" }}
-        >
-          <i className={`bi ${leader.icon}`} />
-        </div>
-        <div className="small text-uppercase fw-semibold text-secondary mb-1">{leader.role}</div>
-        <h3 className="h5 fw-bold mb-0">{leader.name}</h3>
+    <article className="bureau-dynamic-card">
+      <div className="bureau-dynamic-card-top">
+        <img src={imageUrl(assignment.member?.photo)} alt={name} loading="lazy" />
+        <span className="bureau-role-icon"><i className="bi bi-person-badge-fill" /></span>
       </div>
+      <div className="bureau-role-label">{assignment.role || "Fonction du bureau"}</div>
+      <h3>{name}</h3>
+      {assignment.start_date ? <div className="bureau-card-date"><i className="bi bi-calendar3" /> Depuis {formatDate(assignment.start_date)}</div> : null}
+      {assignment.member?.email ? <a className="bureau-card-contact" href={`mailto:${assignment.member.email}`}><i className="bi bi-envelope"/> {assignment.member.email}</a> : null}
+      {assignment.member?.phone ? <a className="bureau-card-contact" href={`tel:${assignment.member.phone.replace(/[^\d+]/g, "")}`}><i className="bi bi-telephone"/> {assignment.member.phone}</a> : null}
     </article>
   );
 }
 
-function OfficeMemberCard({ member }) {
+function ExecutiveCard({ position, assignment }) {
+  const name = assignment?.member?.full_name || "Titulaire Ã  renseigner";
   return (
-    <article className="card border-0 shadow-sm h-100" style={{ background: "var(--panel)" }}>
-      <div className="card-body p-4">
-        <div className="d-flex align-items-center gap-3">
-          <img
-            src={member.photo || DEFAULT_PHOTO}
-            alt={member.name}
-            className="rounded-circle object-fit-cover border"
-            loading="lazy"
-            decoding="async"
-            style={{ width: 64, height: 64 }}
-          />
-          <div>
-            <div className="fw-bold mb-1">{member.name}</div>
-            <div className="text-secondary">{member.role}</div>
-          </div>
-        </div>
+    <article className="bureau-dynamic-card">
+      <div className="bureau-dynamic-card-top">
+        <img src={imageUrl(assignment?.member?.photo)} alt={name} loading="lazy" />
+        <span className="bureau-role-icon bureau-role-acronym">{position.acronym}</span>
       </div>
+      <div className="bureau-role-label">{position.title}</div>
+      <p className="bureau-position-description">{position.description}</p>
+      <h3>{name}</h3>
+      {assignment?.member?.email ? <a className="bureau-card-contact" href={`mailto:${assignment.member.email}`}><i className="bi bi-envelope"/> {assignment.member.email}</a> : null}
+      {assignment?.member?.phone ? <a className="bureau-card-contact" href={`tel:${assignment.member.phone.replace(/[^\d+]/g, "")}`}><i className="bi bi-telephone"/> {assignment.member.phone}</a> : null}
     </article>
   );
 }
 
 export default function BureauPage() {
+  const [payload, setPayload] = useState(null);
+  const [statute, setStatute] = useState(null);
+  const [statuteLoading, setStatuteLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [tab, setTab] = useState("current");
+
+  useEffect(() => {
+    let mounted = true;
+    websiteApi.home()
+      .then((data) => {
+        if (mounted) setPayload(data);
+      })
+      .catch((err) => {
+        if (mounted) setError(err?.response?.data?.message || "Impossible de charger les membres du bureau.");
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+    websiteApi.about()
+      .then((data) => {
+        if (mounted) setStatute(data?.statute || null);
+      })
+      .catch(() => {
+        if (mounted) setStatute(null);
+      })
+      .finally(() => {
+        if (mounted) setStatuteLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const currentMembers = payload?.bureau_members || [];
+  const executiveCodes = EXECUTIVE_POSITIONS.map((position) => position.code);
+  const additionalMembers = currentMembers.filter((assignment) => !executiveCodes.includes(assignment.code));
+  const formerMembers = useMemo(
+    () => (payload?.role_history || []).flatMap((group) =>
+      (group.items || [])
+        .filter((item) => !item.is_current)
+        .map((item) => ({ ...item, role: group.label }))
+    ),
+    [payload]
+  );
+  const historyEvents = useMemo(
+    () => (payload?.role_history || [])
+      .flatMap((group) => (group.items || []).map((item) => ({ ...item, role: group.label })))
+      .sort((a, b) => new Date(a.start_date || a.end_date || 0) - new Date(b.start_date || b.end_date || 0)),
+    [payload]
+  );
+
   return (
-    <div>
-      <section className="py-5 py-lg-6">
-        <div className="container">
-          <div className="rounded-2 overflow-hidden shadow-lg p-4 p-lg-5" style={{ background: "linear-gradient(135deg, rgba(17,94,89,0.96), rgba(194,65,12,0.86))" }}>
-            <div className="row g-4 align-items-center">
-              <div className="col-12 text-white">
-                <h1 className="fw-bold mb-3">Les membres de bureau actifs</h1>
-                <p className="lead text-white-50 mb-0">
-                  Présentation statique des responsables actuels et des autres membres du bureau de l’AEUTNA.
-                </p>
-              </div>
+    <div className="bureau-page">
+      <main className="container bureau-page-content">
+        <div className="bureau-tabs" role="tablist" aria-label="Rubriques du bureau">
+          <button type="button" role="tab" aria-selected={tab === "current"} className={tab === "current" ? "is-active" : ""} onClick={() => setTab("current")}>
+            Bureau actuel <span>{currentMembers.length}</span>
+          </button>
+          <button type="button" role="tab" aria-selected={tab === "history"} className={tab === "history" ? "is-active" : ""} onClick={() => setTab("history")}>
+            Historique des mandats <span>{formerMembers.length}</span>
+          </button>
+          <button type="button" role="tab" aria-selected={tab === "association"} className={tab === "association" ? "is-active" : ""} onClick={() => setTab("association")}>
+            Histoire de lâ€™association <span>{historyEvents.length}</span>
+          </button>
+        </div>
+
+        {loading ? <div className="bureau-page-state"><span className="spinner-border spinner-border-sm" role="status" /> Chargement des membresâ€¦</div> : null}
+        {!loading && error ? <div className="alert alert-warning" role="alert">{error}</div> : null}
+
+        {!loading && !error && tab === "current" ? (
+          <section aria-labelledby="bureau-current-title">
+            <SectionTitle id="bureau-current-title" eyebrow="Ã‰quipe actuelle" title="Membres du bureau" text="Les fonctions et les membres en exercice, actualisÃ©s depuis les donnÃ©es de lâ€™association." />
+            <div className="row g-4">
+              {EXECUTIVE_POSITIONS.map((position) => <div className="col-sm-6 col-lg-4" key={position.code}><ExecutiveCard position={position} assignment={currentMembers.find((item) => item.code === position.code)} /></div>)}
+              {additionalMembers.map((assignment) => <div className="col-sm-6 col-lg-4" key={assignment.id}><MemberCard assignment={assignment} /></div>)}
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
+        ) : null}
 
-      <section className="pb-5 pb-lg-6">
-        <div className="container">
-          <SectionTitle
-            eyebrow="Responsables"
-            title="Président, commissaire aux comptes et trésorier"
-            text="Les postes principaux du bureau actuel sont présentés avec leurs photos."
-          />
-          <div className="row g-4">
-            {LEADERS.map((leader) => (
-              <div key={leader.id} className="col-md-6 col-xl-4">
-                <LeaderCard leader={leader} />
+        {!loading && !error && tab === "history" ? (
+          <section aria-labelledby="bureau-history-title">
+            <SectionTitle id="bureau-history-title" eyebrow="Archives" title="Historique des mandats" text="Les responsabilitÃ©s passÃ©es enregistrÃ©es dans lâ€™historique de lâ€™association." />
+            {formerMembers.length ? (
+              <div className="row g-4">
+                {formerMembers.map((assignment) => (
+                  <div className="col-sm-6 col-lg-4" key={assignment.id}>
+                    <MemberCard assignment={{ ...assignment, role: assignment.role }} />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            ) : (
+              <div className="bureau-page-empty"><i className="bi bi-clock-history" /><h3>Aucun ancien mandat nâ€™est encore enregistrÃ©.</h3><p>Les mandats terminÃ©s apparaÃ®tront ici lorsquâ€™ils seront ajoutÃ©s Ã  lâ€™historique.</p></div>
+            )}
+          </section>
+        ) : null}
 
-      <section className="pb-5 pb-lg-6">
-        <div className="container">
-          <SectionTitle
-            eyebrow="Membres"
-            title="Autres membres du bureau"
-            text="Liste des autres membres actifs du bureau avec leurs fonctions."
-          />
-          <div className="row g-4">
-            {OFFICE_MEMBERS.map((member) => (
-              <div key={member.id} className="col-md-6 col-xl-4">
-                <OfficeMemberCard member={member} />
+        {!loading && !error && tab === "association" ? (
+          <section aria-labelledby="bureau-association-title">
+            <SectionTitle id="bureau-association-title" eyebrow="MÃ©moire collective" title="Histoire de lâ€™association" text={payload?.about?.summary || "Les Ã©tapes de lâ€™association se dessinent Ã  travers les mandats et les personnes qui se sont engagÃ©es."} />
+            {historyEvents.length ? (
+              <div className="bureau-history-timeline">
+                {historyEvents.map((event) => (
+                  <article className="bureau-history-event" key={event.id}>
+                    <span className="bureau-history-dot" />
+                    <div className="bureau-history-event-card">
+                      <div className="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                        <h3>{event.role}</h3>
+                        <span className={event.is_current ? "is-current" : ""}>{event.is_current ? "Mandat en cours" : "Mandat terminÃ©"}</span>
+                      </div>
+                      <p>{event.member?.full_name || "Membre non renseignÃ©"}</p>
+                      <small>{formatDate(event.start_date)}{event.end_date ? ` â€” ${formatDate(event.end_date)}` : event.is_current ? " â€” aujourdâ€™hui" : ""}</small>
+                      {event.notes ? <p className="bureau-history-note">{event.notes}</p> : null}
+                    </div>
+                  </article>
+                ))}
               </div>
-            ))}
+            ) : (
+              <div className="bureau-page-empty"><i className="bi bi-clock-history" /><h3>Lâ€™histoire des mandats sera publiÃ©e prochainement.</h3><p>Les Ã©tapes apparaÃ®tront ici dÃ¨s que les dates et les responsabilitÃ©s seront enregistrÃ©es.</p></div>
+            )}
+          </section>
+        ) : null}
+
+        <aside className="bureau-page-cta">
+          <div><span>Rejoignez lâ€™association</span><h2>Construisons la suite ensemble.</h2></div>
+          <Link to="/devenir-membre" className="home-button home-button-primary">Faire mon adhÃ©sion <i className="bi bi-arrow-right" /></Link>
+        </aside>
+
+        <section className="bureau-official-documents" aria-labelledby="bureau-documents-title">
+          <div className="bureau-documents-copy">
+            <span>Documents officiels</span>
+            <h2 id="bureau-documents-title">Statuts de lâ€™association</h2>
+            {statuteLoading ? <p>Recherche du document officielâ€¦</p> : statute?.document?.file_url ? (
+              <p>{statute.title}{statute.version ? ` Â· Version ${statute.version}` : ""}{statute.effective_at ? ` Â· En vigueur depuis le ${formatDate(statute.effective_at)}` : ""}</p>
+            ) : (
+              <p>Aucun document officiel nâ€™est actuellement publiÃ© en tÃ©lÃ©chargement.</p>
+            )}
           </div>
-        </div>
-      </section>
+          {statute?.document?.file_url ? (
+            <a className="home-button home-button-primary" href={statute.document.file_url} download={statute.document.file_name || true}>
+              <i className="bi bi-download" /> TÃ©lÃ©charger les statuts
+            </a>
+          ) : null}
+        </section>
+      </main>
     </div>
   );
 }

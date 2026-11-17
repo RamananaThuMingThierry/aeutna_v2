@@ -86,7 +86,7 @@ class MemberApplicationController extends Controller
 
         if (!$activeAnnualFee) {
             throw ValidationException::withMessages([
-                'annual_fee' => ['Aucune cotisation annuelle active n est configuree.'],
+                'annual_fee' => ['Aucune cotisation annuelle active n\'est configurée.'],
             ]);
         }
 

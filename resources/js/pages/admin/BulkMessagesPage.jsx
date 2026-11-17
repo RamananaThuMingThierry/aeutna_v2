@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import { groupMessagesApi } from "../../api/group-message";
 import { membersApi } from "../../api/member";
+import { axesApi } from "../../api/axe";
 
 function normalizeCollection(payload) {
   if (Array.isArray(payload?.data)) return payload.data;
@@ -56,6 +57,9 @@ function historyAudienceLabel(item) {
 
 export default function BulkMessagesPage() {
   const [members, setMembers] = useState([]);
+  const [axes, setAxes] = useState([]);
+  const [sectionFilter, setSectionFilter] = useState("");
+  const [axisFilter, setAxisFilter] = useState("");
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
@@ -79,14 +83,16 @@ export default function BulkMessagesPage() {
       setError("");
 
       try {
-        const [membersResponse, historyResponse] = await Promise.all([
+        const [membersResponse, historyResponse, axesResponse] = await Promise.all([
           membersApi.list(),
           groupMessagesApi.list(),
+          axesApi.list(),
         ]);
 
         if (!active) return;
 
         setMembers(normalizeCollection(membersResponse));
+        setAxes(normalizeCollection(axesResponse));
         setHistory(Array.isArray(historyResponse?.messages) ? historyResponse.messages : []);
       } catch (loadError) {
         if (!active) return;
@@ -115,8 +121,23 @@ export default function BulkMessagesPage() {
     return members;
   }, [members, form.audience_type]);
 
+  const sectionOptions = useMemo(() => {
+    const memberSections = members
+      .map((member) => member?.section?.trim())
+      .filter(Boolean);
+
+    return [...new Set([...memberSections])]
+      .sort((a, b) => a.localeCompare(b, "fr"));
+  }, [members]);
+
+  const targetedMembers = useMemo(() => filteredMembers.filter((member) => {
+    const memberAxisId = member.axis_id ?? member.axe?.id;
+    return (!sectionFilter || member.section?.trim() === sectionFilter)
+      && (!axisFilter || String(memberAxisId || "") === String(axisFilter));
+  }), [filteredMembers, sectionFilter, axisFilter]);
+
   const recipients = useMemo(() => {
-    return filteredMembers
+    return targetedMembers
       .map((member) => ({
         id: member.id,
         name: `${member.first_name || ""} ${member.last_name || ""}`.trim() || "Membre",
@@ -124,9 +145,9 @@ export default function BulkMessagesPage() {
       }))
       .filter((member) => member.phone)
       .filter((member, index, array) => array.findIndex((item) => item.phone === member.phone) === index);
-  }, [filteredMembers]);
+  }, [targetedMembers]);
 
-  const missingPhonesCount = Math.max(filteredMembers.length - recipients.length, 0);
+  const missingPhonesCount = Math.max(targetedMembers.length - recipients.length, 0);
   const smsHref = useMemo(() => {
     if (!recipients.length || !form.content.trim()) return "";
     const numbers = recipients.map((item) => item.phone).join(",");
@@ -144,6 +165,8 @@ export default function BulkMessagesPage() {
     try {
       const response = await groupMessagesApi.create({
         audience_type: form.audience_type,
+        section: sectionFilter || null,
+        axis_id: axisFilter || null,
         title: form.title.trim(),
         content: form.content.trim(),
       });
@@ -238,6 +261,22 @@ export default function BulkMessagesPage() {
                   </select>
                 </div>
 
+                <div className="col-md-4">
+                  <label className="form-label">Section</label>
+                  <select className="form-select" value={sectionFilter} onChange={(event) => setSectionFilter(event.target.value)}>
+                    <option value="">Toutes les sections</option>
+                    {sectionOptions.map((section) => <option key={section} value={section}>{section}</option>)}
+                  </select>
+                </div>
+
+                <div className="col-md-4">
+                  <label className="form-label">Axe</label>
+                  <select className="form-select" value={axisFilter} onChange={(event) => setAxisFilter(event.target.value)}>
+                    <option value="">Tous les axes</option>
+                    {axes.map((axis) => <option key={axis.id} value={axis.id}>{axis.name}</option>)}
+                  </select>
+                </div>
+
                 <div className="col-md-8">
                   <label className="form-label">Titre</label>
                   <input
@@ -264,11 +303,15 @@ export default function BulkMessagesPage() {
                     <div className="d-flex flex-wrap gap-3 mb-2">
                       <div>
                         <div className="small text-uppercase text-secondary fw-semibold">Filtre</div>
-                        <div className="fw-semibold">{audienceLabel(form.audience_type)}</div>
+                        <div className="fw-semibold">
+                          {audienceLabel(form.audience_type)}
+                          {sectionFilter ? ` · ${sectionFilter}` : ""}
+                          {axisFilter ? ` · ${axes.find((axis) => String(axis.id) === String(axisFilter))?.name || "Axe"}` : ""}
+                        </div>
                       </div>
                       <div>
                         <div className="small text-uppercase text-secondary fw-semibold">Membres trouves</div>
-                        <div className="fw-semibold">{filteredMembers.length}</div>
+                        <div className="fw-semibold">{targetedMembers.length}</div>
                       </div>
                       <div>
                         <div className="small text-uppercase text-secondary fw-semibold">Numeros disponibles</div>

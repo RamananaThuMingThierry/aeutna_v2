@@ -366,10 +366,10 @@ export default function GalleryAdminPage() {
       {open ? (
         <>
           <div className="modal fade show" style={{ display: "block" }} role="dialog" aria-modal="true">
-            <div className="modal-dialog modal-xl modal-dialog-scrollable">
+            <div className="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
               <div className="modal-content border-0 shadow">
                 <div className="modal-header">
-                  <h5 className="modal-title">{editing ? "Modifier l album" : "Creer un album"}</h5>
+                  <h5 className="modal-title">{editing ? "Modifier l album" : "Créer un album"}</h5>
                   <button type="button" className="btn-close" onClick={() => !saving && setOpen(false)} />
                 </div>
                 <form onSubmit={onSubmit}>

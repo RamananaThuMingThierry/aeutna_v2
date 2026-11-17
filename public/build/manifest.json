@@ -1,52 +1,38 @@
 {
-  "_auth-DHd3U4OK.js": {
-    "file": "assets/auth-DHd3U4OK.js",
+  "_auth-HR4EqWTZ.js": {
+    "file": "assets/auth-HR4EqWTZ.js",
     "name": "auth",
     "imports": [
-      "_axios-DjWuO-Ki.js"
+      "_axios-D3p2hENT.js"
     ]
   },
-  "_axios-Dhza_ktX.js": {
-    "file": "assets/axios-Dhza_ktX.js",
-    "name": "axios",
-    "imports": [
-      "_jsx-runtime-DWSWI4JT.js"
-    ]
-  },
-  "_axios-DjWuO-Ki.js": {
-    "file": "assets/axios-DjWuO-Ki.js",
-    "name": "axios",
-    "imports": [
-      "_axios-Dhza_ktX.js"
-    ]
+  "_axios-D3p2hENT.js": {
+    "file": "assets/axios-D3p2hENT.js",
+    "name": "axios"
   },
   "_bootstrap-icons-CBg-kT3m.css": {
     "file": "assets/bootstrap-icons-CBg-kT3m.css",
     "src": "_bootstrap-icons-CBg-kT3m.css"
   },
-  "_chunk-OE4NN4TA-B5jduoSK.js": {
-    "file": "assets/chunk-OE4NN4TA-B5jduoSK.js",
+  "_chunk-OE4NN4TA-CiUxAINC.js": {
+    "file": "assets/chunk-OE4NN4TA-CiUxAINC.js",
     "name": "chunk-OE4NN4TA",
     "imports": [
-      "_jsx-runtime-DWSWI4JT.js"
+      "_axios-D3p2hENT.js"
     ]
   },
-  "_jsx-runtime-DWSWI4JT.js": {
-    "file": "assets/jsx-runtime-DWSWI4JT.js",
-    "name": "jsx-runtime"
-  },
-  "_member-application-B9OZl6-5.js": {
-    "file": "assets/member-application-B9OZl6-5.js",
+  "_member-application-BJyTe-g4.js": {
+    "file": "assets/member-application-BJyTe-g4.js",
     "name": "member-application",
     "imports": [
-      "_axios-DjWuO-Ki.js"
+      "_axios-D3p2hENT.js"
     ]
   },
-  "_website-Ck_AqXW5.js": {
-    "file": "assets/website-Ck_AqXW5.js",
+  "_website-BXMi7wPc.js": {
+    "file": "assets/website-BXMi7wPc.js",
     "name": "website",
     "imports": [
-      "_axios-DjWuO-Ki.js"
+      "_axios-D3p2hENT.js"
     ]
   },
   "node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff": {
@@ -58,16 +44,15 @@
     "src": "node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff2"
   },
   "resources/js/app.jsx": {
-    "file": "assets/app-BE91nJme.js",
+    "file": "assets/app-BB_HNi0g.js",
     "name": "app",
     "src": "resources/js/app.jsx",
     "isEntry": true,
     "imports": [
-      "_jsx-runtime-DWSWI4JT.js",
-      "_chunk-OE4NN4TA-B5jduoSK.js",
-      "_auth-DHd3U4OK.js",
-      "_axios-DjWuO-Ki.js",
-      "_member-application-B9OZl6-5.js"
+      "_axios-D3p2hENT.js",
+      "_chunk-OE4NN4TA-CiUxAINC.js",
+      "_auth-HR4EqWTZ.js",
+      "_member-application-BJyTe-g4.js"
     ],
     "dynamicImports": [
       "resources/js/pages/auth/ForgotPassword.jsx",
@@ -75,17 +60,15 @@
       "resources/js/pages/auth/Register.jsx",
       "resources/js/pages/auth/ResetPassword.jsx",
       "resources/js/pages/auth/VerifyCode.jsx",
-      "resources/js/pages/public/AboutPage.jsx",
-      "resources/js/pages/public/ActivitiesPublicPage.jsx",
-      "resources/js/pages/public/AnnualFeePaymentPage.jsx",
-      "resources/js/pages/public/BecomeMemberPage.jsx",
+      "resources/js/pages/public/NewActualitePage.jsx",
       "resources/js/pages/public/BureauPage.jsx",
-      "resources/js/pages/public/ContactsPage.jsx",
       "resources/js/pages/public/GalleryPage.jsx",
-      "resources/js/pages/public/HomePage.jsx"
+      "resources/js/pages/public/HistoryPage.jsx",
+      "resources/js/pages/public/HomePage.jsx",
+      "resources/js/pages/public/MembershipPaymentPage.jsx"
     ],
     "css": [
-      "assets/app-CiKGiwnQ.css",
+      "assets/app-B7Sql8BY.css",
       "assets/bootstrap-icons-CBg-kT3m.css"
     ],
     "assets": [
@@ -94,26 +77,25 @@
     ]
   },
   "resources/js/pages/auth/ForgotPassword.jsx": {
-    "file": "assets/ForgotPassword-BivOq0EI.js",
+    "file": "assets/ForgotPassword-CVG1ThqQ.js",
     "name": "ForgotPassword",
     "src": "resources/js/pages/auth/ForgotPassword.jsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime-DWSWI4JT.js",
-      "_chunk-OE4NN4TA-B5jduoSK.js",
-      "_auth-DHd3U4OK.js"
+      "_axios-D3p2hENT.js",
+      "_chunk-OE4NN4TA-CiUxAINC.js",
+      "_auth-HR4EqWTZ.js"
     ]
   },
   "resources/js/pages/auth/Login.jsx": {
-    "file": "assets/Login-CIzl-Tjs.js",
+    "file": "assets/Login-CIDADpKc.js",
     "name": "Login",
     "src": "resources/js/pages/auth/Login.jsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime-DWSWI4JT.js",
-      "_chunk-OE4NN4TA-B5jduoSK.js",
-      "_auth-DHd3U4OK.js",
-      "_axios-DjWuO-Ki.js"
+      "_axios-D3p2hENT.js",
+      "_chunk-OE4NN4TA-CiUxAINC.js",
+      "_auth-HR4EqWTZ.js"
     ],
     "css": [
       "assets/bootstrap-icons-CBg-kT3m.css"
@@ -124,15 +106,14 @@
     ]
   },
   "resources/js/pages/auth/Register.jsx": {
-    "file": "assets/Register-NN3TVMGa.js",
+    "file": "assets/Register-Df6AbLYo.js",
     "name": "Register",
     "src": "resources/js/pages/auth/Register.jsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime-DWSWI4JT.js",
-      "_chunk-OE4NN4TA-B5jduoSK.js",
-      "_auth-DHd3U4OK.js",
-      "_axios-DjWuO-Ki.js"
+      "_axios-D3p2hENT.js",
+      "_chunk-OE4NN4TA-CiUxAINC.js",
+      "_auth-HR4EqWTZ.js"
     ],
     "css": [
       "assets/bootstrap-icons-CBg-kT3m.css"
@@ -143,106 +124,90 @@
     ]
   },
   "resources/js/pages/auth/ResetPassword.jsx": {
-    "file": "assets/ResetPassword-BGGZhbvh.js",
+    "file": "assets/ResetPassword-DK9jwzgv.js",
     "name": "ResetPassword",
     "src": "resources/js/pages/auth/ResetPassword.jsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime-DWSWI4JT.js",
-      "_chunk-OE4NN4TA-B5jduoSK.js",
-      "_auth-DHd3U4OK.js"
+      "_axios-D3p2hENT.js",
+      "_chunk-OE4NN4TA-CiUxAINC.js",
+      "_auth-HR4EqWTZ.js"
     ]
   },
   "resources/js/pages/auth/VerifyCode.jsx": {
-    "file": "assets/VerifyCode-DoT0LztJ.js",
+    "file": "assets/VerifyCode-BDl_QgyB.js",
     "name": "VerifyCode",
     "src": "resources/js/pages/auth/VerifyCode.jsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime-DWSWI4JT.js",
-      "_chunk-OE4NN4TA-B5jduoSK.js",
-      "_auth-DHd3U4OK.js"
-    ]
-  },
-  "resources/js/pages/public/AboutPage.jsx": {
-    "file": "assets/AboutPage-C-D9SuvX.js",
-    "name": "AboutPage",
-    "src": "resources/js/pages/public/AboutPage.jsx",
-    "isDynamicEntry": true,
-    "imports": [
-      "_jsx-runtime-DWSWI4JT.js",
-      "_website-Ck_AqXW5.js"
-    ]
-  },
-  "resources/js/pages/public/ActivitiesPublicPage.jsx": {
-    "file": "assets/ActivitiesPublicPage-bhRaV6GO.js",
-    "name": "ActivitiesPublicPage",
-    "src": "resources/js/pages/public/ActivitiesPublicPage.jsx",
-    "isDynamicEntry": true,
-    "imports": [
-      "_jsx-runtime-DWSWI4JT.js",
-      "_website-Ck_AqXW5.js"
-    ]
-  },
-  "resources/js/pages/public/AnnualFeePaymentPage.jsx": {
-    "file": "assets/AnnualFeePaymentPage-B16vrvno.js",
-    "name": "AnnualFeePaymentPage",
-    "src": "resources/js/pages/public/AnnualFeePaymentPage.jsx",
-    "isDynamicEntry": true,
-    "imports": [
-      "_jsx-runtime-DWSWI4JT.js",
-      "_axios-Dhza_ktX.js"
-    ]
-  },
-  "resources/js/pages/public/BecomeMemberPage.jsx": {
-    "file": "assets/BecomeMemberPage-CJNg9j3d.js",
-    "name": "BecomeMemberPage",
-    "src": "resources/js/pages/public/BecomeMemberPage.jsx",
-    "isDynamicEntry": true,
-    "imports": [
-      "_jsx-runtime-DWSWI4JT.js",
-      "_member-application-B9OZl6-5.js"
+      "_axios-D3p2hENT.js",
+      "_chunk-OE4NN4TA-CiUxAINC.js",
+      "_auth-HR4EqWTZ.js"
     ]
   },
   "resources/js/pages/public/BureauPage.jsx": {
-    "file": "assets/BureauPage-ObNJ4ORJ.js",
+    "file": "assets/BureauPage-ICEFflEP.js",
     "name": "BureauPage",
     "src": "resources/js/pages/public/BureauPage.jsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime-DWSWI4JT.js"
-    ]
-  },
-  "resources/js/pages/public/ContactsPage.jsx": {
-    "file": "assets/ContactsPage-Bq8M6Fg-.js",
-    "name": "ContactsPage",
-    "src": "resources/js/pages/public/ContactsPage.jsx",
-    "isDynamicEntry": true,
-    "imports": [
-      "_jsx-runtime-DWSWI4JT.js",
-      "_axios-DjWuO-Ki.js",
-      "_website-Ck_AqXW5.js"
+      "_axios-D3p2hENT.js",
+      "_chunk-OE4NN4TA-CiUxAINC.js",
+      "_website-BXMi7wPc.js"
     ]
   },
   "resources/js/pages/public/GalleryPage.jsx": {
-    "file": "assets/GalleryPage-nDET8xv1.js",
+    "file": "assets/GalleryPage-T-qW2EAX.js",
     "name": "GalleryPage",
     "src": "resources/js/pages/public/GalleryPage.jsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime-DWSWI4JT.js",
-      "_website-Ck_AqXW5.js"
+      "_axios-D3p2hENT.js",
+      "_chunk-OE4NN4TA-CiUxAINC.js",
+      "_website-BXMi7wPc.js"
+    ]
+  },
+  "resources/js/pages/public/HistoryPage.jsx": {
+    "file": "assets/HistoryPage-CWN0qjbb.js",
+    "name": "HistoryPage",
+    "src": "resources/js/pages/public/HistoryPage.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_axios-D3p2hENT.js",
+      "_website-BXMi7wPc.js"
     ]
   },
   "resources/js/pages/public/HomePage.jsx": {
-    "file": "assets/HomePage-BMRpaQMg.js",
+    "file": "assets/HomePage-B9Ko-ukC.js",
     "name": "HomePage",
     "src": "resources/js/pages/public/HomePage.jsx",
     "isDynamicEntry": true,
     "imports": [
-      "_jsx-runtime-DWSWI4JT.js",
-      "_chunk-OE4NN4TA-B5jduoSK.js",
-      "_website-Ck_AqXW5.js"
+      "_axios-D3p2hENT.js",
+      "_chunk-OE4NN4TA-CiUxAINC.js",
+      "_member-application-BJyTe-g4.js",
+      "_website-BXMi7wPc.js"
+    ]
+  },
+  "resources/js/pages/public/MembershipPaymentPage.jsx": {
+    "file": "assets/MembershipPaymentPage-DhNdY7bx.js",
+    "name": "MembershipPaymentPage",
+    "src": "resources/js/pages/public/MembershipPaymentPage.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_axios-D3p2hENT.js",
+      "_chunk-OE4NN4TA-CiUxAINC.js",
+      "_member-application-BJyTe-g4.js"
+    ]
+  },
+  "resources/js/pages/public/NewActualitePage.jsx": {
+    "file": "assets/NewActualitePage-0peq224g.js",
+    "name": "NewActualitePage",
+    "src": "resources/js/pages/public/NewActualitePage.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_axios-D3p2hENT.js",
+      "_website-BXMi7wPc.js"
     ]
   }
 }

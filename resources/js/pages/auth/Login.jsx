@@ -86,16 +86,10 @@ export default function Login() {
 
   if (authChecking) {
     return (
-      <div className="container py-5">
-        <div className="row justify-content-center">
-          <div className="col-12 col-md-8 col-lg-5">
-            <div className="card border-0 shadow-sm">
-              <div className="card-body p-5 text-center">
+      <div className="aeutna-login-page">
+        <div className="aeutna-login-card text-center">
                 <div className="spinner-border text-dark mb-3" role="status" />
                 <div>Vérification de la session...</div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     );
@@ -139,16 +133,12 @@ export default function Login() {
   }
 
   return (
-    <div className="container py-5">
-      <div className="row justify-content-center">
-        <div className="col-12 col-md-8 col-lg-5">
-          <div className="card border-0 shadow-sm">
-            <div className="card-body p-4 p-lg-5">
+    <div className="aeutna-login-page">
+      <Link to="/" className="aeutna-login-back"><i className="bi bi-arrow-left" title="Retour au site"/></Link>
+      <main className="aeutna-login-card">
+              <img src="/images/logo_aeutna.jpg" alt="Logo AEUTNA" className="aeutna-login-logo" />
               <div className="mb-4 text-center">
-                <h1 className="h3 mb-2">Connexion</h1>
-                <p className="text-muted mb-0">
-                  Connecte-toi avec ton email et ton mot de passe.
-                </p>
+                <h1 className="h3 mb-2">Connexion à votre espace</h1>
               </div>
 
               {error ? (
@@ -165,7 +155,7 @@ export default function Login() {
                   <input
                     id="email"
                     type="email"
-                    className="form-control"
+                    className="form-control aeutna-login-input"
                     value={form.email}
                     onChange={(event) =>
                       setForm((current) => ({ ...current, email: event.target.value }))
@@ -183,7 +173,7 @@ export default function Login() {
                     <input
                       id="password"
                       type={showPassword ? "text" : "password"}
-                      className="form-control pe-5"
+                      className="form-control pe-5 aeutna-login-input"
                       value={form.password}
                       onChange={(event) =>
                         setForm((current) => ({ ...current, password: event.target.value }))
@@ -202,43 +192,12 @@ export default function Login() {
                     </button>
                   </div>
                 </div>
-
-                <div className="d-flex justify-content-between align-items-center gap-3 flex-wrap">
-                  <div className="form-check">
-                    <input
-                      id="remember"
-                      type="checkbox"
-                      className="form-check-input"
-                      checked={form.remember}
-                      onChange={(event) =>
-                        setForm((current) => ({ ...current, remember: event.target.checked }))
-                      }
-                    />
-                    <label htmlFor="remember" className="form-check-label">
-                      Se souvenir de moi
-                    </label>
-                  </div>
-
-                  <Link to="/forgot-password" className="text-decoration-none small">
-                    Mot de passe oublié ?
-                  </Link>
-                </div>
-
-                <button type="submit" className="btn btn-dark py-2" disabled={loading}>
+                
+                <button type="submit" className="btn aeutna-login-submit py-2" disabled={loading}>
                   {loading ? "Connexion..." : "Se connecter"}
                 </button>
               </form>
-
-              <div className="mt-4 text-center">
-                <span className="text-muted">Pas encore de compte ? </span>
-                <Link to="/register" className="text-decoration-none">
-                  Créer un compte
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      </main>
     </div>
   );
 }

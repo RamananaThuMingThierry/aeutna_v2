@@ -3,12 +3,11 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 
 const navItems = [
   { to: "/", label: "Accueil" },
-  { to: "/about", label: "À propos" },
   { to: "/activities", label: "Actualités" },
   { to: "/gallery", label: "Galeries" },
-  { to: "/cotisations", label: "Cotisations" },
-  { to: "/bureau", label: "Les membres du bureau actifs" },
-  { to: "/contacts", label: "Contacts" }
+  { to: "/bureau", label: "Bureau" },
+  { to: "/historique", label: "Historique" },
+  { to: "/#contact", label: "Contact" }
 ];
 
 function NavButtons({ mobile = false, onNavigate }) {
@@ -19,11 +18,9 @@ function NavButtons({ mobile = false, onNavigate }) {
           key={item.to}
           to={item.to}
           onClick={onNavigate}
-          className={({ isActive }) =>
-            mobile
-              ? `btn w-100 text-start rounded-4 px-3 py-3 ${isActive ? "btn-dark" : "btn-outline-secondary"}`
-              : `btn btn-sm rounded-pill px-3 ${isActive ? "btn-dark" : "btn-outline-secondary border-0"}`
-          }
+          className={({ isActive }) => mobile
+            ? `btn w-100 text-start rounded-4 px-3 py-3 ${isActive ? "btn-dark" : "btn-outline-secondary"}`
+            : `aeutna-nav-link ${isActive ? "is-active" : ""}`}
         >
           {item.label}
         </NavLink>
@@ -74,28 +71,29 @@ export default function Header() {
   return (
     <header
       className="position-sticky top-0 z-3 border-bottom"
-      style={{ backdropFilter: "blur(20px)", background: "rgba(255,247,235,0.92)" }}
+      style={{ backdropFilter: "blur(16px)", background: "rgba(255,255,255,0.96)" }}
     >
-      <div className="container py-3 d-flex align-items-center justify-content-between gap-3">
-        <Link to="/" className="text-decoration-none text-dark d-flex align-items-center gap-3">
+      <div className="container py-2 d-flex align-items-center justify-content-between gap-3 aeutna-header-inner">
+        <Link to="/" className="text-decoration-none text-dark d-flex align-items-center gap-3 aeutna-brand">
           <img
             src="/images/logo_aeutna.jpg"
             alt="AEUTNA"
-            className="rounded-2 object-fit-cover border"
-            style={{ width: 52, height: 52 }}
+            className="rounded-3 object-fit-cover border-0"
+            style={{ width: 54, height: 54 }}
           />
+          <span className="d-none d-sm-grid aeutna-brand-copy">
+            <strong>AEUTNA</strong>
+          </span>
         </Link>
 
-        <nav className="d-none d-lg-flex align-items-center gap-2 flex-wrap justify-content-center">
+        <nav className="d-none d-lg-flex align-items-center gap-1 flex-wrap justify-content-center aeutna-main-nav">
           <NavButtons />
         </nav>
 
         <div className="d-none d-lg-flex align-items-center gap-2">
-          <Link to="/login" className="btn btn-outline-dark btn-sm rounded-pill px-3">
-            Connexion
-          </Link>
-          <Link to="/register" className="btn btn-warning btn-sm rounded-pill px-3">
-            Inscription
+          <span className="aeutna-open-badge"><i /> Adhésion ouverte</span>
+          <Link to="/?payment=1#cotisations" className="btn btn-sm rounded-pill px-3 aeutna-join-button">
+            Payer ma cotisation <i className="bi bi-arrow-up-right" />
           </Link>
         </div>
 
@@ -124,11 +122,12 @@ export default function Header() {
               <NavButtons mobile onNavigate={() => setMobileMenuOpen(false)} />
 
               <div className="border-top pt-3 mt-2 d-grid gap-2">
+                <span className="aeutna-open-badge justify-content-center"><i /> Adhésion ouverte</span>
                 <Link to="/login" className="btn btn-outline-dark rounded-4 py-3" onClick={() => setMobileMenuOpen(false)}>
                   Connexion
                 </Link>
-                <Link to="/register" className="btn btn-warning rounded-4 py-3" onClick={() => setMobileMenuOpen(false)}>
-                  Inscription
+                <Link to="/?payment=1#cotisations" className="btn btn-warning rounded-4 py-3" onClick={() => setMobileMenuOpen(false)}>
+                  Payer ma cotisation
                 </Link>
               </div>
             </div>

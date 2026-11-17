@@ -10,6 +10,7 @@ import { useI18n } from "../../hooks/website/I18nContext";
 const STATUS_OPTIONS = ["pending", "active", "inactive", "suspended", "archived"];
 
 const SECTION_OPTIONS = [
+  "67H",
   "AMBOHIPO",
   "AMBOLINKANDRINA",
   "ANKATSO I",

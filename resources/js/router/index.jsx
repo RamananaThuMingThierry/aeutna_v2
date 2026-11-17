@@ -45,14 +45,12 @@ const Login = lazy(() => import("../pages/auth/Login"));
 const Register = lazy(() => import("../pages/auth/Register"));
 const ResetPassword = lazy(() => import("../pages/auth/ResetPassword"));
 const VerifyCode = lazy(() => import("../pages/auth/VerifyCode"));
-const AboutPage = lazy(() => import("../pages/public/AboutPage"));
-const ActivitiesPublicPage = lazy(() => import("../pages/public/ActivitiesPublicPage"));
-const AnnualFeePaymentPage = lazy(() => import("../pages/public/AnnualFeePaymentPage"));
-const BecomeMemberPage = lazy(() => import("../pages/public/BecomeMemberPage"));
+const ActivitiesPublicPage = lazy(() => import("../pages/public/NewActualitePage"));
 const BureauPage = lazy(() => import("../pages/public/BureauPage"));
-const ContactsPage = lazy(() => import("../pages/public/ContactsPage"));
 const GalleryPage = lazy(() => import("../pages/public/GalleryPage"));
+const HistoryPage = lazy(() => import("../pages/public/HistoryPage"));
 const HomePage = lazy(() => import("../pages/public/HomePage"));
+const MembershipPaymentPage = lazy(() => import("../pages/public/MembershipPaymentPage"));
 
 function PlaceholderPage({ title, description }) {
   return (
@@ -126,7 +124,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "about",
-            element: withSuspense(<AboutPage />),
+            element: <Navigate to="/#apropos" replace />,
           },
           {
             path: "gallery",
@@ -137,12 +135,20 @@ export const router = createBrowserRouter([
             element: withSuspense(<BureauPage />),
           },
           {
+            path: "historique",
+            element: withSuspense(<HistoryPage />),
+          },
+          {
             path: "devenir-membre",
-            element: withSuspense(<BecomeMemberPage />),
+            element: <Navigate to="/?modal=membership" replace />,
+          },
+          {
+            path: "paiement-adhesion",
+            element: withSuspense(<MembershipPaymentPage />),
           },
           {
             path: "cotisations",
-            element: withSuspense(<AnnualFeePaymentPage />),
+            element: <Navigate to="/?payment=1#cotisations" replace />,
           },
           {
             path: "activities",
@@ -150,7 +156,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "contacts",
-            element: withSuspense(<ContactsPage />),
+            element: <Navigate to="/#contact" replace />,
           },
           {
             path: "login",

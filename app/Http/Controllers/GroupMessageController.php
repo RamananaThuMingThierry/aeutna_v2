@@ -52,7 +52,7 @@ class GroupMessageController extends Controller
     public function store(StoreGroupMessageRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        $recipients = $this->resolveRecipients($validated['audience_type']);
+        $recipients = $this->resolveRecipients($validated['audience_type'], $validated['section'] ?? null, $validated['axis_id'] ?? null);
         $phoneNumbers = collect($recipients)
             ->pluck('phone')
             ->filter()
@@ -103,14 +103,22 @@ class GroupMessageController extends Controller
         ]);
     }
 
-    private function resolveRecipients(string $audienceType): array
+    private function resolveRecipients(string $audienceType, ?string $section = null, ?int $axisId = null): array
     {
-        $query = Member::query()->select(['id', 'first_name', 'last_name', 'member_type', 'phone', 'alternative_phone']);
+        $query = Member::query()->select(['id', 'first_name', 'last_name', 'member_type', 'phone', 'alternative_phone', 'section', 'axis_id']);
 
         if ($audienceType === 'member') {
             $query->where('member_type', 'member');
         } elseif ($audienceType === 'bureau') {
             $query->where('member_type', 'bureau');
+        }
+
+        if ($section !== null && $section !== '') {
+            $query->where('section', $section);
+        }
+
+        if ($axisId !== null) {
+            $query->where('axis_id', $axisId);
         }
 
         return $query

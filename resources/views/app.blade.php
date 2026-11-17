@@ -82,7 +82,7 @@
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
     </script>
 
-    <title>{{ config('app.name', 'AEUTNA') }}</title>
+    <title>AEUTNA - Association des Etudiants de l\'Université de Tananarivo Natifs d\'Antalaha</title>
 
     @viteReactRefresh
     @vite('resources/js/app.jsx')

@@ -1,0 +1,53 @@
+import { useEffect, useMemo, useState } from "react";
+import { websiteApi } from "../../api/website";
+
+function formatDate(value) {
+  if (!value) return "Date à renseigner";
+  const date = new Date(`${value}T00:00:00`);
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+}
+
+export default function HistoryPage() {
+  const [payload, setPayload] = useState(null);
+  const [tab, setTab] = useState("mandates");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    websiteApi.home()
+      .then((data) => { if (active) setPayload(data); })
+      .catch((err) => { if (active) setError(err?.response?.data?.message || "Impossible de charger l’historique."); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, []);
+
+  const mandates = useMemo(() => (payload?.role_history || [])
+    .flatMap((group) => (group.items || []).filter((item) => !item.is_current).map((item) => ({ ...item, role: group.label })))
+    .sort((a, b) => new Date(b.start_date || b.end_date || 0) - new Date(a.start_date || a.end_date || 0)), [payload]);
+  const events = useMemo(() => (payload?.role_history || [])
+    .flatMap((group) => (group.items || []).map((item) => ({ ...item, role: group.label })))
+    .sort((a, b) => new Date(a.start_date || a.end_date || 0) - new Date(b.start_date || b.end_date || 0)), [payload]);
+
+  return (
+    <main className="history-page">
+      <section className="history-hero"><div className="container"><span className="home-eyebrow">Mémoire collective</span><h1>L’histoire de l’AEUTNA</h1><p>Les personnes, les mandats et les étapes qui ont construit notre association.</p></div></section>
+      <section className="container bureau-page-content">
+        <div className="bureau-tabs" role="tablist" aria-label="Historique de l’association">
+          <button type="button" role="tab" aria-selected={tab === "mandates"} className={tab === "mandates" ? "is-active" : ""} onClick={() => setTab("mandates")}>Historique des mandats</button>
+          <button type="button" role="tab" aria-selected={tab === "association"} className={tab === "association" ? "is-active" : ""} onClick={() => setTab("association")}>Historique de l’association</button>
+        </div>
+        {loading ? <div className="bureau-page-state"><span className="spinner-border spinner-border-sm" role="status"/> Chargement de l’historique…</div> : null}
+        {error ? <div className="alert alert-warning" role="alert">{error}</div> : null}
+        {!loading && !error && tab === "mandates" ? <section aria-labelledby="history-mandates-title">
+          <div className="bureau-section-title"><span>Archives</span><h2 id="history-mandates-title">Historique des mandats</h2><p>Retrouvez les membres qui ont exercé une responsabilité au sein de l’association.</p></div>
+          {mandates.length ? <div className="row g-4">{mandates.map((mandate) => <div className="col-sm-6 col-lg-4" key={mandate.id}><article className="bureau-dynamic-card"><div className="bureau-dynamic-card-top"><img src={mandate.member?.photo ? (mandate.member.photo.startsWith("/") || /^https?:/i.test(mandate.member.photo) ? mandate.member.photo : `/${mandate.member.photo}`) : "/images/avatar.png"} alt={mandate.member?.full_name || "Membre"} loading="lazy"/><span className="bureau-role-icon"><i className="bi bi-person-badge-fill"/></span></div><div className="bureau-role-label">{mandate.role}</div><h3>{mandate.member?.full_name || "Membre non renseigné"}</h3><div className="bureau-card-date"><i className="bi bi-calendar3"/> {formatDate(mandate.start_date)}{mandate.end_date ? ` — ${formatDate(mandate.end_date)}` : ""}</div></article></div>)}</div> : <div className="bureau-page-empty"><i className="bi bi-clock-history"/><h3>Aucun ancien mandat n’est encore enregistré.</h3><p>Les mandats terminés apparaîtront ici lorsqu’ils seront ajoutés à l’historique.</p></div>}
+        </section> : null}
+        {!loading && !error && tab === "association" ? <section aria-labelledby="history-association-title">
+          <div className="bureau-section-title"><span>Notre mémoire</span><h2 id="history-association-title">Historique de l’association</h2><p>{payload?.about?.summary || "Les étapes de l’association se dessinent à travers les mandats et les personnes qui se sont engagées."}</p></div>
+          {events.length ? <div className="bureau-history-timeline">{events.map((event) => <article className="bureau-history-event" key={event.id}><span className="bureau-history-dot"/><div className="bureau-history-event-card"><div className="d-flex flex-wrap align-items-center justify-content-between gap-2"><h3>{event.role}</h3><span className={event.is_current ? "is-current" : ""}>{event.is_current ? "Mandat en cours" : "Mandat terminé"}</span></div><p>{event.member?.full_name || "Membre non renseigné"}</p><small>{formatDate(event.start_date)}{event.end_date ? ` — ${formatDate(event.end_date)}` : event.is_current ? " — aujourd’hui" : ""}</small>{event.notes ? <p className="bureau-history-note">{event.notes}</p> : null}</div></article>)}</div> : <div className="bureau-page-empty"><i className="bi bi-clock-history"/><h3>L’histoire de l’association sera publiée prochainement.</h3><p>Les étapes apparaîtront ici dès que les dates et les responsabilités seront enregistrées.</p></div>}
+        </section> : null}
+      </section>
+    </main>
+  );
+}
