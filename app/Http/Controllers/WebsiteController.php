@@ -7,11 +7,24 @@ use App\Models\Album;
 use App\Models\AlbumImage;
 use App\Models\Statute;
 use App\Models\MemberFunction;
+use App\Models\Document;
 use App\Models\Slide;
 use Illuminate\Http\JsonResponse;
 
 class WebsiteController extends Controller
 {
+    public function publishedDocuments(): JsonResponse
+    {
+        $documents = Document::query()
+            ->where('visibility', 'public')
+            ->where('publication_status', 'published')
+            ->orderByDesc('published_at')
+            ->orderByDesc('id')
+            ->get(['id', 'title', 'description', 'file_name', 'file_path', 'document_type', 'published_at']);
+
+        return response()->json($documents);
+    }
+
     public function homeData(): JsonResponse
     {
         $slides = Slide::query()
@@ -150,6 +163,7 @@ class WebsiteController extends Controller
                     'title' => $album->title,
                     'slug' => $album->slug,
                     'description' => $album->description,
+                    'created_at' => $album->created_at?->toDateString(),
                     'status' => $album->status,
                     'images_count' => $album->images->count(),
                     'cover_image' => $album->images->first() ? [

@@ -47,6 +47,7 @@ Route::get('/website/home', [WebsiteController::class, 'homeData'])->name('websi
 Route::get('/website/about', [WebsiteController::class, 'aboutData'])->name('website.about');
 Route::get('/website/gallery', [WebsiteController::class, 'galleryData'])->name('website.gallery');
 Route::get('/website/activities', [WebsiteController::class, 'activitiesData'])->name('website.activities');
+Route::get('/website/documents', [WebsiteController::class, 'publishedDocuments'])->name('website.documents');
 Route::get('/website/member-application-meta', [MemberApplicationController::class, 'publicMeta'])->name('website.member_application_meta');
 Route::post('/member-applications', [MemberApplicationController::class, 'store'])->name('member_applications.store');
 Route::post('/contact-us', [ContactUsController::class, 'store'])->name('contact_us.store');

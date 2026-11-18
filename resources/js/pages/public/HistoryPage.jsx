@@ -9,14 +9,15 @@ function formatDate(value) {
 
 export default function HistoryPage() {
   const [payload, setPayload] = useState(null);
+  const [documents, setDocuments] = useState([]);
   const [tab, setTab] = useState("mandates");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     let active = true;
-    websiteApi.home()
-      .then((data) => { if (active) setPayload(data); })
+    Promise.all([websiteApi.home(), websiteApi.documents()])
+      .then(([data, publishedDocuments]) => { if (active) { setPayload(data); setDocuments(Array.isArray(publishedDocuments?.data) ? publishedDocuments.data : Array.isArray(publishedDocuments) ? publishedDocuments : []); } })
       .catch((err) => { if (active) setError(err?.response?.data?.message || "Impossible de charger l’historique."); })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
@@ -46,6 +47,8 @@ export default function HistoryPage() {
         {!loading && !error && tab === "association" ? <section aria-labelledby="history-association-title">
           <div className="bureau-section-title"><span>Notre mémoire</span><h2 id="history-association-title">Historique de l’association</h2><p>{payload?.about?.summary || "Les étapes de l’association se dessinent à travers les mandats et les personnes qui se sont engagées."}</p></div>
           {events.length ? <div className="bureau-history-timeline">{events.map((event) => <article className="bureau-history-event" key={event.id}><span className="bureau-history-dot"/><div className="bureau-history-event-card"><div className="d-flex flex-wrap align-items-center justify-content-between gap-2"><h3>{event.role}</h3><span className={event.is_current ? "is-current" : ""}>{event.is_current ? "Mandat en cours" : "Mandat terminé"}</span></div><p>{event.member?.full_name || "Membre non renseigné"}</p><small>{formatDate(event.start_date)}{event.end_date ? ` — ${formatDate(event.end_date)}` : event.is_current ? " — aujourd’hui" : ""}</small>{event.notes ? <p className="bureau-history-note">{event.notes}</p> : null}</div></article>)}</div> : <div className="bureau-page-empty"><i className="bi bi-clock-history"/><h3>L’histoire de l’association sera publiée prochainement.</h3><p>Les étapes apparaîtront ici dès que les dates et les responsabilités seront enregistrées.</p></div>}
+          <div className="bureau-section-title mt-5"><span>Archives publiques</span><h2>Documents publiés</h2><p>Téléchargez les documents officiels mis à disposition par l’association.</p></div>
+          {documents.length ? <div className="row g-3">{documents.map((document) => <div className="col-md-6 col-lg-4" key={document.id}><article className="bureau-dynamic-card h-100"><div className="bureau-role-icon"><i className="bi bi-file-earmark-text"/></div><h3>{document.title}</h3>{document.description ? <p>{document.description}</p> : null}<a className="home-button home-button-primary mt-3" href={document.file_url || `/${String(document.file_path || "").replace(/^\/+/, "")}`} download={document.file_name || true}><i className="bi bi-download"/> Télécharger</a></article></div>)}</div> : <div className="bureau-page-empty"><i className="bi bi-file-earmark"/><h3>Aucun document publié</h3><p>Les documents disponibles au téléchargement apparaîtront ici.</p></div>}
         </section> : null}
       </section>
     </main>

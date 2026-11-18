@@ -20,4 +20,9 @@ export const websiteApi = {
     const res = await api.get("/website/activities");
     return res.data;
   },
+
+  async documents() {
+    const res = await api.get("/website/documents");
+    return res.data;
+  },
 };
