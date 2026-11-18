@@ -9,6 +9,8 @@ function formatDate(value) {
 
 export default function HistoryPage() {
   const [payload, setPayload] = useState(null);
+  const [statute, setStatute] = useState(null);
+  const [statuteLoading, setStatuteLoading] = useState(true);
   const [tab, setTab] = useState("mandates");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -19,6 +21,10 @@ export default function HistoryPage() {
       .then((data) => { if (active) setPayload(data); })
       .catch((err) => { if (active) setError(err?.response?.data?.message || "Impossible de charger l’historique."); })
       .finally(() => { if (active) setLoading(false); });
+    websiteApi.about()
+      .then((data) => { if (active) setStatute(data?.statute || null); })
+      .catch(() => { if (active) setStatute(null); })
+      .finally(() => { if (active) setStatuteLoading(false); });
     return () => { active = false; };
   }, []);
 
@@ -45,6 +51,16 @@ export default function HistoryPage() {
         </section> : null}
         {!loading && !error && tab === "association" ? <section aria-labelledby="history-association-title">
           <div className="bureau-section-title"><span>Notre mémoire</span><h2 id="history-association-title">Historique de l’association</h2><p>{payload?.about?.summary || "Les étapes de l’association se dessinent à travers les mandats et les personnes qui se sont engagées."}</p></div>
+          <section className="bureau-official-documents mb-4" aria-labelledby="history-documents-title">
+            <div className="bureau-documents-copy">
+              <span>Documents officiels</span>
+              <h2 id="history-documents-title">Statuts de l’association</h2>
+              {statuteLoading ? <p>Recherche du document officiel…</p> : statute?.document?.file_url ? (
+                <p>{statute.title}{statute.version ? ` · Version ${statute.version}` : ""}{statute.effective_at ? ` · En vigueur depuis le ${formatDate(statute.effective_at)}` : ""}</p>
+              ) : <p>Aucun document officiel n’est actuellement publié en téléchargement.</p>}
+            </div>
+            {statute?.document?.file_url ? <a className="home-button home-button-primary" href={statute.document.file_url} download={statute.document.file_name || true}><i className="bi bi-download" /> Télécharger les statuts</a> : null}
+          </section>
           {events.length ? <div className="bureau-history-timeline">{events.map((event) => <article className="bureau-history-event" key={event.id}><span className="bureau-history-dot"/><div className="bureau-history-event-card"><div className="d-flex flex-wrap align-items-center justify-content-between gap-2"><h3>{event.role}</h3><span className={event.is_current ? "is-current" : ""}>{event.is_current ? "Mandat en cours" : "Mandat terminé"}</span></div><p>{event.member?.full_name || "Membre non renseigné"}</p><small>{formatDate(event.start_date)}{event.end_date ? ` — ${formatDate(event.end_date)}` : event.is_current ? " — aujourd’hui" : ""}</small>{event.notes ? <p className="bureau-history-note">{event.notes}</p> : null}</div></article>)}</div> : <div className="bureau-page-empty"><i className="bi bi-clock-history"/><h3>L’histoire de l’association sera publiée prochainement.</h3><p>Les étapes apparaîtront ici dès que les dates et les responsabilités seront enregistrées.</p></div>}
         </section> : null}
       </section>

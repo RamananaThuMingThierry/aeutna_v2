@@ -69,8 +69,6 @@ function ExecutiveCard({ position, assignment }) {
 
 export default function BureauPage() {
   const [payload, setPayload] = useState(null);
-  const [statute, setStatute] = useState(null);
-  const [statuteLoading, setStatuteLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [tab, setTab] = useState("current");
@@ -87,17 +85,6 @@ export default function BureauPage() {
       .finally(() => {
         if (mounted) setLoading(false);
       });
-    websiteApi.about()
-      .then((data) => {
-        if (mounted) setStatute(data?.statute || null);
-      })
-      .catch(() => {
-        if (mounted) setStatute(null);
-      })
-      .finally(() => {
-        if (mounted) setStatuteLoading(false);
-      });
-
     return () => {
       mounted = false;
     };
@@ -197,22 +184,6 @@ export default function BureauPage() {
           <Link to="/devenir-membre" className="home-button home-button-primary">Faire mon adhÃ©sion <i className="bi bi-arrow-right" /></Link>
         </aside>
 
-        <section className="bureau-official-documents" aria-labelledby="bureau-documents-title">
-          <div className="bureau-documents-copy">
-            <span>Documents officiels</span>
-            <h2 id="bureau-documents-title">Statuts de lâ€™association</h2>
-            {statuteLoading ? <p>Recherche du document officielâ€¦</p> : statute?.document?.file_url ? (
-              <p>{statute.title}{statute.version ? ` Â· Version ${statute.version}` : ""}{statute.effective_at ? ` Â· En vigueur depuis le ${formatDate(statute.effective_at)}` : ""}</p>
-            ) : (
-              <p>Aucun document officiel nâ€™est actuellement publiÃ© en tÃ©lÃ©chargement.</p>
-            )}
-          </div>
-          {statute?.document?.file_url ? (
-            <a className="home-button home-button-primary" href={statute.document.file_url} download={statute.document.file_name || true}>
-              <i className="bi bi-download" /> TÃ©lÃ©charger les statuts
-            </a>
-          ) : null}
-        </section>
       </main>
     </div>
   );
