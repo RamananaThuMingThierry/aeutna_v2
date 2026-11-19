@@ -4,9 +4,9 @@ import { websiteApi } from "../../api/website";
 
 const DEFAULT_PHOTO = "/images/avatar.png";
 const EXECUTIVE_POSITIONS = [
-  { code: "PRESIDENT", acronym: "PR", title: "PrÃ©sident(e)", description: "Coordination gÃ©nÃ©rale" },
-  { code: "COMMISSAIRE_COMPTES", acronym: "CC", title: "Commissaire aux comptes", description: "ContrÃ´le et transparence financiÃ¨re" },
-  { code: "TRESORIER", acronym: "TR", title: "TrÃ©sorier(Ã¨re)", description: "Finances et cotisations" },
+  { code: "PRESIDENT", acronym: "PR", title: "Président(e)", description: "Coordination générale" },
+  { code: "COMMISSAIRE_COMPTES", acronym: "CC", title: "Commissaire aux comptes", description: "Contrôle et transparence financière" },
+  { code: "TRESORIER", acronym: "TR", title: "Trésorier", description: "Finances et cotisations" },
 ];
 
 function imageUrl(value) {
@@ -16,7 +16,7 @@ function imageUrl(value) {
 }
 
 function formatDate(value) {
-  if (!value) return "Date Ã  renseigner";
+  if (!value) return "Date à  renseigner";
   const date = new Date(`${value}T00:00:00`);
   return Number.isNaN(date.getTime())
     ? value
@@ -34,7 +34,7 @@ function SectionTitle({ id, eyebrow, title, text }) {
 }
 
 function MemberCard({ assignment }) {
-  const name = assignment.member?.full_name || "Nom Ã  renseigner";
+  const name = assignment.member?.full_name || "Nom à  renseigner";
   return (
     <article className="bureau-dynamic-card">
       <div className="bureau-dynamic-card-top">
@@ -51,7 +51,7 @@ function MemberCard({ assignment }) {
 }
 
 function ExecutiveCard({ position, assignment }) {
-  const name = assignment?.member?.full_name || "Titulaire Ã  renseigner";
+  const name = assignment?.member?.full_name || "Titulaire à  renseigner";
   return (
     <article className="bureau-dynamic-card">
       <div className="bureau-dynamic-card-top">
@@ -120,7 +120,7 @@ export default function BureauPage() {
             Historique des mandats <span>{formerMembers.length}</span>
           </button>
           <button type="button" role="tab" aria-selected={tab === "association"} className={tab === "association" ? "is-active" : ""} onClick={() => setTab("association")}>
-            Histoire de lâ€™association <span>{historyEvents.length}</span>
+            Histoire de l'association <span>{historyEvents.length}</span>
           </button>
         </div>
 
@@ -129,7 +129,7 @@ export default function BureauPage() {
 
         {!loading && !error && tab === "current" ? (
           <section aria-labelledby="bureau-current-title">
-            <SectionTitle id="bureau-current-title" eyebrow="Ã‰quipe actuelle" title="Membres du bureau" text="Les fonctions et les membres en exercice, actualisÃ©s depuis les donnÃ©es de lâ€™association." />
+            <SectionTitle id="bureau-current-title" eyebrow="équipe actuelle" title="Membres du bureau" text="Les fonctions et les membres en exercice, actualisés depuis les données de l'association." />
             <div className="row g-4">
               {EXECUTIVE_POSITIONS.map((position) => <div className="col-sm-6 col-lg-4" key={position.code}><ExecutiveCard position={position} assignment={currentMembers.find((item) => item.code === position.code)} /></div>)}
               {additionalMembers.map((assignment) => <div className="col-sm-6 col-lg-4" key={assignment.id}><MemberCard assignment={assignment} /></div>)}
@@ -139,7 +139,7 @@ export default function BureauPage() {
 
         {!loading && !error && tab === "history" ? (
           <section aria-labelledby="bureau-history-title">
-            <SectionTitle id="bureau-history-title" eyebrow="Archives" title="Historique des mandats" text="Les responsabilitÃ©s passÃ©es enregistrÃ©es dans lâ€™historique de lâ€™association." />
+            <SectionTitle id="bureau-history-title" eyebrow="Archives" title="Historique des mandats" text="Les responsabilités passées enregistrées dans l'historique de l'association." />
             {formerMembers.length ? (
               <div className="row g-4">
                 {formerMembers.map((assignment) => (
@@ -149,14 +149,14 @@ export default function BureauPage() {
                 ))}
               </div>
             ) : (
-              <div className="bureau-page-empty"><i className="bi bi-clock-history" /><h3>Aucun ancien mandat nâ€™est encore enregistrÃ©.</h3><p>Les mandats terminÃ©s apparaÃ®tront ici lorsquâ€™ils seront ajoutÃ©s Ã  lâ€™historique.</p></div>
+              <div className="bureau-page-empty"><i className="bi bi-clock-history" /><h3>Aucun ancien mandat n'est encore enregistré.</h3><p>Les mandats terminés apparaîtront ici lorsqu'ils seront ajoutés à  l'historique.</p></div>
             )}
           </section>
         ) : null}
 
         {!loading && !error && tab === "association" ? (
           <section aria-labelledby="bureau-association-title">
-            <SectionTitle id="bureau-association-title" eyebrow="MÃ©moire collective" title="Histoire de lâ€™association" text={payload?.about?.summary || "Les Ã©tapes de lâ€™association se dessinent Ã  travers les mandats et les personnes qui se sont engagÃ©es."} />
+            <SectionTitle id="bureau-association-title" eyebrow="Mémoire collective" title="Histoire de l'association" text={payload?.about?.summary || "Les étapes de l'association se dessinent à  travers les mandats et les personnes qui se sont engagées."} />
             {historyEvents.length ? (
               <div className="bureau-history-timeline">
                 {historyEvents.map((event) => (
@@ -165,24 +165,24 @@ export default function BureauPage() {
                     <div className="bureau-history-event-card">
                       <div className="d-flex flex-wrap align-items-center justify-content-between gap-2">
                         <h3>{event.role}</h3>
-                        <span className={event.is_current ? "is-current" : ""}>{event.is_current ? "Mandat en cours" : "Mandat terminÃ©"}</span>
+                        <span className={event.is_current ? "is-current" : ""}>{event.is_current ? "Mandat en cours" : "Mandat terminé"}</span>
                       </div>
-                      <p>{event.member?.full_name || "Membre non renseignÃ©"}</p>
-                      <small>{formatDate(event.start_date)}{event.end_date ? ` â€” ${formatDate(event.end_date)}` : event.is_current ? " â€” aujourdâ€™hui" : ""}</small>
+                      <p>{event.member?.full_name || "Membre non renseigné"}</p>
+                      <small>{formatDate(event.start_date)}{event.end_date ? ` â€” ${formatDate(event.end_date)}` : event.is_current ? " â€” aujourd'hui" : ""}</small>
                       {event.notes ? <p className="bureau-history-note">{event.notes}</p> : null}
                     </div>
                   </article>
                 ))}
               </div>
             ) : (
-              <div className="bureau-page-empty"><i className="bi bi-clock-history" /><h3>Lâ€™histoire des mandats sera publiÃ©e prochainement.</h3><p>Les Ã©tapes apparaÃ®tront ici dÃ¨s que les dates et les responsabilitÃ©s seront enregistrÃ©es.</p></div>
+              <div className="bureau-page-empty"><i className="bi bi-clock-history" /><h3>L'histoire des mandats sera publiée prochainement.</h3><p>Les étapes apparaà®tront ici dès que les dates et les responsabilités seront enregistrées.</p></div>
             )}
           </section>
         ) : null}
 
         <aside className="bureau-page-cta">
-          <div><span>Rejoignez lâ€™association</span><h2>Construisons la suite ensemble.</h2></div>
-          <Link to="/devenir-membre" className="home-button home-button-primary">Faire mon adhÃ©sion <i className="bi bi-arrow-right" /></Link>
+          <div><span>Rejoignez l'association</span><h2>Construisons la suite ensemble.</h2></div>
+          <Link to="/devenir-membre" className="home-button home-button-primary">Faire mon adhésion <i className="bi bi-arrow-right" /></Link>
         </aside>
 
 

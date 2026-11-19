@@ -28,7 +28,23 @@ class PublicFeePaymentController extends Controller
             return response()->json(['message' => 'Membre non trouve ou inactif.'], 404);
         }
 
-        return response()->json(['member' => $member]);
+        $memberPayments = FeePayment::query()
+            ->with('annualFee:id,year')
+            ->where('member_id', $member->id)
+            ->whereIn('validation_status', ['pending', 'validated'])
+            ->orderByDesc('paid_at')
+            ->orderByDesc('id')
+            ->get();
+        $latestPayment = $memberPayments->first();
+
+        return response()->json([
+            'member' => $member,
+            'latest_payment' => $latestPayment ? [
+                'year' => $latestPayment->annualFee?->year,
+                'status' => $latestPayment->validation_status,
+            ] : null,
+            'paid_years' => $memberPayments->map(fn (FeePayment $payment) => $payment->annualFee?->year)->filter()->unique()->values(),
+        ]);
     }
 
     public function getMeta(): JsonResponse
@@ -55,7 +71,6 @@ class PublicFeePaymentController extends Controller
             'annual_fee_id' => 'required|integer|exists:annual_fees,id',
             'payment_method' => 'required|string',
             'reference' => 'nullable|string|max:255',
-            'payment_date' => 'required|date',
             'amount_paid' => 'required|numeric|min:0',
             'proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'notes' => 'nullable|string',
@@ -96,7 +111,7 @@ class PublicFeePaymentController extends Controller
             'amount_paid' => $request->input('amount_paid'),
             'payment_method' => $request->input('payment_method'),
             'reference' => $request->input('reference'),
-            'paid_at' => $request->input('payment_date'),
+            'paid_at' => now()->toDateString(),
             'proof_path' => $proofPath,
             'notes' => $request->input('notes'),
             'payment_status' => 'paid',

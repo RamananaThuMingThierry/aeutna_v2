@@ -64,6 +64,7 @@ export default function BulkMessagesPage() {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [historyLoading, setHistoryLoading] = useState(false);
+  const [resendingId, setResendingId] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -146,6 +147,7 @@ export default function BulkMessagesPage() {
       .filter((member) => member.phone)
       .filter((member, index, array) => array.findIndex((item) => item.phone === member.phone) === index);
   }, [targetedMembers]);
+  const selectedRecipientCount = selectedMessage?.recipients_count ?? selectedMessage?.recipients?.length ?? 0;
 
   const missingPhonesCount = Math.max(targetedMembers.length - recipients.length, 0);
   const smsHref = useMemo(() => {
@@ -171,7 +173,7 @@ export default function BulkMessagesPage() {
         content: form.content.trim(),
       });
 
-      setSuccess(response?.message || "Message prepare avec succes.");
+      setSuccess(response?.message || "Message prépare avec succès.");
       setHistory((current) => [response.group_message, ...current]);
 
       const directSmsHref = Array.isArray(response?.phone_numbers) && response.phone_numbers.length
@@ -182,7 +184,7 @@ export default function BulkMessagesPage() {
         window.location.href = directSmsHref;
       }
     } catch (sendError) {
-      setError(sendError?.response?.data?.message || "Impossible de preparer ce message.");
+      setError(sendError?.response?.data?.message || "Impossible de préparer ce message.");
     } finally {
       setSending(false);
     }
@@ -198,9 +200,38 @@ export default function BulkMessagesPage() {
       const response = await groupMessagesApi.show(item.encrypted_id);
       setSelectedMessage(response?.group_message || null);
     } catch (loadError) {
-      setError(loadError?.response?.data?.message || "Impossible de charger ce detail.");
+      setError(loadError?.response?.data?.message || "Impossible de charger ce détail.");
     } finally {
       setHistoryLoading(false);
+    }
+  }
+
+  async function handleResendHistory(item) {
+    if (!item?.encrypted_id || resendingId) return;
+
+    setResendingId(item.encrypted_id);
+    setError("");
+    setSuccess("");
+
+    try {
+      const response = await groupMessagesApi.show(item.encrypted_id);
+      const message = response?.group_message;
+      const phoneNumbers = (message?.recipients || [])
+        .map((recipient) => normalizePhone(recipient.member?.phone || recipient.member?.alternative_phone || ""))
+        .filter(Boolean)
+        .filter((phone, index, phones) => phones.indexOf(phone) === index);
+
+      if (!phoneNumbers.length) {
+        setError("Aucun numéro de téléphone disponible pour relancer ce message.");
+        return;
+      }
+
+      setSuccess("Le message est prêt dans votre application SMS.");
+      window.location.href = `sms:${phoneNumbers.join(",")}?body=${encodeURIComponent(message?.content || "")}`;
+    } catch (resendError) {
+      setError(resendError?.response?.data?.message || "Impossible de relancer ce message.");
+    } finally {
+      setResendingId(null);
     }
   }
 
@@ -235,7 +266,7 @@ export default function BulkMessagesPage() {
         <div>
           <h4 className="mb-1">Messages en masse</h4>
           <div className="text-muted small">
-            Filtrez les membres, ecrivez votre message puis ouvrez l application SMS du mobile.
+            Filtrez les membres, écrivez votre message puis ouvrez l'application SMS du mobile.
           </div>
         </div>
       </div>
@@ -277,7 +308,7 @@ export default function BulkMessagesPage() {
                   </select>
                 </div>
 
-                <div className="col-md-8">
+                <div className="col">
                   <label className="form-label">Titre</label>
                   <input
                     className="form-control"
@@ -288,13 +319,13 @@ export default function BulkMessagesPage() {
                 </div>
 
                 <div className="col-12">
-                  <label className="form-label">Message a envoyer</label>
+                  <label className="form-label">Message à envoyer</label>
                   <textarea
                     className="form-control"
                     rows="7"
                     value={form.content}
                     onChange={(event) => setForm((current) => ({ ...current, content: event.target.value }))}
-                    placeholder="Ecrivez le message qui sera pre-rempli dans l application SMS..."
+                    placeholder="Ecrivez le message qui sera pre-rempli dans l'application SMS..."
                   />
                 </div>
 
@@ -310,21 +341,21 @@ export default function BulkMessagesPage() {
                         </div>
                       </div>
                       <div>
-                        <div className="small text-uppercase text-secondary fw-semibold">Membres trouves</div>
+                        <div className="small text-uppercase text-secondary fw-semibold">Membres trouvés</div>
                         <div className="fw-semibold">{targetedMembers.length}</div>
                       </div>
                       <div>
-                        <div className="small text-uppercase text-secondary fw-semibold">Numeros disponibles</div>
+                        <div className="small text-uppercase text-secondary fw-semibold">Numéros disponibles</div>
                         <div className="fw-semibold">{recipients.length}</div>
                       </div>
                       <div>
-                        <div className="small text-uppercase text-secondary fw-semibold">Sans numero</div>
+                        <div className="small text-uppercase text-secondary fw-semibold">Sans numéro</div>
                         <div className="fw-semibold">{missingPhonesCount}</div>
                       </div>
                     </div>
 
                     <div className="small text-secondary">
-                      L ouverture de l application SMS depend du mobile. Si trop de numeros sont inclus, certains appareils peuvent limiter la composition automatique.
+                      L'ouverture de l'application SMS depend du mobile. Si trop de numéros sont inclus, certains appareils peuvent limiter la composition automatique.
                     </div>
                   </div>
                 </div>
@@ -335,7 +366,7 @@ export default function BulkMessagesPage() {
                       {sending ? (
                         <>
                           <span className="spinner-border spinner-border-sm me-2" />
-                          Preparation...
+                          Préparation...
                         </>
                       ) : (
                         <>
@@ -362,7 +393,7 @@ export default function BulkMessagesPage() {
           <div className="card border-0 shadow-sm h-100">
             <div className="card-body">
               <div className="d-flex align-items-center justify-content-between mb-3">
-                <h5 className="mb-0">Apercu des destinataires</h5>
+                <h5 className="mb-0">Aperçu des destinataires</h5>
                 <span className="badge text-bg-light border text-dark">{recipients.length}</span>
               </div>
 
@@ -373,7 +404,7 @@ export default function BulkMessagesPage() {
                     <div className="small text-secondary">{recipient.phone}</div>
                   </div>
                 ))}
-                {!recipients.length ? <div className="text-secondary small">Aucun destinataire avec numero disponible.</div> : null}
+                {!recipients.length ? <div className="text-secondary small">Aucun destinataire avec numéro disponible.</div> : null}
                 {recipients.length > 40 ? (
                   <div className="small text-secondary">Et {recipients.length - 40} autre(s) destinataire(s)...</div>
                 ) : null}
@@ -385,7 +416,7 @@ export default function BulkMessagesPage() {
 
       <div className="card border-0 shadow-sm mt-4">
         <div className="card-body">
-          <h5 className="mb-3">Historique des messages prepares</h5>
+          <h5 className="mb-3">Historique des messages prépares</h5>
           <div className="row g-3">
             {history.map((item) => (
               <div key={item.id} className="col-12 col-xl-6">
@@ -418,9 +449,13 @@ export default function BulkMessagesPage() {
                     {item.content}
                   </p>
                   <div className="d-flex flex-wrap gap-2">
+                    <button type="button" className="btn btn-sm btn-outline-primary" onClick={() => void handleResendHistory(item)} disabled={Boolean(resendingId) || historyLoading}>
+                      {resendingId === item.encrypted_id ? <span className="spinner-border spinner-border-sm me-2" role="status" /> : <i className="bi bi-arrow-repeat me-2" />}
+                      Relancer
+                    </button>
                     <button type="button" className="btn btn-sm btn-outline-dark" onClick={() => void handleOpenHistory(item)} disabled={historyLoading}>
                       <i className="bi bi-eye me-2" />
-                      Details
+                      Détails
                     </button>
                     <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => setDeleteTarget(item)} disabled={deleteLoading}>
                       <i className="bi bi-trash3 me-2" />
@@ -438,18 +473,18 @@ export default function BulkMessagesPage() {
       {selectedMessage ? (
         <>
           <div className="modal fade show" style={{ display: "block" }} role="dialog" aria-modal="true">
-            <div className="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
               <div className="modal-content border-0 shadow">
                 <div className="modal-header">
-                  <h5 className="modal-title">Detail du message</h5>
+                  <h5 className="modal-title">Détail du message</h5>
                   <button type="button" className="btn-close" onClick={() => setSelectedMessage(null)} />
                 </div>
                 <div className="modal-body">
                   <div className="row g-4">
-                    <div className="col-lg-5">
-                      <div className="rounded-4 border p-3 h-100">
-                        <div className="small text-uppercase fw-semibold text-secondary mb-2">Informations</div>
-                        <div className="d-flex align-items-center gap-3 mb-3">
+                    <div className="col-12">
+                      <div className="rounded-4 border p-4">
+                        <div className="small text-uppercase fw-semibold text-secondary mb-2">Expéditeur</div>
+                        <div className="d-flex align-items-center gap-3 mb-4">
                           <img
                             src={resolveAvatarUrl(selectedMessage?.sender?.avatar || "")}
                             alt={selectedMessage?.sender?.name || "Utilisateur"}
@@ -461,34 +496,35 @@ export default function BulkMessagesPage() {
                             <div className="small text-secondary">{selectedMessage?.sender?.email || ""}</div>
                           </div>
                         </div>
-                        <div className="fw-semibold mb-1">{selectedMessage.title || "Message sans titre"}</div>
-                        <div className="small text-secondary mb-3">{historyAudienceLabel(selectedMessage)}</div>
-                        <div className="small text-secondary mb-3">{formatDate(selectedMessage.sent_at || selectedMessage.created_at)}</div>
-                        <div className="small text-uppercase fw-semibold text-secondary mb-2">Message</div>
-                        <p className="mb-0 text-secondary">{selectedMessage.content}</p>
-                      </div>
-                    </div>
-                    <div className="col-lg-7">
-                      <div className="rounded-4 border p-3">
-                        <div className="d-flex align-items-center justify-content-between mb-3">
-                          <div className="small text-uppercase fw-semibold text-secondary">Destinataires</div>
-                          <span className="badge text-bg-light border text-dark">
-                            {selectedMessage.recipients_count || selectedMessage.recipients?.length || 0}
-                          </span>
+
+                        <div className="row g-3 mb-4">
+                          <div className="col-md-6">
+                            <div className="rounded-3 bg-light border p-3 h-100">
+                              <div className="small text-secondary mb-1">
+                                <i className="bi bi-calendar3 me-2" aria-hidden="true" />
+                                Envoyé le
+                              </div>
+                              <div className="fw-semibold">{formatDate(selectedMessage.sent_at || selectedMessage.created_at)}</div>
+                            </div>
+                          </div>
+                          <div className="col-md-6">
+                            <div className="rounded-3 bg-light border p-3 h-100">
+                              <div className="small text-secondary mb-1">
+                                <i className="bi bi-people me-2" aria-hidden="true" />
+                                Nombre de destinataires
+                              </div>
+                              <div className="fw-semibold">{selectedRecipientCount}</div>
+                            </div>
+                          </div>
                         </div>
 
-                        <div className="d-grid gap-2" style={{ maxHeight: 420, overflow: "auto" }}>
-                          {(selectedMessage.recipients || []).map((recipient) => (
-                            <div key={recipient.id} className="border rounded-4 p-3">
-                              <div className="fw-semibold">
-                                {recipient.member ? `${recipient.member.first_name || ""} ${recipient.member.last_name || ""}`.trim() : "Membre"}
-                              </div>
-                              <div className="small text-secondary">
-                                {recipient.member?.member_type || "-"} · {normalizePhone(recipient.member?.phone || recipient.member?.alternative_phone || "") || "-"}
-                              </div>
-                            </div>
-                          ))}
-                          {!selectedMessage.recipients?.length ? <div className="text-secondary small">Aucun destinataire trouve.</div> : null}
+                        <div className="border-top pt-3">
+                          <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+                            <h6 className="mb-0">{selectedMessage.title || "Message sans titre"}</h6>
+                            <span className="badge text-bg-light border text-secondary">{historyAudienceLabel(selectedMessage)}</span>
+                          </div>
+                          <div className="small text-uppercase fw-semibold text-secondary mb-2">Contenu du message</div>
+                          <p className="mb-0 text-secondary" style={{ whiteSpace: "pre-wrap" }}>{selectedMessage.content}</p>
                         </div>
                       </div>
                     </div>

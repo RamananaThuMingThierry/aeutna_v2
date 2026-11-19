@@ -92,7 +92,7 @@ export default function Header() {
 
         <div className="d-none d-lg-flex align-items-center gap-2">
           <span className="aeutna-open-badge"><i /> Adhésion ouverte</span>
-          <Link to="/?payment=1#cotisations" className="btn btn-sm rounded-pill px-3 aeutna-join-button">
+          <Link to="/?payment=1" className="btn btn-sm rounded-pill px-3 aeutna-join-button">
             Payer ma cotisation <i className="bi bi-arrow-up-right" />
           </Link>
         </div>
@@ -126,7 +126,7 @@ export default function Header() {
                 <Link to="/login" className="btn btn-outline-dark rounded-4 py-3" onClick={() => setMobileMenuOpen(false)}>
                   Connexion
                 </Link>
-                <Link to="/?payment=1#cotisations" className="btn btn-warning rounded-4 py-3" onClick={() => setMobileMenuOpen(false)}>
+                <Link to="/?payment=1" className="btn btn-warning rounded-4 py-3" onClick={() => setMobileMenuOpen(false)}>
                   Payer ma cotisation
                 </Link>
               </div>
