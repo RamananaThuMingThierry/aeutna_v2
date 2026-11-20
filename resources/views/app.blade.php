@@ -6,8 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="app-url" content="{{ url('/') }}">
 
-    <meta name="description" content="AEUTNA rassemble les étudiants natifs d'Antalaha à l'Université de Tananarive autour de l'entraide, des actualités associatives, de la mémoire collective et de la vie communautaire.">
-    <meta name="keywords" content="AEUTNA, étudiants Antalaha, Université de Tananarive, association étudiante, actualités AEUTNA, galerie AEUTNA, bureau AEUTNA">
+    <meta name="description" content="AEUTNA est une Association des Etudiants de l'Universite de Tananarive Natifs d'Antalaha.">
+    <meta name="keywords" content="AEUTNA, étudiants Antalaha, Université de Tananarive, association étudiante, actualités AEUTNA, galerie AEUTNA, bureau AEUTNA, natifs d'Antalaha">
     <meta name="robots" content="index, follow">
     <meta name="author" content="AEUTNA">
 

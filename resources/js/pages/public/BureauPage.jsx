@@ -85,7 +85,6 @@ export default function BureauPage() {
       .finally(() => {
         if (mounted) setLoading(false);
       });
-
     return () => {
       mounted = false;
     };
@@ -184,7 +183,6 @@ export default function BureauPage() {
           <div><span>Rejoignez l'association</span><h2>Construisons la suite ensemble.</h2></div>
           <Link to="/devenir-membre" className="home-button home-button-primary">Faire mon adhésion <i className="bi bi-arrow-right" /></Link>
         </aside>
-
 
       </main>
     </div>
