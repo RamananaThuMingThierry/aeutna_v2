@@ -78,8 +78,8 @@ export default function GalleryPage() {
       <section className="gallery-hero">
         <div className="container gallery-hero-content">
           <span className="home-eyebrow">Nos souvenirs en images</span>
-          <h1>Albums de lâ€™AEUTNA</h1>
-          <p>Revivez les activitÃ©s, les rencontres et les moments de partage de notre association.</p>
+          <h1>Albums de l'AEUTNA</h1>
+          <p>Revivez les activités, les rencontres et les moments de partage de notre association.</p>
         </div>
       </section>
 

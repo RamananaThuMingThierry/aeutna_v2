@@ -80,7 +80,7 @@ export default function Footer() {
           </div>
 
           <div className="public-footer-bottom">
-            <span>&copy; {currentYear} AEUTNA. Tous droits réservés.</span>
+            <span>Izay tsy Mihetsiky Tavela</span>
           </div>
         </div>
       </footer>

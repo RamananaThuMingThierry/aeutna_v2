@@ -128,7 +128,7 @@ body {
 }
 .public-mobile-nav-link:hover { border-color: #b9d0c2; color: #173e34; background: #f8fbf8; transform: translateY(-1px); }
 .public-mobile-nav-link.is-active { border-color: #c3d8ca; color: #173e34; background: #eff6f1; }
-.public-mobile-nav-icon { display: grid; width: 34px; height: 34px; flex: 0 0 34px; place-items: center; border-radius: 11px; color: #31654e; background: #eff6f1; font-size: 1rem; }
+.public-mobile-nav-icon { display: grid; width: 34px; height: 34px; flex: 0 0 34px; place-items: center; border-radius: 11px; color: #a57736; background: #eff6f1; font-size: 1rem; }
 .public-mobile-nav-link.is-active .public-mobile-nav-icon { color: #fff; background: #31654e; }
 .public-mobile-nav-label { overflow-wrap: anywhere; }
 .public-mobile-menu-actions { display: grid; gap: .7rem; padding-top: .85rem; border-top: 1px solid #e8eeea; }
@@ -860,7 +860,9 @@ body { background: #f5eddc; color: #263746; }
 .home-gallery { background-color: #f5eddc; }
 .home-button-primary, .aeutna-login-submit { color: #fff; background-color: #245b8f; border-color: #245b8f; }
 .home-button-primary:hover, .aeutna-login-submit:hover { color: #fff; background-color: #1d4b75; border-color: #1d4b75; }
-.home-text-link, .bureau-card-contact, .gallery-album-copy .gallery-view-album { color: #fff; }
+.home-text-link, .bureau-card-contact{ color: #1c5dab; }
+.gallery-album-copy .gallery-view-album { color: #fff; }
+.gallery-album-copy:hover .gallery-view-album:hover { color: #00FF00; }
  .home-contact-list a{
     color: #1c266b;
  }

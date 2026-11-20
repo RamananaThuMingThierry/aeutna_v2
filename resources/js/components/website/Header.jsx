@@ -149,7 +149,6 @@ export default function Header() {
             />
             <span className="d-grid aeutna-brand-copy">
               <strong>AEUTNA</strong>
-              <small className="d-sm-none">Association étudiante</small>
             </span>
           </Link>
 
