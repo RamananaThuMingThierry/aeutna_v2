@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { websiteApi } from "../../api/website";
+import staticMandateHistory from "../../data/mandateHistory.json";
 
 function formatDate(value) {
   if (!value) return "Date à renseigner";
@@ -29,9 +30,42 @@ export default function HistoryPage() {
     return () => { active = false; };
   }, []);
 
-  const mandates = useMemo(() => (payload?.role_history || [])
-    .flatMap((group) => (group.items || []).filter((item) => !item.is_current).map((item) => ({ ...item, role: group.label })))
-    .sort((a, b) => new Date(b.start_date || b.end_date || 0) - new Date(a.start_date || a.end_date || 0)), [payload]);
+  const mandates = useMemo(() => {
+    const roleOrder = ["PRESIDENT", "COMMISSAIRE_COMPTES", "TRESORIER"];
+    const roleLabels = {
+      PRESIDENT: "Président(e)",
+      COMMISSAIRE_COMPTES: "Commissaire aux comptes",
+      TRESORIER: "Trésorier(ère)",
+    };
+    const years = new Map();
+
+    (payload?.role_history || []).forEach((group) => {
+      (group.items || []).filter((item) => !item.is_current).forEach((item) => {
+        const year = String(item.start_date || item.end_date || "").slice(0, 4);
+        if (!year) return;
+        if (!years.has(year)) years.set(year, { year, roles: {} });
+        const mandateYear = years.get(year);
+        mandateYear.roles[group.code] ||= [];
+        mandateYear.roles[group.code].push({
+          name: item.member?.full_name || "Nom non renseigné",
+          photo: item.member?.photo,
+        });
+      });
+    });
+
+    // Keep the prepared archive visible until past mandates are entered in the database.
+    staticMandateHistory.forEach((entry) => {
+      if (!years.has(entry.year)) years.set(entry.year, { year: entry.year, roles: {} });
+      const year = years.get(entry.year);
+      Object.entries(entry.roles).forEach(([code, candidates]) => {
+        if (!year.roles[code]?.length) year.roles[code] = candidates;
+      });
+    });
+
+    return [...years.values()]
+      .map((year) => ({ ...year, roleOrder, roleLabels }))
+      .sort((a, b) => Number(b.year) - Number(a.year));
+  }, [payload]);
   const events = useMemo(() => (payload?.role_history || [])
     .flatMap((group) => (group.items || []).map((item) => ({ ...item, role: group.label })))
     .sort((a, b) => new Date(a.start_date || a.end_date || 0) - new Date(b.start_date || b.end_date || 0)), [payload]);
@@ -48,7 +82,7 @@ export default function HistoryPage() {
         {error ? <div className="alert alert-warning" role="alert">{error}</div> : null}
         {!loading && !error && tab === "mandates" ? <section aria-labelledby="history-mandates-title">
           <div className="bureau-section-title"><span>Archives</span><h2 id="history-mandates-title">Historique des mandats</h2><p>Retrouvez les membres qui ont exercé une responsabilité au sein de l’association.</p></div>
-          {mandates.length ? <div className="row g-4">{mandates.map((mandate) => <div className="col-sm-6 col-lg-4" key={mandate.id}><article className="bureau-dynamic-card"><div className="bureau-dynamic-card-top"><img src={mandate.member?.photo ? (mandate.member.photo.startsWith("/") || /^https?:/i.test(mandate.member.photo) ? mandate.member.photo : `/${mandate.member.photo}`) : "/images/avatar.png"} alt={mandate.member?.full_name || "Membre"} loading="lazy"/><span className="bureau-role-icon"><i className="bi bi-person-badge-fill"/></span></div><div className="bureau-role-label">{mandate.role}</div><h3>{mandate.member?.full_name || "Membre non renseigné"}</h3><div className="bureau-card-date"><i className="bi bi-calendar3"/> {formatDate(mandate.start_date)}{mandate.end_date ? ` — ${formatDate(mandate.end_date)}` : ""}</div></article></div>)}</div> : <div className="bureau-page-empty"><i className="bi bi-clock-history"/><h3>Aucun ancien mandat n’est encore enregistré.</h3><p>Les mandats terminés apparaîtront ici lorsqu’ils seront ajoutés à l’historique.</p></div>}
+          {mandates.length ? <div className="history-mandate-years">{mandates.map((mandate) => <section className="history-mandate-year-group" key={mandate.year} aria-labelledby={`history-mandate-${mandate.year}`}><div className="history-mandate-year-heading"><span>Année du mandat</span><h3 id={`history-mandate-${mandate.year}`}>{mandate.year}</h3></div><div className="row g-4">{mandate.roleOrder.flatMap((code) => (mandate.roles[code] || []).map((candidate, index) => { const photo = candidate.photo ? (candidate.photo.startsWith("/") || /^https?:/i.test(candidate.photo) ? candidate.photo : `/${candidate.photo}`) : null; const image = <img className="history-candidate-photo" src={photo || "/images/avatar.png"} alt={photo ? `Photo de ${candidate.name}` : "Photo non disponible"} loading="lazy"/>; return <div className="col-12 col-sm-6 col-lg-4" key={`${code}-${candidate.name}-${index}`}><article className="history-candidate-card">{photo ? <a className="history-candidate-photo-link" href={photo} target="_blank" rel="noreferrer" aria-label={`Agrandir la photo de ${candidate.name}`}>{image}</a> : image}<div className="history-candidate-details"><span>{mandate.roleLabels[code]}</span><h4>{candidate.name}</h4></div></article></div>; }))}</div></section>)}</div> : <div className="bureau-page-empty"><i className="bi bi-clock-history"/><h3>Aucun ancien mandat n’est encore enregistré.</h3><p>Les mandats terminés apparaîtront ici lorsqu’ils seront ajoutés à l’historique.</p></div>}
         </section> : null}
         {!loading && !error && tab === "association" ? <section aria-labelledby="history-association-title">
           <div className="bureau-section-title"><span>Notre mémoire</span><h2 id="history-association-title">Historique de l’association</h2><p>{payload?.about?.summary || "Les étapes de l’association se dessinent à travers les mandats et les personnes qui se sont engagées."}</p></div>

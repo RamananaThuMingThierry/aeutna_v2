@@ -681,6 +681,20 @@ body { background: #f5eddc; color: #263746; }
 .bureau-role-label { color: #a57736; font-size: .74rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .bureau-dynamic-card h3 { margin: 7px 0 0; color: #102d50; font-size: 1.05rem; font-weight: 800; }
 .bureau-card-date { display: flex; align-items: center; gap: 7px; margin-top: 17px; padding-top: 14px; border-top: 1px solid #edf0ee; color: #718078; font-size: .82rem; }
+.history-mandate-years { display: grid; gap: 34px; }
+.history-mandate-year-group { display: grid; gap: 18px; }
+.history-mandate-year-heading { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-radius: 16px; color: #fff; background: linear-gradient(120deg, #6d5c44, #a57736); }
+.history-mandate-year-heading span { font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; opacity: .8; }
+.history-mandate-year-heading h3 { margin: 0; color: #fff; font-size: 1.8rem; font-weight: 800; }
+.history-candidate-card { display: flex; height: 100%; min-height: 150px; align-items: center; gap: 18px; overflow: hidden; padding: 16px; border: 1px solid #e3ebe5; border-radius: 20px; background: #fff; box-shadow: 0 6px 22px rgba(16,45,80,.06); }
+.history-candidate-photo-link { display: block; flex: 0 0 112px; border-radius: 14px; overflow: hidden; }
+.history-candidate-photo { display: block; width: 112px; height: 120px; flex: 0 0 112px; border-radius: 14px; object-fit: cover; background: #eff6f1; }
+.history-candidate-photo-link .history-candidate-photo { transition: transform .2s ease, filter .2s ease; }
+.history-candidate-photo-link:hover .history-candidate-photo, .history-candidate-photo-link:focus-visible .history-candidate-photo { transform: scale(1.06); filter: brightness(.92); }
+.history-candidate-details { min-width: 0; }
+.history-candidate-details span { display: block; margin-bottom: 8px; color: #a57736; font-size: .72rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.history-candidate-details h4 { margin: 0; color: #102d50; font-size: 1rem; font-weight: 800; overflow-wrap: anywhere; }
+@media(max-width: 575.98px) { .history-candidate-card { gap: 13px; padding: 12px; } .history-candidate-photo-link, .history-candidate-photo { width: 92px; height: 104px; flex-basis: 92px; } }
 .bureau-page-state { display: flex; align-items: center; gap: 10px; padding: 28px 0; color: #64736d; }
 .bureau-page-empty { padding: 42px 20px; border: 1px dashed #d5e0d9; border-radius: 18px; color: #718078; text-align: center; }
 .bureau-page-empty > i { color: #31654e; font-size: 1.8rem; }
