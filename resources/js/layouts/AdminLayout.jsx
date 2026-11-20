@@ -62,6 +62,7 @@ const menuSections = [
     title: "Communication",
     items: [
       { to: "/admin/bulk-messages", label: "Messages en masse", icon: "bi-chat-dots-fill" },
+      { to: "/admin/sponsors", label: "Annuaire des parrains", icon: "bi-person-lines-fill" },
       { to: "/admin/contacts", label: "Contacts", icon: "bi-envelope-fill" },
     ],
   },

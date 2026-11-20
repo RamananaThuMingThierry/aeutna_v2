@@ -53,46 +53,102 @@ body {
     height: 104px;
 }
 
+.aeutna-brand-logo { width: 54px; height: 54px; }
 .public-nav-toggle {
-    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+    display: inline-grid;
+    place-items: center;
+    border: 1px solid rgba(23, 62, 52, .18);
+    border-radius: 14px;
+    color: #173e34;
+    background: #fff;
+    box-shadow: 0 3px 10px rgba(16, 45, 80, .07);
+    transition: color .2s ease, background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
-
-.public-nav-toggle.is-open {
-    transform: rotate(90deg) scale(1.03);
+.public-nav-toggle:hover, .public-nav-toggle.is-open {
+    border-color: #173e34;
+    color: #fff;
+    background: #173e34;
 }
-
-.public-mobile-menu-wrap {
-    transform-origin: top center;
+.public-nav-toggle:focus-visible { outline: 3px solid rgba(36, 91, 143, .25); outline-offset: 2px; box-shadow: none; }
+.aeutna-site-header { width: 100%; max-width: none; }
+.public-mobile-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1040;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: rgba(16, 35, 29, .34);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .22s ease;
 }
-
+.public-mobile-overlay.is-open { opacity: 1; pointer-events: auto; }
+.public-mobile-overlay.is-closing { opacity: 0; pointer-events: none; }
 .public-mobile-menu {
-    opacity: 0;
-    transform: translateY(-10px) scale(0.985);
-    transition: opacity 0.24s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    display: grid;
+    gap: 1rem;
+    width: min(100%, 520px);
+    max-height: calc(100vh - 2rem);
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+    padding: 1.25rem;
+    border: 1px solid #e4ebe6;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .98);
+    box-shadow: 0 20px 50px rgba(16, 45, 80, .16);
+    transform: translateY(10px) scale(.985);
+    transition: transform .24s cubic-bezier(.22, 1, .36, 1);
 }
-
-.public-mobile-menu.is-open {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+.public-mobile-menu.is-open { transform: translateY(0) scale(1); }
+.public-mobile-menu.is-closing { transform: translateY(8px) scale(.99); }
+.public-mobile-menu-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.public-mobile-menu-heading { display: grid; gap: .2rem; }
+.public-mobile-menu-heading > span { color: #a57736; font-size: .66rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.public-mobile-menu-heading > strong { color: #173e34; font-size: 1.03rem; font-weight: 800; }
+.public-mobile-close { display: inline-grid; width: 40px; height: 40px; flex: 0 0 40px; place-items: center; border: 1px solid #e4ebe6; border-radius: 12px; color: #435567; background: #fff; }
+.public-mobile-close:hover { border-color: #c3d8ca; color: #173e34; background: #eff6f1; }
+.public-mobile-nav-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; }
+.public-mobile-nav-link {
+    display: flex;
+    min-width: 0;
+    min-height: 56px;
+    align-items: center;
+    gap: .55rem;
+    padding: .55rem .65rem;
+    border: 1px solid #e5ebe7;
+    border-radius: 14px;
+    color: #435567;
+    background: #fff;
+    font-size: .84rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+    transition: color .18s ease, background-color .18s ease, border-color .18s ease, transform .18s ease;
 }
-
-.public-mobile-menu.is-closing {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.99);
+.public-mobile-nav-link:hover { border-color: #b9d0c2; color: #173e34; background: #f8fbf8; transform: translateY(-1px); }
+.public-mobile-nav-link.is-active { border-color: #c3d8ca; color: #173e34; background: #eff6f1; }
+.public-mobile-nav-icon { display: grid; width: 34px; height: 34px; flex: 0 0 34px; place-items: center; border-radius: 11px; color: #31654e; background: #eff6f1; font-size: 1rem; }
+.public-mobile-nav-link.is-active .public-mobile-nav-icon { color: #fff; background: #31654e; }
+.public-mobile-nav-label { overflow-wrap: anywhere; }
+.public-mobile-menu-actions { display: grid; gap: .7rem; padding-top: .85rem; border-top: 1px solid #e8eeea; }
+.public-mobile-menu-meta { display: flex; align-items: center; justify-content: space-between; gap: .55rem; }
+.public-mobile-login { display: inline-flex; min-height: 38px; align-items: center; justify-content: center; gap: .4rem; padding: .45rem .7rem; border: 1px solid #dfe7e2; border-radius: 999px; color: #435567; background: #fff; font-size: .8rem; font-weight: 700; text-decoration: none; }
+.public-mobile-login:hover { border-color: #b9d0c2; color: #173e34; background: #f8fbf8; }
+.public-mobile-payment { display: flex; min-height: 48px; align-items: center; justify-content: space-between; gap: .8rem; padding: .75rem 1rem; border: 1px solid #173e34; border-radius: 14px; color: #fff; background: #173e34; font-size: .88rem; font-weight: 700; text-decoration: none; transition: background-color .18s ease, border-color .18s ease; }
+.public-mobile-payment:hover { border-color: #245b8f; color: #fff; background: #245b8f; }
+.sponsor-phone-number, .sponsor-phone-link { color: #1c3047; }
+.sponsor-phone-link, .sponsor-phone-link:hover { text-decoration: none; }
+@media (max-width: 575.98px) {
+    .aeutna-brand-logo { width: 44px; height: 44px; }
+    .aeutna-brand-copy { line-height: 1.1; }
+    .aeutna-brand-copy small { margin-top: .18rem; font-size: .62rem; }
+    .public-mobile-menu { padding: 1rem; }
 }
-
-.public-mobile-backdrop {
-    background: rgba(0, 0, 0, 0.12);
-    opacity: 0;
-    transition: opacity 0.22s ease;
-}
-
-.public-mobile-backdrop.is-open {
-    opacity: 1;
-}
-
-.public-mobile-backdrop.is-closing {
-    opacity: 0;
+@media (max-width: 991.98px) { .aeutna-site-header { width: 100%; max-width: none; } }
+@media (prefers-reduced-motion: reduce) {
+    .public-nav-toggle, .public-mobile-overlay, .public-mobile-menu, .public-mobile-nav-link, .public-mobile-payment { transition: none; }
+    .public-mobile-nav-link:hover { transform: none; }
 }
 
 .public-site-main > div > section {

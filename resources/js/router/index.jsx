@@ -33,6 +33,7 @@ import MembershipCardsPage from "../pages/admin/MembershipCardsPage";
 import ReportsPage from "../pages/admin/ReportsPage";
 import ReportScanPage from "../pages/admin/ReportScanPage";
 import SlidesPage from "../pages/admin/SlidesPage";
+import SponsorsPage from "../pages/admin/SponsorsPage";
 import SuppliersPage from "../pages/admin/SuppliersPage";
 import StatutesPage from "../pages/admin/StatutesPage";
 import UsersPage from "../pages/admin/UsersPage";
@@ -297,6 +298,10 @@ export const router = createBrowserRouter([
           {
             path: "suppliers",
             element: <SuppliersPage />,
+          },
+          {
+            path: "sponsors",
+            element: <SponsorsPage />,
           },
           {
             path: "material-maintenances",
